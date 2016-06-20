@@ -11,7 +11,7 @@
 	EstLib.getEstatDataURL = function(table, params, language, format, version){
 		language = language || "en";
 		format = format || "json";
-		version = version || "1.1";
+		version = version || "1.1"; //TODO update to version 2.1
 		var url = [];
 		url.push(EstLib.getEstatRestDataURLBase,"v",version,"/",format,"/",language,"/",table,"?");
 		if(params)

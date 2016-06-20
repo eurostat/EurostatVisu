@@ -96,6 +96,7 @@
 		//get base information on years and geos
 		$.when($.ajax({url:EstLib.getEstatDataURL("prc_hicp_inw",{coicop:"CP00"})}))
 		.then(function(data) {
+			//data = data["prc_hicp_inw"];
 			EstLib.overrideCountryNames(data["prc_hicp_inw"].dimension.geo.category.label);
 			var ds = JSONstat(data).Dataset(0);
 			var years = ds.Dimension("time").id.sort();
