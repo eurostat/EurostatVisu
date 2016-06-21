@@ -1,16 +1,16 @@
 /*
 
-JSON-stat Javascript Toolkit v. 0.8.3
-http://json-stat.org
+JSON-stat Javascript Toolkit v. 0.12.1 (JSON-stat v. 2.0 ready)
+http://json-stat.com
 https://github.com/badosa/JSON-stat
 
-Copyright 2015 Xavier Badosa (http://xavierbadosa.com)
+Copyright 2016 Xavier Badosa (http://xavierbadosa.com)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+	http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,126 +20,4 @@ permissions and limitations under the License.
 
 */
 
-function JSONstat(t,e){return window===this?new JSONstat.jsonstat(t,e):void 0}var JSONstat=JSONstat||{}
-JSONstat.version="0.8.3",function(){"use strict"
-function t(t){return"[object Array]"===Object.prototype.toString.call(t)}function e(e,n){var i,s,r,l,a=function(t,e){var n,i,s=e!==!1
-if(window.XDomainRequest&&/^(http(s)?:)?\/\//.test(t)){if(!s)return
-i=new XDomainRequest,i.onload=function(){n=JSON.parse(i.responseText),e.call(JSONstat(n))},i.open("GET",t),i.send()}else if(i=new XMLHttpRequest,i.onreadystatechange=function(){if(4===i.readyState){var t=i.status
-n=t&&i.responseText&&(t>=200&&300>t||304===t)?JSON.parse(i.responseText):null,s&&e.call(JSONstat(n))}},i.open("GET",t,s),i.send(null),!s)return n},o=function(e,n){var i,s=[]
-if("string"==typeof e&&(e=[e]),t(e)){if(e.length===n)return e
-if(1===e.length){for(i=0;n>i;i++)s.push(e[0])
-return s}}for(i=0;n>i;i++){var r=void 0===e[i]?null:e[i]
-s.push(r)}return s}
-if(this.length=0,this.id=[],null!==e&&void 0!==e)switch(this["class"]=e["class"]||"bundle",this["class"]){case"bundle":var u=[],h=0
-if(this.error=null,this.length=0,"string"==typeof e&&e.length>0&&(e=a(e,"function"==typeof n?n:!1)),null===e||"object"!=typeof e)return this["class"]=null,void(void 0===e&&(delete this.id,delete this["class"],delete this.error,delete this.length))
-if(e.hasOwnProperty("error"))return void(this.error=e.error)
-if("dataset"===e["class"]||"collection"===e["class"])return JSONstat(e)
-for(s in e)h++,u.push(s)
-this.__tree__=e,this.length=h,this.id=u
-break
-case"dataset":e.hasOwnProperty("__tree__")||(delete e["class"],e={__tree__:e}),this.__tree__=i=e.__tree__,this.label=i.label||null,this.note=i.note||null,this.link=i.link||null,this.href=i.href||null,this.updated=i.updated||null,this.source=i.source||null,this.extension=i.extension||null
-var f,c=0
-if(i.hasOwnProperty("value")&&t(i.value))c=i.value.length
-else if(i.hasOwnProperty("status")&&t(i.status))c=i.status.length
-else if(i.hasOwnProperty("dimension")){var d=i.dimension.size,p=1
-for(f=d.length;f--;)p*=d[f]
-c=p}if(this.value=o(i.value,c),this.status=i.hasOwnProperty("status")?o(i.status,c):null,i.hasOwnProperty("dimension")){if(!t(i.dimension.id)||!t(i.dimension.size)||i.dimension.id.length!=i.dimension.size.length)return
-var v=i.dimension,g=v.role||null,y=v.id,_=v.size.length,b=function(t){g.hasOwnProperty(t)||(g[t]=null)}
-if(this.length=_,this.id=y,g&&(b("time"),b("geo"),b("metric"),b("classification")),g&&null===g.classification){var m=[],w=["time","geo","metric"],O=function(t,e){for(var n=e.length;n--;)if(t===e[n])return!0
-return!1}
-for(f=0;3>f;f++){var x=g[w[f]]
-null!==x&&(m=m.concat(x))}for(g.classification=[],f=0;_>f;f++)O(y[f],m)||g.classification.push(y[f])
-0===g.classification.length&&(g.classification=null)}this.role=g,this.n=c
-for(var S=0,k=this.length;k>S;S++)if(v[v.id[S]].category.hasOwnProperty("index")){if(t(v[v.id[S]].category.index)){var P={},D=v[v.id[S]].category.index
-for(r=D.length,l=0;r>l;l++)P[D[l]]=l
-v[v.id[S]].category.index=P}}else{var j=0
-v[v.id[S]].category.index={}
-for(s in v[v.id[S]].category.label)v[v.id[S]].category.index[s]=j++}}else this.length=0
-break
-case"dimension":i=e.__tree__
-var J=[],N=i.category
-if(!e.hasOwnProperty("__tree__")||!i.hasOwnProperty("category"))return
-if(!N.hasOwnProperty("label")){N.label={}
-for(s in N.index)N.label[s]=s}for(s in N.index)J[N.index[s]]=s
-this.__tree__=i,this.label=i.label||null,this.note=i.note||null,this.link=i.link||null,this.href=i.href||null,this.id=J,this.length=J.length,this.role=e.role,this.hierarchy=N.hasOwnProperty("child"),this.extension=i.extension||null
-break
-case"category":var T=e.child
-this.id=T,this.length=null===T?0:T.length,this.index=e.index,this.label=e.label,this.note=e.note||null,this.unit=e.unit,this.coordinates=e.coord
-break
-case"collection":if(this.length=0,this.label=e.label||null,this.note=e.note||null,this.link=e.link||null,this.href=e.href||null,this.updated=e.updated||null,this.source=e.source||null,this.extension=e.extension||null,null!==this.link&&e.link.item){var z=e.link.item
-if(this.length=t(z)?z.length:0,this.length)for(l=0;l<this.length;l++)this.id[l]=z[l].href}}}e.prototype.Item=function(t){if(null===this||"collection"!==this["class"]||!this.length)return null
-if("number"==typeof t)return t>this.length||0>t?null:this.link.item[t]
-var e,n=[]
-if("object"==typeof t){if(!t["class"]&&!t.follow)return null
-t["class"]?e=function(t,e,i){i["class"]===t.link.item[e]["class"]&&n.push(t.link.item[e])}:t.follow&&(e=function(t,e){n.push(JSONstat(t.id[e]))})}else e=function(t,e){n.push(t.link.item[e])}
-for(var i=0;i<this.length;i++)e(this,i,t)
-return n},e.prototype.Dataset=function(t){if(null===this)return null
-if("dataset"===this["class"])return void 0!==t?this:[this]
-if("bundle"!==this["class"])return null
-if(void 0===t){for(var n=[],i=0,s=this.id.length;s>i;i++)n.push(this.Dataset(this.id[i]))
-return n}if("number"==typeof t){var r=this.id[t]
-return void 0!==r?this.Dataset(r):null}var l=this.__tree__[t]
-return void 0===l?null:new e({"class":"dataset",__tree__:l})},e.prototype.Dimension=function(t){var n,i=[],s=this.id.length,r=function(t,e){var n=t.role
-if(null!==n)for(var i in n)for(var s=null!==n[i]?n[i].length:0;s--;)if(n[i][s]===e)return i
-return null}
-if(null===this||"dataset"!==this["class"])return null
-if(void 0===t){for(n=0;s>n;n++)i.push(this.Dimension(this.id[n]))
-return i}if("number"==typeof t){var l=this.id[t]
-return void 0!==l?this.Dimension(l):null}var a=this.__tree__.dimension
-if(void 0===a)return null
-if("object"==typeof t){if(t.hasOwnProperty("role")){for(n=0;s>n;n++){var o=this.id[n]
-r(a,o)===t.role&&i.push(this.Dimension(o))}return void 0===i[0]?null:i}return null}var u=a[t]
-return void 0===u?null:new e({"class":"dimension",__tree__:u,role:r(a,t)})},e.prototype.Category=function(t){if(null===this||"dimension"!==this["class"])return null
-if(void 0===t){for(var n=[],i=0,s=this.id.length;s>i;i++)n.push(this.Category(this.id[i]))
-return n}if("number"==typeof t){var r=this.id[t]
-return void 0!==r?this.Category(r):null}var l=this.__tree__.category
-if(void 0===l)return null
-var a=l.index[t]
-if(void 0===a)return null
-var o=l.unit&&l.unit[t]||null,u=l.coordinates&&l.coordinates[t]||null,h=l.child&&l.child[t]||null,f=l.note&&l.note[t]||null
-return new e({"class":"category",index:a,label:l.label[t],note:f,child:h,unit:o,coord:u})},e.prototype.Data=function(e){var n,i,s=[],r=function(t){for(var e in t)if(t.hasOwnProperty(e))return e},l=function(t,e){for(var n=[],i=t.dimension,s=i.id,l=0,a=s.length;a>l;l++){var o=s[l],u=e[o]
-n.push("string"==typeof u?u:1===i.size[l]?r(i[o].category.index):null)}return n}
-if(null===this||"dataset"!==this["class"])return null
-if(void 0===e){for(i=this.value.length,n=0;i>n;n++)s.push(this.Data(n))
-return s}if("number"==typeof e){var a=this.value[e]
-return void 0!==a?{value:a,status:this.status?this.status[e]:null}:null}var o=this.__tree__,u=o.dimension.size,h=u.length
-if(t(e)){if(this.length!==e.length)return null
-var f=1,c=0,d=[],p=[]
-for(n=0;h>n;n++)if(void 0!==e[n]){if("number"!=typeof e[n]||e[n]>=u[n])return null
-f*=n>0?u[h-n]:1,c+=f*e[h-n-1]}else d.push(n),p.push(u[n])
-if(d.length>1)return null
-if(1===d.length){for(var v=0,g=p[0];g>v;v++){var y=[]
-for(n=0;h>n;n++)y.push(n!==d[0]?e[n]:v)
-s.push(this.Data(y))}return s}return{value:this.value[c],status:this.status?this.status[c]:null}}var _=l(o,e),b=[],m=o.dimension
-for(i=_.length,n=0;i>n;n++)b.push(m[m.id[n]].category.index[_[n]])
-return this.Data(b)},e.prototype.toTable=function(t,e){if(null===this||"dataset"!==this["class"])return null
-1==arguments.length&&"function"==typeof t&&(e=t,t=null)
-var n,i,s,r,l,a=this.__tree__
-if(t=t||{field:"label",content:"label",vlabel:"Value",slabel:"Status",type:"array",status:!1},"function"==typeof e){n=this.toTable(t)
-var o=[],u="array"!==t.type?0:1,h="object"!==t.type?n.slice(u):n.rows.slice(0)
-for(l=h.length,i=0;l>i;i++){var f=e.call(this,h[i],i)
-void 0!==f&&o.push(f)}return"object"===t.type?{cols:n.cols,rows:o}:("array"===t.type&&o.unshift(n[0]),o)}if("arrobj"===t.type){n=this.toTable({field:"id",content:t.content,status:t.status})
-var c=[],d=n.shift()
-for(l=n.length,i=0;l>i;i++){var p={}
-for(s=n[i].length;s--;)p[d[s]]=n[i][s]
-c.push(p)}return c}var v,g,y,_,b="id"===t.field
-if("object"===t.type){var m="number"==typeof this.value[0]||null===this.value[0]?"number":"string"
-v=function(t,e){var n=b&&t||e||t
-z.push({id:t,label:n,type:"string"})},g=function(t,e,n){var i=b&&"value"||t||"Value",s=b&&"status"||e||"Status"
-n&&z.push({id:"status",label:s,type:"string"}),z.push({id:"value",label:i,type:m})},y=function(t){B.push({v:t})},_=function(t){B.push({v:t}),V.push({c:B})}}else v=function(t,e){var n=b&&t||e||t
-z.push(n)},g=function(t,e,n){var i=b&&"value"||t||"Value",s=b&&"status"||e||"Status"
-n&&z.push(s),z.push(i),T.push(z)},y=function(t){B.push(t)},_=function(t){B.push(t),T.push(B)}
-var w=a.dimension,O=w.id,x=O.length,S=w.size
-if(x!=S.length)return!1
-var k=[],P=1,D=1,j=[],J=[],N=[],T=[],z=[],V=[]
-for(i=0;x>i;i++){var q=O[i],C=w[q].label
-v(q,C),P*=S[i],D*=S[i]
-var R=[]
-for(s=0;s<S[i];s++)for(var X in w[O[i]].category.index)if(w[O[i]].category.index[X]===s){var E="id"!==t.content&&w[O[i]].category.label?w[O[i]].category.label[X]:X
-R.push(E)}k.push(R),j.push(D)}for(g(t.vlabel,t.slabel,t.status),l=k.length,i=0;l>i;i++){for(var G=[],A=0,H=k[i].length;H>A;A++)for(var I=0;I<P/j[i];I++)G.push(k[i][A])
-J.push(G)}for(l=J.length,i=0;l>i;i++){var L=[],M=0
-for(r=0;P>r;r++)L.push(J[i][M]),M++,M===J[i].length&&(M=0)
-N.push(L)}for(r=0;P>r;r++){var B=[]
-l=J.length
-for(var F=0;l>F;F++)y(N[F][r])
-t.status&&y(this.status?this.status[r]:null),_(this.value[r])}return"object"===t.type?{cols:z,rows:V}:T},e.prototype.node=function(){return this.__tree__},e.prototype.toString=function(){return this["class"]},e.prototype.toValue=function(){return this.length},JSONstat.jsonstat=e}()
+function JSONstat(t,e,n){return window===this?new JSONstat.jsonstat(t,e,n):void 0}var JSONstat=JSONstat||{};JSONstat.version="0.12.1",function(){"use strict";function t(t){return"[object Array]"===Object.prototype.toString.call(t)}function e(e,n,i){var r,s,l,o,a=function(t,e,n){var i,r,s=e!==!1;if(n=e?n:!0,window.XDomainRequest&&/^(http(s)?:)?\/\//.test(t)){if(!s)return;r=new XDomainRequest,r.onload=function(){i=JSON.parse(r.responseText),n?e.call(JSONstat(i)):e.call(i)},r.open("GET",t),r.send()}else if(r=new XMLHttpRequest,r.onreadystatechange=function(){if(4===r.readyState){var t=r.status;i=t&&r.responseText&&(t>=200&&300>t||304===t)?JSON.parse(r.responseText):null,s&&(n?e.call(JSONstat(i)):e.call(i))}},r.open("GET",t,s),r.send(null),!s)return i},u=function(e,n){var i,r=[];if("string"==typeof e&&(e=[e]),t(e)){if(e.length===n)return e;if(1===e.length){for(i=0;n>i;i++)r.push(e[0]);return r}}for(i=0;n>i;i++){var s=void 0===e[i]?null:e[i];r.push(s)}return r},h=function(e){var n=void 0===e.index?e.label:e.index;return t(n)?n.length:Object.keys(n).length};if(this.length=0,this.id=[],null!==e&&void 0!==e)switch(this["class"]=e["class"]||"bundle",this["class"]){case"bundle":var f=[],c=0;if(this.error=null,this.length=0,"string"==typeof e&&e.length>0&&(e=a(e,"function"==typeof n?n:!1,void 0===i?!0:i)),null===e||"object"!=typeof e)return this["class"]=null,void(void 0===e&&(delete this.id,delete this["class"],delete this.error,delete this.length));if(e.hasOwnProperty("error"))return void(this.error=e.error);if("dataset"===e["class"]||"collection"===e["class"]||"dimension"===e["class"])return JSONstat(e);for(s in e)c++,f.push(s);this.__tree__=e,this.length=c,this.id=f;break;case"dataset":e.hasOwnProperty("__tree__")?this.__tree__=r=e.__tree__:this.__tree__=r=e,this.label=r.label||null,this.note=r.note||null,this.link=r.link||null,this.href=r.href||null,this.updated=r.updated||null,this.source=r.source||null,this.extension=r.extension||null;var d,p=0,v=r.size||r.dimension&&r.dimension.size;if(this.size=v,r.hasOwnProperty("value")&&t(r.value))p=r.value.length;else{var y=1;for(d=v.length;d--;)y*=v[d];p=y}if(this.value=u(r.value,p),this.status=r.hasOwnProperty("status")?u(r.status,p):null,r.hasOwnProperty("dimension")){var g=r.dimension,_=r.role||!r.version&&g.role||null,b=r.id||g.id,m=v.length,O=function(t){_.hasOwnProperty(t)||(_[t]=null)};if(!t(b)||!t(v)||b.length!=m)return;if(this.length=m,this.id=b,_&&(O("time"),O("geo"),O("metric"),O("classification")),_&&null===_.classification){var w=[],x=["time","geo","metric"],S=function(t,e){for(var n=e.length;n--;)if(t===e[n])return!0;return!1};for(d=0;3>d;d++){var k=_[x[d]];null!==k&&(w=w.concat(k))}for(_.classification=[],d=0;m>d;d++)S(b[d],w)||_.classification.push(b[d]);0===_.classification.length&&(_.classification=null)}this.role=_,this.n=p;for(var j=0,J=this.length;J>j;j++)if(g[b[j]].category.hasOwnProperty("index")){if(t(g[b[j]].category.index)){var N={},D=g[b[j]].category.index;for(l=D.length,o=0;l>o;o++)N[D[o]]=o;g[b[j]].category.index=N}}else{var P=0;g[b[j]].category.index={};for(s in g[b[j]].category.label)g[b[j]].category.index[s]=P++}}else this.length=0;break;case"dimension":if(!e.hasOwnProperty("__tree__"))return JSONstat({version:"2.0","class":"dataset",dimension:{d:e},id:["d"],size:[h(e.category)],value:[null]}).Dimension(0);r=e.__tree__;var z=[],T=r.category;if(!r.hasOwnProperty("category"))return;if(!T.hasOwnProperty("label")){T.label={};for(s in T.index)T.label[s]=s}for(s in T.index)z[T.index[s]]=s;this.__tree__=r,this.label=r.label||null,this.note=r.note||null,this.link=r.link||null,this.href=r.href||null,this.id=z,this.length=z.length,this.role=e.role,this.hierarchy=T.hasOwnProperty("child"),this.extension=r.extension||null;break;case"category":var E=e.child;this.id=E,this.length=null===E?0:E.length,this.index=e.index,this.label=e.label,this.note=e.note||null,this.unit=e.unit,this.coordinates=e.coord;break;case"collection":if(this.length=0,this.label=e.label||null,this.note=e.note||null,this.link=e.link||null,this.href=e.href||null,this.updated=e.updated||null,this.source=e.source||null,this.extension=e.extension||null,null!==this.link&&e.link.item){var A=e.link.item;if(this.length=t(A)?A.length:0,this.length)for(o=0;o<this.length;o++)this.id[o]=A[o].href}}}Array.prototype.indexOf||(Array.prototype.indexOf=function(t,e){var n;if(null==this)throw new TypeError('"this" is null or not defined');var i=Object(this),r=i.length>>>0;if(0===r)return-1;var s=+e||0;if(Math.abs(s)===1/0&&(s=0),s>=r)return-1;for(n=Math.max(s>=0?s:r-Math.abs(s),0);r>n;){if(n in i&&i[n]===t)return n;n++}return-1}),Array.prototype.forEach||(Array.prototype.forEach=function(t,e){var n,i;if(null==this)throw new TypeError(" this is null or not defined");var r=Object(this),s=r.length>>>0;if("function"!=typeof t)throw new TypeError(t+" is not a function");for(arguments.length>1&&(n=e),i=0;s>i;){var l;i in r&&(l=r[i],t.call(n,l,i,r)),i++}}),Object.keys||(Object.keys=function(t){var e,n=[];for(e in t)Object.prototype.hasOwnProperty.call(t,e)&&n.push(e);return n}),e.prototype.Item=function(t){if(null===this||"collection"!==this["class"]||!this.length)return null;if("number"==typeof t)return t>this.length||0>t?null:this.link.item[t];var e,n=[];if("object"==typeof t){if(!t["class"]&&!t.follow)return null;t["class"]?e="dataset"===t["class"]&&"boolean"==typeof t.embedded?t.embedded===!0?function(t,e,i){var r=t.link.item[e];i["class"]===r["class"]&&r.id&&r.size&&r.dimension&&n.push(r)}:function(t,e,i){var r=t.link.item[e];i["class"]!==r["class"]||r.id&&r.size&&r.dimension||n.push(r)}:function(t,e,i){i["class"]===t.link.item[e]["class"]&&n.push(t.link.item[e])}:t.follow&&(e=function(t,e){n.push(JSONstat(t.id[e]))})}else e=function(t,e){n.push(t.link.item[e])};for(var i=0;i<this.length;i++)e(this,i,t);return n},e.prototype.Dataset=function(t){if(null===this)return null;if("dataset"===this["class"])return void 0!==t?this:[this];var n,i=[],r=0;if("collection"===this["class"]){var s=this.Item({"class":"dataset",embedded:!0});if(void 0===t){for(n=s.length;n>r;r++)i.push(JSONstat(s[r]));return i}if("number"==typeof t&&t>=0&&t<s.length)return JSONstat(s[t]);if("string"==typeof t)for(n=s.length;n>r;r++)if(s[r].href===t)return JSONstat(s[r]);return null}if("bundle"!==this["class"])return null;if(void 0===t){for(n=this.id.length;n>r;r++)i.push(this.Dataset(this.id[r]));return i}if("number"==typeof t){var l=this.id[t];return void 0!==l?this.Dataset(l):null}var o=this.__tree__[t];return void 0===o?null:new e({"class":"dataset",__tree__:o})},e.prototype.Dimension=function(t){var n,i=[],r=this.id.length,s=function(t,e){if(null!==t)for(var n in t)for(var i=null!==t[n]?t[n].length:0;i--;)if(t[n][i]===e)return n;return null};if(null===this||"dataset"!==this["class"])return null;if(void 0===t){for(n=0;r>n;n++)i.push(this.Dimension(this.id[n]));return i}if("number"==typeof t){var l=this.id[t];return void 0!==l?this.Dimension(l):null}var o=this.role;if("object"==typeof t){if(t.hasOwnProperty("role")){for(n=0;r>n;n++){var a=this.id[n];s(o,a)===t.role&&i.push(this.Dimension(a))}return void 0===i[0]?null:i}return null}var u=this.__tree__.dimension;if(void 0===u)return null;var h=u[t];return void 0===h?null:new e({"class":"dimension",__tree__:h,role:s(o,t)})},e.prototype.Category=function(t){if(null===this||"dimension"!==this["class"])return null;if(void 0===t){for(var n=[],i=0,r=this.id.length;r>i;i++)n.push(this.Category(this.id[i]));return n}if("number"==typeof t){var s=this.id[t];return void 0!==s?this.Category(s):null}var l=this.__tree__.category;if(void 0===l)return null;var o=l.index[t];if(void 0===o)return null;var a=l.unit&&l.unit[t]||null,u=l.coordinates&&l.coordinates[t]||null,h=l.child&&l.child[t]||null,f=l.note&&l.note[t]||null;return new e({"class":"category",index:o,label:l.label[t],note:f,child:h,unit:a,coord:u})},e.prototype.Slice=function(e){if(null===this||"dataset"!==this["class"])return null;if(void 0===e)return this;if(!t(e)){var n,i=[];for(n in e)i.push([n,e[n]]);e=i}var r=this,s=e.length,l=r.toTable({field:"id",content:"id",status:!0}),o=r.status,a=l.shift(),u=!1,h=[],f=[],c=[],d=[];return e.forEach(function(t){var e=r.Dimension(t[0]);if(null===e)return void(u=!0);var n=e.id.indexOf(t[1]);return-1===n?void(u=!0):(c.push([r.id.indexOf(t[0]),n]),void d.push(e.Category(n).label))}),u?null:(l.forEach(function(t){var n,i={},r=0;for(n=t.length;n--;)i[a[n]]=t[n];e.forEach(function(t){i[t[0]]===t[1]&&r++}),s===r&&(h.push(i.value),f.push(i.status))}),r.n=h.length,r.value=r.__tree__.value=h,r.status=r.__tree__.status=null!==o?f:null,e.forEach(function(t,e){r.size[c[e][0]]=1,r.__tree__.dimension[t[0]].category.index={},r.__tree__.dimension[t[0]].category.index[t[1]]=0,r.__tree__.dimension[t[0]].category.label={},r.__tree__.dimension[t[0]].category.label[t[1]]=d[e]}),r)},e.prototype.Data=function(e,n){var i,r,s=[],l=function(t){for(var e in t)if(t.hasOwnProperty(e))return e},o=function(t,e,n){var i,r=[],s={},o=t.dimension,a=t.id||o.id,u=t.size||o&&o.size;if("array"===n){for(i=e.length;i--;)s[e[i][0]]=e[i][1];e=s}for(var h=0,f=a.length;f>h;h++){var c=a[h],d=e[c];r.push("string"==typeof d?d:1===u[h]?l(o[c].category.index):null)}return r};if(null===this||"dataset"!==this["class"])return null;if(void 0===e){for(r=this.value.length,i=0;r>i;i++)s.push(this.Data(i));return s}if("boolean"!=typeof n&&(n=!0),"number"==typeof e){var a=this.value[e];return void 0===a?null:n?{value:a,status:this.status?this.status[e]:null}:a}var u="object",h=this.__tree__,f=h.size||h.dimension&&h.dimension.size,c=f.length;if(t(e)){if(!t(e[0])){if(this.length!==e.length)return null;var d=1,p=0,v=[],y=[];for(i=0;c>i;i++)if(void 0!==e[i]){if("number"!=typeof e[i]||e[i]>=f[i])return null;d*=i>0?f[c-i]:1,p+=d*e[c-i-1]}else v.push(i),y.push(f[i]);if(v.length>1)return null;if(1===v.length){for(var g=0,_=y[0];_>g;g++){var b=[];for(i=0;c>i;i++)i!==v[0]?b.push(e[i]):b.push(g);s.push(this.Data(b,n))}return s}return n?{value:this.value[p],status:this.status?this.status[p]:null}:this.value[p]}u="array"}var m=o(h,e,u),O=[],w=h.dimension,x=h.id||w.id;for(i=0,r=m.length;r>i;i++)O.push(w[x[i]].category.index[m[i]]);return this.Data(O,n)},e.prototype.toTable=function(t,e){if(null===this||"dataset"!==this["class"])return null;1==arguments.length&&"function"==typeof t&&(e=t,t=null);var n,i,r,s,l,o=this.__tree__;if(t=t||{field:"label",content:"label",vlabel:"Value",slabel:"Status",type:"array",status:!1},"function"==typeof e){n=this.toTable(t);var a=[],u="array"!==t.type?0:1,h="object"!==t.type?n.slice(u):n.rows.slice(0);for(l=h.length,i=0;l>i;i++){var f=e.call(this,h[i],i);void 0!==f&&a.push(f)}return"object"===t.type?{cols:n.cols,rows:a}:("array"===t.type&&a.unshift(n[0]),a)}if("arrobj"===t.type){n=this.toTable({field:"id",content:t.content,status:t.status});var c=[],d=n.shift();for(l=n.length,i=0;l>i;i++){var p={};for(r=n[i].length;r--;)p[d[r]]=n[i][r];c.push(p)}return c}var v,y,g,_,b="id"===t.field;if("object"===t.type){var m="number"==typeof this.value[0]||null===this.value[0]?"number":"string";v=function(t,e){var n=b&&t||e||t;T.push({id:t,label:n,type:"string"})},y=function(t,e,n){var i=b&&"value"||t||"Value",r=b&&"status"||e||"Status";n&&T.push({id:"status",label:r,type:"string"}),T.push({id:"value",label:i,type:m})},g=function(t){B.push({v:t})},_=function(t){B.push({v:t}),E.push({c:B})}}else v=function(t,e){var n=b&&t||e||t;T.push(n)},y=function(t,e,n){var i=b&&"value"||t||"Value",r=b&&"status"||e||"Status";n&&T.push(r),T.push(i),z.push(T)},g=function(t){B.push(t)},_=function(t){B.push(t),z.push(B)};var O=o.dimension,w=o.id||O.id,x=o.size||O.size,S=w.length;if(S!=x.length)return!1;var k=[],j=1,J=1,N=[],D=[],P=[],z=[],T=[],E=[];for(i=0;S>i;i++){var A=w[i],C=O[A].label;v(A,C),j*=x[i],J*=x[i];var M=[];for(r=0;r<x[i];r++)for(var V in O[w[i]].category.index)if(O[w[i]].category.index[V]===r){var q="id"!==t.content&&O[w[i]].category.label?O[w[i]].category.label[V]:V;M.push(q)}k.push(M),N.push(J)}for(y(t.vlabel,t.slabel,t.status),l=k.length,i=0;l>i;i++){for(var R=[],X=0,G=k[i].length;G>X;X++)for(var I=0;I<j/N[i];I++)R.push(k[i][X]);D.push(R)}for(l=D.length,i=0;l>i;i++){var H=[],L=0;for(s=0;j>s;s++)H.push(D[i][L]),L++,L===D[i].length&&(L=0);P.push(H)}for(s=0;j>s;s++){var B=[];l=D.length;for(var F=0;l>F;F++)g(P[F][s]);t.status&&g(this.status?this.status[s]:null),_(this.value[s])}return"object"===t.type?{cols:T,rows:E}:z},e.prototype.node=function(){return this.__tree__},e.prototype.toString=function(){return this["class"]},e.prototype.toValue=function(){return this.length},JSONstat.jsonstat=e}();

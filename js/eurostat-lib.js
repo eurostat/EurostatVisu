@@ -33,6 +33,7 @@
 
 
 	//to solve bug in format for flags
+	//TODO check if still necessary in version 2.1
 	EstLib.fixEurostatFormatBug = function(ds){
 		if(ds.status && ds.status.value) ds.status = ds.status.value;
 	};
