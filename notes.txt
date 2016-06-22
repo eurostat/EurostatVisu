@@ -1,32 +1,18 @@
+http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
+
+show monthly data by coicop, re-using donut presentation, with value - COCICOP sunburst heatmap
 chart with contribution - slide 86
 
-
-FPMT: time series - extract common things!!! - add external data
-FPMT: time series + small multiples
-
-Show monthly data by coicop, re-using donut presentation, with value
 Add linear heatmaps to timser visualisation
-COCICOP sunburst heatmap
 stacked time series for decomposition by geo/product
-For GI: grided chart OR stacked bar chart
 
-FPMT: linear heatmaps
-FPMT: map small multiples
+generic map for Eurostat
 
 
 
-http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
-https://worldstatisticsday.org/data-visualisation-challenge.html
+--- List of charts Existing charts in SE ---
 
-validation (for member states)
-COICOP
-
-check that:
-http://www.eea.europa.eu/data-and-maps/daviz
-
---- List of charts ---
-
-Existing charts in SE:
+:
 
 Inflation in the euro area: http://ec.europa.eu/eurostat/statistics-explained/index.php/Inflation_in_the_euro_area
 Table 1: Euro area annual rate of change, by component
@@ -44,20 +30,3 @@ HICP - household consumption patterns: http://ec.europa.eu/eurostat/statistics-e
 Figure 2: pie charts. Country weights in EU and Euro area
 
 Inflation dashboard: http://ec.europa.eu/eurostat/inflation-dashboard/
-
-
-New charts:
-- Time series, by country, coicop, etc.
-- Time series + stacked bar chart, with arrows, showing decomposition by product/country
-- product and country weights:
-   - Sunburst for product and country weights
-http://bl.ocks.org/mbostock/4063423
-https://www.jasondavies.com/coffee-wheel/
-   - pie charts on bubble map or as small multiples
-
-- small multiples for time series + maps
-- bubble maps with pie charts
-- Map
-- comparison HICP/HICP_CT
-- stacked time series for FPMT
-
