@@ -1,4 +1,6 @@
 http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
+show COCIOP hierarchy as: http://bl.ocks.org/robschmuecker/7880033
+http://bl.ocks.org/mbostock/4063550
 
 show monthly data by coicop, re-using donut presentation, with value - COCICOP sunburst heatmap
 chart with contribution - slide 86
