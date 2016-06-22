@@ -12,9 +12,9 @@
 
 		$.when(
 				//get weight data
-				$.ajax({url:EstLib.getEstatDataURL("prc_hicp_inw",{geo:"EA",coicop:coicops,lastTimePeriod:1}, null, null, "2.1")}),
+				$.ajax({url:EstLib.getEstatDataURL("prc_hicp_inw",{geo:"EA",coicop:coicops,lastTimePeriod:1})}),
 				//get rate of change (ROC) data
-				$.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{geo:"EA",unit:"RCH_A",coicop:coicops,lastTimePeriod:7}, null, null, "2.1")})
+				$.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{geo:"EA",unit:"RCH_A",coicop:coicops,lastTimePeriod:7})})
 		).then(function(weightData, rocData) {
 			var ds;
 

@@ -273,7 +273,6 @@
 				//extract data
 				for(var i=0; i<arguments.length; i++){
 					var data = arguments[i][0];
-					EstLib.fixEurostatFormatBug(data);
 					var ds = JSONstat(data).Dataset(0);
 					var geos = ds.Dimension("geo").id;
 					var year = ds.Dimension("time").id[0];

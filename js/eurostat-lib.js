@@ -11,7 +11,7 @@
 	EstLib.getEstatDataURL = function(table, params, language, format, version){
 		language = language || "en";
 		format = format || "json";
-		version = version || "1.1"; //TODO update to version 2.1
+		version = version || "2.1";
 		var url = [];
 		url.push(EstLib.getEstatRestDataURLBase,"v",version,"/",format,"/",language,"/",table,"?");
 		if(params)
@@ -30,14 +30,6 @@
 	EstLib.getMonthTXT = function(monthInt){
 		return monthInt<=9?"0"+monthInt:""+monthInt;
 	};
-
-
-	//to solve bug in format for flags
-	//TODO check if still necessary in version 2.1
-	EstLib.fixEurostatFormatBug = function(ds){
-		if(ds.status && ds.status.value) ds.status = ds.status.value;
-	};
-
 
 	//override country names, to shoter ones
 	EstLib.overrideCountryNames = function(dict){

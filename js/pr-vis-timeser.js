@@ -171,9 +171,7 @@
 						var key = sel[j].geo+"_"+sel[j].coicop;
 						if(dsDict[indic][key]) continue;
 						var data = arguments.length==3&&arguments[1]==="success" ? arguments[0] : arguments[j][0];
-						var ds = data["prc_hicp_"+indic];
-						EstLib.fixEurostatFormatBug(ds);
-						EstLib.overrideCountryNames(ds.dimension.geo.category.label);
+						EstLib.overrideCountryNames(data.dimension.geo.category.label);
 						data = JSONstat(data).Dataset(0);
 
 						//if index and new index reference year, re-reference
@@ -432,7 +430,7 @@
 
 			//get geo info
 			geos = geos[0];
-			geoDict = geos["prc_hicp_manr"].dimension.geo.category.label;
+			geoDict = geos.dimension.geo.category.label;
 			EstLib.overrideCountryNames(geoDict);
 			geos = JSONstat(geos).Dataset(0);
 			PrVis.fillGeoList(geoList, geos.Dimension("geo").id, function(geo){return geoDict[geo];});
