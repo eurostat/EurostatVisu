@@ -1,7 +1,4 @@
 PrVis.coicopsDict = {
-		"AP" : {desc:"Administered prices", parents:[], children:["APF","APM"]},
-		"APF" : {desc:"Fully administered prices", parents:["AP"], children:[]},
-		"APM" : {desc:"Mainly administered prices", parents:["AP"], children:[]},
 		"CP00" : {desc:"All-items HICP", parents:[], children:["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"]},
 		"CP01" : {desc:"Food and non-alcoholic beverages", parents:["CP00"], children:["CP011","CP012"]},
 		"CP011" : {desc:"Food", parents:["CP01","FROOPP"], children:["CP0111","CP0112","CP0113","CP0114","CP0115","CP0116","CP0117","CP0118","CP0119"]},
@@ -172,4 +169,7 @@ PrVis.coicopsDict = {
 		"TOT_X_NRG_FOOD_NP" : {desc:"Overall index excluding energy and unprocessed food", parents:[], children:["FOOD_P","TOT_X_NRG_FOOD"]},
 		"TOT_X_NRG_FOOD_S" : {desc:"Overall index excluding energy and seasonal food", parents:["TOT_X_FOOD_S"], children:["CP0111","CP0112","CP0114","CP0115","CP0118","CP0119","CP0121","CP0122","CP0211","CP0212","CP0213","CP022","TOT_X_NRG_FOOD"]},
 		"TOT_X_TBC" : {desc:"Overall index excluding tobacco", parents:[], children:["CP0111","CP0114","CP0115","CP0118","CP0119","CP0121","CP0122","CP0211","CP0212","CP0213","FOOD_NP","NRG","TOT_X_NRG_FOOD"]},
+		"AP" : {desc:"Administered prices", parents:[], children:["APF","APM"]},
+		"APF" : {desc:"Fully administered prices", parents:["AP"], children:[]},
+		"APM" : {desc:"Mainly administered prices", parents:["AP"], children:[]},
 };

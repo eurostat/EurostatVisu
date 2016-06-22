@@ -6,6 +6,7 @@
 (function($, PrVis) {
 
 	$(function() {
+		//http://ec.europa.eu/eurostat/statistics-explained/index.php/Inflation_in_the_euro_area
 
 		//coicop codes corresponding to table raws
 		var coicops = ["CP00", "TOT_X_NRG", "TOT_X_NRG_FOOD", "TOT_X_NRG_FOOD_NP", "FOOD", "FOOD_P", "FOOD_NP", "NRG", "IGD_NNRG", "SERV"];

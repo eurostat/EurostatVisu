@@ -11,6 +11,7 @@
 		//TODO show flags
 		//TODO do something when no data
 		//TODO fill empty spaces ?
+		//TODO coicop 5
 
 		//
 		PrVis.modifyCoicopHierarchy();

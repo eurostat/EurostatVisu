@@ -1,5 +1,4 @@
 chart with contribution - slide 86
-basket evolution
 
 
 FPMT: time series - extract common things!!! - add external data
