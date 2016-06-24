@@ -116,7 +116,7 @@
 					for(var c=0; c<coicops.length; c++){
 						var coicop = coicops[c];
 						var data_ = [];
-						for(var year=yearMin; year<yearMax; year++){
+						for(var year=yearMin; year<=yearMax; year++){
 							var s = ds.Data({coicop:coicop,time:""+year,geo:geoSel});
 							data_.push({year:year,y0:0,y:s.value});
 							data_.coicop = coicop;
