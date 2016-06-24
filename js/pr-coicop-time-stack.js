@@ -38,16 +38,17 @@
 				if(out) return out;
 			}
 		};
-		var color = d3.scale.linear().range(["#aad", "#556"]); //TODO deprecated
 
 		//title
 		var title = $("#title");
 
-		//svg, with a bottom-right origin.
-		var width = 960, height = 500;
-		var svg = d3.select("#stack").append("svg")
-		.attr("width", width)
-		.attr("height", height);
+		//svg elements
+		var width = 800, height = 400, marginBottom = 12, marginSide = 20;
+		var svg = d3.select("#stack").append("svg").attr("width", width).attr("height", height);
+		var chart = svg.append("g").attr("transform", "translate("+marginSide+",0)");
+		var grat = svg.append("g").attr("transform", "translate("+marginSide+","+(height-marginBottom)+")");
+		grat.style({fill:"none",stroke:"#000",font:"10px sans-serif"});
+
 
 		//legend
 		var lgd = $("#legend");
@@ -104,34 +105,49 @@
 					ds = JSONstat(ds).Dataset(0);
 
 					//clear previous
-					svg.selectAll("*").remove();
+					chart.selectAll("*").remove();
 
-					var n = coicops.length;
-					var yearMin = 1996, yearMax = 2016; //TODO replace
-					var stack = d3.layout.stack().offset("zero");
+					//get years interval
+					var years = ds.Dimension("time").id,
+					yearMin = +years[0], yearMax = +years[years.length-1]
 
-					var data = [];
+					//structure dataset
+					data = [];
 					for(var c=0; c<coicops.length; c++){
+						var coicop = coicops[c];
 						var data_ = [];
 						for(var year=yearMin; year<yearMax; year++){
-							var value = ds.Data({coicop:coicops[c],time:""+year,geo:geoSel}).value;
-							data_.push({x:year,y0:0,y:value});
+							var s = ds.Data({coicop:coicop,time:""+year,geo:geoSel});
+							data_.push({year:year,y0:0,y:s.value});
+							data_.coicop = coicop;
 						}
 						data.push(data_);
 					}
+					var stack = d3.layout.stack().offset("zero");
 					data = stack(data);
 
-					var x = d3.scale.linear().domain([yearMin, yearMax]).range([0, width]);
-					var y = d3.scale.linear().domain([0, 1000]).range([height, 0]);
+					//scales
+					var xScale = d3.scale.linear().domain([yearMin, yearMax]).range([0, width-2*marginSide]);
+					var yScale = d3.scale.linear().domain([0, 1000]).range([height-marginBottom, 0]);
 
 					//area construction function
 					var area = d3.svg.area()
-					.x(function(d) { return x(d.x); })
-					.y0(function(d) { return y(d.y0); })
-					.y1(function(d) { return y(d.y0 + d.y); });
+					.x(function(d) { return xScale(d.year); })
+					.y0(function(d) { return yScale(d.y0); })
+					.y1(function(d) { return yScale(d.y0 + d.y); });
 
-					svg.selectAll("path").data(data).enter().append("path").attr("d", area)
-					.style("fill", function() { return color(Math.random()); }); //TODO use coicopToColor
+					chart.selectAll("path").data(data).enter().append("path").attr("d", area)
+					.style("fill", function(d) { return coicopToColor(d.coicop); })
+					.attr("id", function(d) { return "area"+d.coicop; })
+					//.interpolate("monotone")
+
+					//year labels
+					grat.selectAll("*").remove();
+					var xAxis = d3.svg.axis().scale(xScale).tickSize(-height).orient("bottom");
+					grat.call(xAxis);
+
+					//TODO hignhlight
+
 				}, function() {
 					console.log("Could not load data"); //TODO better
 				});
