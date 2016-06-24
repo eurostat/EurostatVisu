@@ -43,12 +43,11 @@
 		var title = $("#title");
 
 		//svg elements
-		var width = 800, height = 400, marginBottom = 12, marginSide = 20;
+		var width = 800, height = 400, marginBottom = 30, marginSide = 20;
 		var svg = d3.select("#stack").append("svg").attr("width", width).attr("height", height);
 		var chart = svg.append("g").attr("transform", "translate("+marginSide+",0)");
-		var grat = svg.append("g").attr("transform", "translate("+marginSide+","+(height-marginBottom)+")");
-		grat.style({fill:"none",stroke:"#000",font:"10px sans-serif"});
-
+		var grat = svg.append("g").attr("class", "xaxis").attr("transform", "translate("+marginSide+","+(height-marginBottom)+")");
+		grat.style({fill:"none",stroke:"#777",font:"10px sans-serif"});
 
 		//legend
 		var lgd = $("#legend");
@@ -143,8 +142,10 @@
 
 					//year labels
 					grat.selectAll("*").remove();
-					var xAxis = d3.svg.axis().scale(xScale).tickSize(-height).orient("bottom");
+					var xAxis = d3.svg.axis().scale(xScale).tickSize(-height).tickValues(years).tickFormat(function(d) {return d;}).orient("bottom");
 					grat.call(xAxis);
+					//rotate labels
+					grat.selectAll(".xaxis text").attr("transform", function(d) { return "translate(" + (10+this.getBBox().height*-2) + "," + this.getBBox().height + ")rotate(-45)"; });
 
 					//TODO hignhlight
 
