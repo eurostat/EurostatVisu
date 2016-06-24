@@ -12,7 +12,7 @@
 
 		//
 		//PrVis.modifyCoicopHierarchy();
-		//TODO remove too low level coicops.
+		//TODO add more coicop levels?
 
 		//TODO add ECB
 		var coicops = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
@@ -157,7 +157,7 @@
 					grat.selectAll(".xaxis text").attr("transform", function(d) { return "translate(" + (10+this.getBBox().height*-2) + "," + this.getBBox().height + ")rotate(-45)"; });
 
 				}, function() {
-					console.log("Could not load data"); //TODO better
+					console.log("Could not load product weight data for "+geoSel);
 				});
 
 			};
@@ -165,7 +165,7 @@
 			//
 			updateChart();
 		}, function() {
-			console.log("Could not load initialisation data"); //TODO better
+			console.log("Could not load initialisation data");
 		});
 	});
 }(jQuery, window.PrVis = window.PrVis || {} ));

@@ -267,7 +267,7 @@
 			updateChart();
 
 		}, function() {
-			console.log("Could not load initialisation data"); //TODO better
+			console.log("Could not load initialisation data");
 		});
 	});
 }(jQuery, window.PrVis = window.PrVis || {} ));
