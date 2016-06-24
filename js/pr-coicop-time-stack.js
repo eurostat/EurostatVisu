@@ -29,7 +29,7 @@
 				return colorSA[getFamCode(coicop)];
 			}
 		};
-		var getFamCode = function(coicop){
+		/*var getFamCode = function(coicop){
 			if( $.inArray(coicop, PrVis.coicopsDict["SA"].children)>=0 ) return coicop;
 			var parents = PrVis.coicopsDict[coicop].parents;
 			if(parents.length == 0) return;
@@ -37,7 +37,7 @@
 				var out = getFamCode(parents[i]);
 				if(out) return out;
 			}
-		};
+		};*/
 
 		//title
 		var title = $("#title");
@@ -52,18 +52,24 @@
 		//legend
 		var lgd = $("#legend");
 		lgd.css("height", height);
-		var infoDiv = null;
 		var refreshLegend = function(){
 			lgd.empty();
 			if($("input:radio[name=ctype]:checked").val() === "CP00"){
-				var mouseoverFun = function() { /*highlightCoicop($(this).attr("id").replace("lgdElt",""));*/ };
-				var mouseoutFun = function() { /*unHighlightCoicop($(this).attr("id").replace("lgdElt",""));*/ };
+				var mouseoverFun = function() { highlightCoicop($(this).attr("id").replace("lgdElt","")); };
+				var mouseoutFun = function() { unHighlightCoicop($(this).attr("id").replace("lgdElt","")); };
 				PrVis.buildCOICOPLegend(lgd, coicopToColor, mouseoverFun, mouseoutFun);
 			} else {}
-			//info
-			infoDiv = $("<div>").appendTo(lgd).css("font-size","1.5em").css("margin-top","10px")/*.css("border","solid 1px").css("width","auto")*/;
 		};
 		refreshLegend();
+
+		var highlightCoicop = function(coicop){
+			$("#area"+coicop).css("fill","red");
+			$("#lgdEltRect"+coicop.substring(0,4)).css("fill","red");
+		};
+		var unHighlightCoicop = function(coicop){
+			$("#area"+coicop).css("fill",coicopToColor(coicop));
+			$("#lgdEltRect"+coicop.substring(0,4)).css("fill",coicopToColor(coicop));
+		};
 
 		var geoList = $("#geoList");
 
@@ -113,7 +119,7 @@
 
 					//structure dataset
 					data = [];
-					for(var c=0; c<coicops.length; c++){
+					for(var c=coicops.length-1; c>=0; c--){
 						var coicop = coicops[c];
 						var data_ = [];
 						for(var year=yearMin; year<=yearMax; year++){
@@ -139,7 +145,9 @@
 					chart.selectAll("path").data(data).enter().append("path").attr("d", area)
 					.style("fill", function(d) { return coicopToColor(d.coicop); })
 					.attr("id", function(d) { return "area"+d.coicop; })
-					//.interpolate("monotone")
+					.on("mouseover", function(d) { highlightCoicop(d.coicop); })
+					.on("mouseout", function(d) { unHighlightCoicop(d.coicop); })
+					//.interpolate("monotone") TODO test that
 
 					//year labels
 					grat.selectAll("*").remove();
@@ -147,8 +155,6 @@
 					grat.call(xAxis);
 					//rotate labels
 					grat.selectAll(".xaxis text").attr("transform", function(d) { return "translate(" + (10+this.getBBox().height*-2) + "," + this.getBBox().height + ")rotate(-45)"; });
-
-					//TODO hignhlight
 
 				}, function() {
 					console.log("Could not load data"); //TODO better
