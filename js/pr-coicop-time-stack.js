@@ -67,7 +67,7 @@
 
 		var geoList = $("#geoList");
 
-		//get base information on years and geos
+		//get base information on geos
 		$.when($.ajax({url:EstLib.getEstatDataURL("prc_hicp_inw",{coicop:"CP00"})}))
 		.then(function(geoDim) {
 			EstLib.overrideCountryNames(geoDim.dimension.geo.category.label);
@@ -83,7 +83,8 @@
 
 			//build geolist
 			PrVis.fillGeoList(geoList, geoDim.id, function(geo){return geoDim.Category(geo).label;});
-			$('#geoList option[value="EA"]').attr('selected', 'selected');
+			var geoURL = PrVis.getParameterByName("geo") || "EA";
+			$('#geoList option[value="'+geoURL+'"]').attr('selected', 'selected');
 			geoList.selectmenu({
 				change:function(){
 					$("#geoTXT").text( geoDim.Category(geoList.find(":selected").attr("value")).label );
