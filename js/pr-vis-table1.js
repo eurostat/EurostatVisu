@@ -17,20 +17,18 @@
             //get rate of change (ROC) data
             $.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{geo:"EA",unit:"RCH_A",coicop:coicops,lastTimePeriod:7})})
         ).then(function(weightData, rocData) {
-                var ds;
-
 
                 //decode weight data
-                ds = JSONstat(weightData).Dataset(0);
+                weightData = JSONstat(weightData).Dataset(0);
 
                 //write weight year in table header
-                $("#wlabely").text( ds.Dimension("time").Category(0).label ).removeAttr("id");
+                $("#wlabely").text( weightData.Dimension("time").Category(0).label ).removeAttr("id");
 
                 //fill weight column
                 for(var i=0; i<coicops.length; i++){
                     //get weight data
                     var coicop = coicops[i];
-                    var d = ds.Data({coicop:coicop});
+                    var d = weightData.Data({coicop:coicop});
                     var value = d? d3.round(d.value, 1) + (d.status||"") : ":";
 
                     //fill table cell
@@ -40,10 +38,10 @@
 
 
                 //decode rate of change data
-                ds = JSONstat(rocData).Dataset(0);
+                rocData = JSONstat(rocData).Dataset(0);
 
                 //retrieve months
-                var months = ds.Dimension("time").Category();
+                var months = rocData.Dimension("time").Category();
 
                 //build header cells and fill with month labels
                 var hrow = $("#hrow");
@@ -62,7 +60,7 @@
                         month = months[j].label;
 
                         //get ROC data
-                        d = ds.Data({coicop:coicop,time:month});
+                        d = rocData.Data({coicop:coicop,time:month});
                         value = d? d3.round(d.value, 1).toFixed(1) + (d.status||"") : ":";
 
                         //last month in bold
