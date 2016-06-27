@@ -10,14 +10,12 @@
 
 		var info = $("#info");
 
-		//try with annual data: 
-
 		$.when(
 				//get inflation data
 				//$.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{unit:"RCH_A",coicop:"CP00"})}),
 				$.ajax({url:EstLib.getEstatDataURL("prc_hicp_aind",{unit:"RCH_A_AVG",coicop:"CP00"})}),
 				//get unemployment data
-				//$.ajax({url:EstLib.getEstatDataURL("une_rt_m",{age:"TOTAL",sex:"T",s_adj:"NSA",unit:"PC_ACT"})}) //TODO use seasonal adjusted?
+				//$.ajax({url:EstLib.getEstatDataURL("une_rt_m",{age:"TOTAL",sex:"T",s_adj:"NSA",unit:"PC_ACT"})}) //use seasonal adjusted?
 				$.ajax({url:EstLib.getEstatDataURL("une_rt_a",{age:"TOTAL",sex:"T",unit:"PC_ACT"})})
 		).then(function(inflationData, unemploymentData) {
 			EstLib.overrideCountryNames(inflationData[0].dimension.geo.category.label);
@@ -28,11 +26,11 @@
 			unemploymentData = JSONstat(unemploymentData).Dataset(0);
 
 			//function to compute intersection of two arrays
-			var intersection = function(array1,array2){ return array1.filter(function(n) { return array2.indexOf(n) != -1; }); }
+			var intersection = function(array1,array2){ return array1.filter(function(n) { return array2.indexOf(n) != -1; }); };
 
 			//get time and geo
-			var times = intersection(inflationData.Dimension("time").id, unemploymentData.Dimension("time").id)
-			var geos = intersection(inflationData.Dimension("geo").id, unemploymentData.Dimension("geo").id)
+			var times = intersection(inflationData.Dimension("time").id, unemploymentData.Dimension("time").id);
+			var geos = intersection(inflationData.Dimension("geo").id, unemploymentData.Dimension("geo").id);
 			geos.splice(geos.indexOf("US"),1);
 			geos.splice(geos.indexOf("TR"),1);
 
@@ -70,7 +68,7 @@
 				//.interpolate("linear")
 				.interpolate("cardinal")
 				;
-			}
+			};
 
 			//draw chart
 			for(var i=0; i<geos.length; i++){
@@ -79,13 +77,13 @@
 				.attr("d", lineFunction(geo)(times))
 				.attr("id", "curve"+geo)
 				.attr("stroke", "#555").attr("stroke-width", 1).attr("fill", "none")
-				.on("mouseover", function(d) {
+				.on("mouseover", function() {
 					var o = d3.select(this);
 					o.attr("stroke", "blue").attr("stroke-width", 3);
 					var geoName = inflationData.Dimension("geo").Category(o.attr("id").replace("curve","")).label;
 					info.html(geoName);
 				})
-				.on("mouseout", function(d) {
+				.on("mouseout", function() {
 					d3.select(this).attr("stroke", "black").attr("stroke-width", 1);
 					info.html("");
 				})
