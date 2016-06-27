@@ -48,7 +48,9 @@
 				return d3.svg.line()
 				.x(function(d) { return xScale(unemploymentData.Data({time:d,geo:geo}).value); })
 				.y(function(d) { return yScale(inflationData.Data({time:d,geo:geo}).value); })
-				.interpolate("linear");
+				//.interpolate("linear")
+				.interpolate("cardinal")
+				;
 			}
 
 			for(var i=0; i<geos.length; i++){
