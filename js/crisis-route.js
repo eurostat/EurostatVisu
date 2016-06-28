@@ -8,7 +8,11 @@
 		//http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
 		//https://www.dashingd3js.com/svg-paths-and-d3js
 
-		var info = $("#info");
+		//TODO show strip with years
+		//TODO add legend with country
+
+		//TODO graticule dashed
+		//TODO show arrows in chart labels
 
 		$.when(
 				//get inflation data
@@ -115,7 +119,7 @@
 			//TODO add points with labels - time. show them when passing over.
 			var points = chart.append("g").attr("id", "points");
 			var pointsLblTime = chart.append("g").attr("id", "pointsLblTime");
-			//var pointsLblGeo = chart.append("g").attr("id", "pointsLblGeo");
+			var pointsLblGeo = chart.append("g").attr("id", "pointsLblGeo");
 			for(var i=0; i<geos.length; i++){
 				var geo = geos[i];
 				var g;
@@ -135,7 +139,7 @@
 				//time labels
 				g = pointsLblTime.append("g").attr("id", "pointsLblTime"+geo);
 				g.selectAll("text").data(dataset[geo]).enter().append("text")
-				.attr("display", "none")//.attr("fill", "black").attr("stroke-width", 0)
+				.attr("display", "none")
 				.attr("class", function(d) { return "lblTime"; })
 				.attr("geo", function(d) { return d.geo; })
 				.attr("time", function(d) { return d.time; })
@@ -144,12 +148,20 @@
 				.text(function(d) { return d.time; })
 				;
 
-				//TODO geo labels
+				//geo labels
+				g = pointsLblGeo.append("g").attr("id", "pointsLblGeo"+geo);
+				g.selectAll("text").data(dataset[geo]).enter().append("text")
+				.attr("display", "none")
+				.attr("class", function(d) { return "lblGeo"; })
+				.attr("geo", function(d) { return d.geo; })
+				.attr("time", function(d) { return d.time; })
+				.attr("x", function(d) { return 5+xScale(d.unemp); })
+				.attr("y", function(d) { return -5+yScale(d.infl); })
+				.text(function(d) { return d.geo; })
+				;
 			}
 
-			//TODO show arrows in chart labels
-			//TODO add legend with country
-
+			var info = chart.append("text").attr("x", width-140).attr("y", 20).text("");
 		}, function() {
 			console.log("Could not load data");
 		}
