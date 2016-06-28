@@ -45,21 +45,19 @@
 
 
 			//draw x grid
-			var gratUnemp = svg.append("g").attr("transform", "translate("+margin.left+","+(height+margin.top)+")");
-			var xAxis = d3.svg.axis().scale(xScale).tickSize(-height).tickFormat(function(d) {return d+"%";}).orient("bottom");
+			var gratUnemp = svg.append("g").attr("class", "axis").attr("transform", "translate("+margin.left+","+(height+margin.top)+")");
+			var xAxis = d3.svg.axis().scale(xScale).tickValues([0,5,10,15,20,25]).tickSize(-height).tickFormat(function(d) {return d+"%";}).orient("bottom");
 			gratUnemp.call(xAxis);
-			//gratUnemp.select("line").style({stroke:"#aaa","stroke-width":1.3});
-			//gratUnemp.select("text").style({font:"10px sans-serif"});
-			gratUnemp.style({stroke:"#aaa","stroke-width":0.3,font:"10px sans-serif"});
-			gratUnemp.select("path").style({fill:"none"});
 
 			//draw y grid
-			var gratInfl = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+")");
-			var yAxis = d3.svg.axis().scale(yScale).tickSize(-width).tickFormat(function(d) {return d+"%";}).orient("left");
+			var gratInfl = svg.append("g").attr("class", "axis").attr("transform", "translate("+margin.left+","+margin.top+")");
+			var yAxis = d3.svg.axis().scale(yScale).tickValues([0,5,10,15]).tickSize(-width).tickFormat(function(d) {return d+"%";}).orient("left");
 			gratInfl.call(yAxis);
-			gratInfl.style({stroke:"#aaa","stroke-width":0.3,font:"10px sans-serif"});
-			gratInfl.select("path").style({fill:"none"});
 
+			//axis labels
+			gratUnemp.append("text").attr("class","chartLabel").attr("x",width*0.5-50).attr("y",20).attr("dy", ".35em").text("Unemployment rate");
+			gratInfl.append("text").attr("class","chartLabel").attr("x",2-margin.left).attr("y",height*0.5-15).attr("dy", ".35em").text("Inflation");
+			gratInfl.append("text").attr("class","chartLabel").attr("x",4-margin.left).attr("y",height*0.5).attr("dy", ".35em").text("rate");
 
 			//the chart element
 			var chart = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -107,9 +105,8 @@
 				;
 			}
 
-			//axis labels
-			gratUnemp.append("text").attr("x",width*0.5-30).attr("y",20).attr("dy", ".35em").text("Unemployment rate");
-			gratInfl.append("text").attr("x",2-margin.left).attr("y",100).attr("dy", ".35em").text("Inflation rate");
+			//TODO add points with labels - year
+			//TODO add legend with country
 
 		}, function() {
 			console.log("Could not load data");
