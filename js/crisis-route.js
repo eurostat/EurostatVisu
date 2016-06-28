@@ -36,8 +36,8 @@
 			var geos = intersection(inflationData.Dimension("geo").id, unemploymentData.Dimension("geo").id);
 
 			//filter and sort geos
-			geos.splice(geos.indexOf("US"),1);
-			geos.splice(geos.indexOf("TR"),1);
+			//geos.splice(geos.indexOf("US"),1);
+			//geos.splice(geos.indexOf("TR"),1);
 			var isAggregate = function(geo){ return geo.indexOf("EA") > -1 || geo.indexOf("EU") > -1; };
 			geos.sort(function(g1, g2) {
 				if(isAggregate(g1) && !isAggregate(g2)) return 1;
