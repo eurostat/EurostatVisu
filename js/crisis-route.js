@@ -8,8 +8,11 @@
 		//http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
 		//https://www.dashingd3js.com/svg-paths-and-d3js
 
-		//TODO show strip with years
-		//TODO add legend with country
+		//TODO add title
+		//TODO add title "Show by... country, year"
+		//TODO better sort countries
+		//TODO adapt labels number depending on country
+		//TODO improve labels legibility: halo? move on top?
 
 		//TODO graticule dashed
 		//TODO show arrows in chart labels
@@ -37,6 +40,56 @@
 			var geos = intersection(inflationData.Dimension("geo").id, unemploymentData.Dimension("geo").id);
 			geos.splice(geos.indexOf("US"),1);
 			geos.splice(geos.indexOf("TR"),1);
+
+
+
+			var highlightGeo = function(geo){
+				//show curve
+				d3.select("#curve"+geo).attr("stroke", "black").attr("stroke-width", 3);
+				//show points
+				d3.selectAll(".pt[geo="+geo+"]").attr("display", "inline");
+				//show year labels
+				d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "inline");
+				//bold legend label
+				d3.selectAll(".lgd[geo="+geo+"]").attr("font-weight","bold").attr("fill","maroon");
+				//show info
+				info.text( inflationData.Dimension("geo").Category(geo).label );
+			}
+			var unHighlightGeo = function(geo){
+				//hide curve
+				d3.select("#curve"+geo).attr("stroke", "#555").attr("stroke-width", 1);
+				//hide points
+				d3.selectAll(".pt[geo="+geo+"]").attr("display", "none");
+				//hide year labels
+				d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "none");
+				//unbold legend label
+				d3.selectAll(".lgd[geo="+geo+"]").attr("font-weight","normal").attr("fill","black");
+				//hide info
+				info.text("");
+			}
+
+			var highlightTime = function(time){
+				//show points
+				d3.selectAll(".pt[time='"+time+"']").attr("display", "inline");
+				//show geo labels
+				d3.selectAll(".lblGeo[time='"+time+"']").attr("display", "inline");
+				//bold legend label
+				d3.selectAll(".lgd[time='"+time+"']").attr("font-weight","bold").attr("fill","maroon");
+				//show info
+				info.text( time );
+			}
+			var unHighlightTime = function(time){
+				//hide points
+				d3.selectAll(".pt[time='"+time+"']").attr("display", "none");
+				//hide geo labels
+				d3.selectAll(".lblGeo[time='"+time+"']").attr("display", "none");
+				//unbold legend label
+				d3.selectAll(".lgd[time='"+time+"']").attr("font-weight","normal").attr("fill","black");
+				//hide info
+				info.text("");
+			}
+
+
 
 			var margin = {top: 15, right: 10, bottom: 40, left: 50};
 			var width = 800 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
@@ -115,8 +168,8 @@
 				g.selectAll("circle").data(dataset[geo]).enter().append("circle")
 				.attr("display", "none").attr("fill", "black").attr("stroke-width", 0)
 				.attr("class", function(d) { return "pt"; })
-				.attr("geo", function(d) { return d.geo; })
 				.attr("time", function(d) { return d.time; })
+				.attr("geo", function(d) { return d.geo; })
 				.attr("cx", function(d) { return xScale(d.unemp); })
 				.attr("cy", function(d) { return yScale(d.infl); })
 				.attr("r", 4)
@@ -127,8 +180,8 @@
 				g.selectAll("text").data(dataset[geo]).enter().append("text")
 				.attr("display", "none")
 				.attr("class", function(d) { return "lblTime"; })
-				.attr("geo", function(d) { return d.geo; })
 				.attr("time", function(d) { return d.time; })
+				.attr("geo", function(d) { return d.geo; })
 				.attr("x", function(d) { return 5+xScale(d.unemp); })
 				.attr("y", function(d) { return -5+yScale(d.infl); })
 				.text(function(d) { return d.time; })
@@ -139,8 +192,8 @@
 				g.selectAll("text").data(dataset[geo]).enter().append("text")
 				.attr("display", "none")
 				.attr("class", function(d) { return "lblGeo"; })
-				.attr("geo", function(d) { return d.geo; })
 				.attr("time", function(d) { return d.time; })
+				.attr("geo", function(d) { return d.geo; })
 				.attr("x", function(d) { return 5+xScale(d.unemp); })
 				.attr("y", function(d) { return -5+yScale(d.infl); })
 				.text(function(d) { return d.geo; })
@@ -155,45 +208,27 @@
 			var dy = margin.top+12;
 			d3.select("#legendGeo").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom)
 			.selectAll("text").data(geos).enter().append("text")
-			.attr("class", function(d) { return "lgdGeo"; })
+			.attr("class", function(d) { return "lgd"; })
 			.attr("geo", function(d) { return d; })
 			.attr("x", 0)
 			.attr("y", function(d) { dy+=12; return dy-10; })
 			.text(function(d) { return d; })
-			.on("mouseover", function() {
-				highlightGeo(d3.select(this).attr("geo"));
-			})
-			.on("mouseout", function() {
-				unHighlightGeo(d3.select(this).attr("geo"));
-			})
+			.on("mouseover", function() { highlightGeo(d3.select(this).attr("geo")); })
+			.on("mouseout", function() { unHighlightGeo(d3.select(this).attr("geo")); })
 			;
 
-
-			var highlightGeo = function(geo){
-				//show curve
-				d3.select("#curve"+geo).attr("stroke", "black").attr("stroke-width", 3);
-				//show points
-				d3.selectAll(".pt[geo="+geo+"]").attr("display", "inline");
-				//show year labels
-				d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "inline");
-				//bold legend label
-				d3.selectAll(".lgdGeo[geo="+geo+"]").attr("font-weight","bold").attr("fill","maroon");
-				//show info
-				info.text( inflationData.Dimension("geo").Category(geo).label );
-			}
-
-			var unHighlightGeo = function(geo){
-				//hide curve
-				d3.select("#curve"+geo).attr("stroke", "#555").attr("stroke-width", 1);
-				//hide points
-				d3.selectAll(".pt[geo="+geo+"]").attr("display", "none");
-				//hide year labels
-				d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "none");
-				//unbold legend label
-				d3.selectAll(".lgdGeo[geo="+geo+"]").attr("font-weight","normal").attr("fill","black");
-				//hide info
-				info.text("");
-			}
+			//time legend
+			dy = margin.top+12;
+			d3.select("#legendTime").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom)
+			.selectAll("text").data(times).enter().append("text")
+			.attr("class", function(d) { return "lgd"; })
+			.attr("time", function(d) { return d; })
+			.attr("x", 0)
+			.attr("y", function(d) { dy+=12; return dy-10; })
+			.text(function(d) { return d; })
+			.on("mouseover", function() { highlightTime(d3.select(this).attr("time")); })
+			.on("mouseout", function() { unHighlightTime(d3.select(this).attr("time")); })
+			;
 
 		}, function() {
 			console.log("Could not load data");
