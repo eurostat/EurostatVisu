@@ -61,7 +61,7 @@
 			//axis labels
 			gratUnemp.append("text").attr("class","chartLabel").attr("x",width*0.5-50).attr("y",20).attr("dy", ".35em").text("Unemployment rate");
 			gratInfl.append("text").attr("class","chartLabel").attr("x",2-margin.left).attr("y",height*0.5-15).attr("dy", ".35em").text("Inflation");
-			gratInfl.append("text").attr("class","chartLabel").attr("x",4-margin.left).attr("y",height*0.5).attr("dy", ".35em").text("rate");
+			gratInfl.append("text").attr("class","chartLabel").attr("x",20-margin.left).attr("y",height*0.5).attr("dy", ".35em").text("rate");
 
 			//the chart element
 			var chart = svg.append("g").attr("id", "chart").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -97,26 +97,12 @@
 				.attr("id", "curve"+geo)
 				.attr("geo", geo)
 				.attr("stroke", "#555").attr("stroke-width", 1).attr("fill", "none")
-				.on("mouseover", function() {
-					var o = d3.select(this);
-					o.attr("stroke", "black").attr("stroke-width", 3);
-					var geoName = inflationData.Dimension("geo").Category(o.attr("id").replace("curve","")).label;
-					d3.selectAll(".pt[geo="+o.attr("geo")+"]").attr("display", "inline");
-					d3.selectAll(".lblTime[geo="+o.attr("geo")+"]").attr("display", "inline");
-					info.html(geoName);
-				})
-				.on("mouseout", function() {
-					var o = d3.select(this);
-					d3.select(this).attr("stroke", "#555").attr("stroke-width", 1);
-					d3.selectAll(".pt[geo="+o.attr("geo")+"]").attr("display", "none");
-					d3.selectAll(".lblTime[geo="+o.attr("geo")+"]").attr("display", "none");
-					info.html("");
-				})
+				.on("mouseover", function() { highlightGeo(d3.select(this).attr("geo")); })
+				.on("mouseout", function() { unHighlightGeo(d3.select(this).attr("geo")); })
 				;
 			}
 
-			//draw chart points
-			//TODO add points with labels - time. show them when passing over.
+			//draw chart points and labels
 			var points = chart.append("g").attr("id", "points");
 			var pointsLblTime = chart.append("g").attr("id", "pointsLblTime");
 			var pointsLblGeo = chart.append("g").attr("id", "pointsLblGeo");
@@ -161,7 +147,54 @@
 				;
 			}
 
-			var info = chart.append("text").attr("x", width-140).attr("y", 20).text("");
+			var info = chart.append("text").attr("id", "infoText").attr("x", width-280).attr("y", 30).text("");
+
+
+			//geo legend
+			width = 30;
+			var dy = margin.top+12;
+			d3.select("#legendGeo").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom)
+			.selectAll("text").data(geos).enter().append("text")
+			.attr("class", function(d) { return "lgdGeo"; })
+			.attr("geo", function(d) { return d; })
+			.attr("x", 0)
+			.attr("y", function(d) { dy+=12; return dy-10; })
+			.text(function(d) { return d; })
+			.on("mouseover", function() {
+				highlightGeo(d3.select(this).attr("geo"));
+			})
+			.on("mouseout", function() {
+				unHighlightGeo(d3.select(this).attr("geo"));
+			})
+			;
+
+
+			var highlightGeo = function(geo){
+				//show curve
+				d3.select("#curve"+geo).attr("stroke", "black").attr("stroke-width", 3);
+				//show points
+				d3.selectAll(".pt[geo="+geo+"]").attr("display", "inline");
+				//show year labels
+				d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "inline");
+				//bold legend label
+				d3.selectAll(".lgdGeo[geo="+geo+"]").attr("font-weight","bold").attr("fill","maroon");
+				//show info
+				info.text( inflationData.Dimension("geo").Category(geo).label );
+			}
+
+			var unHighlightGeo = function(geo){
+				//hide curve
+				d3.select("#curve"+geo).attr("stroke", "#555").attr("stroke-width", 1);
+				//hide points
+				d3.selectAll(".pt[geo="+geo+"]").attr("display", "none");
+				//hide year labels
+				d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "none");
+				//unbold legend label
+				d3.selectAll(".lgdGeo[geo="+geo+"]").attr("font-weight","normal").attr("fill","black");
+				//hide info
+				info.text("");
+			}
+
 		}, function() {
 			console.log("Could not load data");
 		}
