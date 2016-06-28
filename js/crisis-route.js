@@ -8,7 +8,6 @@
 		//http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
 		//https://www.dashingd3js.com/svg-paths-and-d3js
 
-		//TODO add title
 		//TODO add title "Show by... country, year"
 		//TODO better sort countries
 		//TODO adapt labels number depending on country
