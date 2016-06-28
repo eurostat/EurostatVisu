@@ -8,7 +8,6 @@
 		//http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
 		//https://www.dashingd3js.com/svg-paths-and-d3js
 
-		//TODO improve labels legibility: halo? move on top?
 		//TODO adapt labels presence to remove cluttering
 		//TODO tw
 
@@ -47,8 +46,8 @@
 			});
 
 			var highlightGeo = function(geo){
-				//show curve
-				d3.select("#curve"+geo).attr("stroke", "black").attr("stroke-width", 3);
+				//move curve to front and show
+				d3.select("#curve"+geo).moveToFront().attr("stroke", "black").attr("stroke-width", 3);
 				//show points
 				d3.selectAll(".pt[geo="+geo+"]").attr("display", "inline");
 				//show year labels
@@ -60,7 +59,7 @@
 			}
 			var unHighlightGeo = function(geo){
 				//hide curve
-				d3.select("#curve"+geo).attr("stroke", "#555").attr("stroke-width", 1);
+				d3.select("#curve"+geo).attr("stroke", "#aaa").attr("stroke-width", 0.7);
 				//hide points
 				d3.selectAll(".pt[geo="+geo+"]").attr("display", "none");
 				//hide year labels
@@ -152,7 +151,7 @@
 				.attr("d", lineFunction(dataset[geo]))
 				.attr("id", "curve"+geo)
 				.attr("geo", geo)
-				.attr("stroke", "#555").attr("stroke-width", 1).attr("fill", "none")
+				.attr("stroke", "#aaa").attr("stroke-width", 0.7).attr("fill", "none")
 				.on("mouseover", function() { highlightGeo(d3.select(this).attr("geo")); })
 				.on("mouseout", function() { unHighlightGeo(d3.select(this).attr("geo")); })
 				;
@@ -240,6 +239,12 @@
 			;
 
 
+			//move to front function
+			d3.selection.prototype.moveToFront = function() {  
+				return this.each(function(){
+					this.parentNode.appendChild(this);
+				});
+			};
 
 		}, function() {
 			console.log("Could not load data");
