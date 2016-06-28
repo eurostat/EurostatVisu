@@ -10,7 +10,6 @@
 
 		//TODO adapt labels presence to remove cluttering
 		//TODO tw
-
 		//TODO graticule dashed
 
 		$.when(
@@ -56,7 +55,7 @@
 				d3.selectAll(".lgd[geo="+geo+"]").attr("font-weight","bold").attr("fill","maroon");
 				//show info
 				info.text( inflationData.Dimension("geo").Category(geo).label );
-			}
+			};
 			var unHighlightGeo = function(geo){
 				//hide curve
 				d3.select("#curve"+geo).attr("stroke", "#aaa").attr("stroke-width", 0.7);
@@ -68,7 +67,7 @@
 				d3.selectAll(".lgd[geo="+geo+"]").attr("font-weight","normal").attr("fill","black");
 				//hide info
 				info.text("");
-			}
+			};
 
 			var highlightTime = function(time){
 				//show points
@@ -79,7 +78,7 @@
 				d3.selectAll(".lgd[time='"+time+"']").attr("font-weight","bold").attr("fill","maroon");
 				//show info
 				info.text( time );
-			}
+			};
 			var unHighlightTime = function(time){
 				//hide points
 				d3.selectAll(".pt[time='"+time+"']").attr("display", "none");
@@ -89,7 +88,7 @@
 				d3.selectAll(".lgd[time='"+time+"']").attr("font-weight","normal").attr("fill","black");
 				//hide info
 				info.text("");
-			}
+			};
 
 
 
@@ -145,8 +144,8 @@
 
 			//draw chart curves
 			var curves = chart.append("g").attr("id", "curves");
-			for(var i=0; i<geos.length; i++){
-				var geo = geos[i];
+			for(i=0; i<geos.length; i++){
+				geo = geos[i];
 				curves.append("path")
 				.attr("d", lineFunction(dataset[geo]))
 				.attr("id", "curve"+geo)
@@ -161,15 +160,15 @@
 			var points = chart.append("g").attr("id", "points");
 			var pointsLblTime = chart.append("g").attr("id", "pointsLblTime");
 			var pointsLblGeo = chart.append("g").attr("id", "pointsLblGeo");
-			for(var i=0; i<geos.length; i++){
-				var geo = geos[i];
+			for(i=0; i<geos.length; i++){
+				geo = geos[i];
 				var g;
 
 				//circles
 				g = points .append("g").attr("id", "points"+geo);
 				g.selectAll("circle").data(dataset[geo]).enter().append("circle")
 				.attr("display", "none").attr("fill", "black").attr("stroke-width", 0)
-				.attr("class", function(d) { return "pt"; })
+				.attr("class", "pt")
 				.attr("time", function(d) { return d.time; })
 				.attr("geo", function(d) { return d.geo; })
 				.attr("cx", function(d) { return xScale(d.unemp); })
@@ -181,7 +180,7 @@
 				g = pointsLblTime.append("g").attr("id", "pointsLblTime"+geo);
 				g.selectAll("text").data(dataset[geo]).enter().append("text")
 				.attr("display", "none")
-				.attr("class", function(d) { return "lblTime"; })
+				.attr("class", "lblTime")
 				.attr("time", function(d) { return d.time; })
 				.attr("geo", function(d) { return d.geo; })
 				.attr("x", function(d) { return 5+xScale(d.unemp); })
@@ -193,7 +192,7 @@
 				g = pointsLblGeo.append("g").attr("id", "pointsLblGeo"+geo);
 				g.selectAll("text").data(dataset[geo]).enter().append("text")
 				.attr("display", "none")
-				.attr("class", function(d) { return "lblGeo"; })
+				.attr("class", "lblGeo")
 				.attr("time", function(d) { return d.time; })
 				.attr("geo", function(d) { return d.geo; })
 				.attr("x", function(d) { return 5+xScale(d.unemp); })
@@ -207,11 +206,11 @@
 
 			//legend
 			width = 100;
-			var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom)
+			var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom);
 
 			//legend title
-			lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 25).text("Focus on")
-			lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 40).text("country or year...")
+			lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 25).text("Focus on");
+			lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 40).text("country or year...");
 			var topLgd = 45;
 
 			//geo legend
@@ -220,7 +219,7 @@
 			.attr("class", "lgd")
 			.attr("geo", function(d) { return d; })
 			.attr("x", 0)
-			.attr("y", function(d) { dy+=12; return dy-10; })
+			.attr("y", function() { dy+=12; return dy-10; })
 			.text(function(d) { return d; })
 			.on("mouseover", function() { highlightGeo(d3.select(this).attr("geo")); })
 			.on("mouseout", function() { unHighlightGeo(d3.select(this).attr("geo")); })
@@ -232,7 +231,7 @@
 			.attr("class", "lgd")
 			.attr("time", function(d) { return d; })
 			.attr("x", 60)
-			.attr("y", function(d) { dy+=12; return dy-10; })
+			.attr("y", function() { dy+=12; return dy-10; })
 			.text(function(d) { return d; })
 			.on("mouseover", function() { highlightTime(d3.select(this).attr("time")); })
 			.on("mouseout", function() { unHighlightTime(d3.select(this).attr("time")); })
