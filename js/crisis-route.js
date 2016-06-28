@@ -8,12 +8,11 @@
 		//http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
 		//https://www.dashingd3js.com/svg-paths-and-d3js
 
-		//TODO adapt labels number depending on country
 		//TODO improve labels legibility: halo? move on top?
+		//TODO adapt labels presence to remove cluttering
 		//TODO tw
 
 		//TODO graticule dashed
-		//TODO show arrows in chart labels
 
 		$.when(
 				//get inflation data
