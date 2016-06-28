@@ -8,10 +8,9 @@
 		//http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
 		//https://www.dashingd3js.com/svg-paths-and-d3js
 
-		//TODO add title "Show by... country, year"
-		//TODO better sort countries
 		//TODO adapt labels number depending on country
 		//TODO improve labels legibility: halo? move on top?
+		//TODO tw
 
 		//TODO graticule dashed
 		//TODO show arrows in chart labels
@@ -37,10 +36,16 @@
 			//get time and geo
 			var times = intersection(inflationData.Dimension("time").id, unemploymentData.Dimension("time").id);
 			var geos = intersection(inflationData.Dimension("geo").id, unemploymentData.Dimension("geo").id);
+
+			//filter and sort geos
 			geos.splice(geos.indexOf("US"),1);
 			geos.splice(geos.indexOf("TR"),1);
-
-
+			var isAggregate = function(geo){ return geo.indexOf("EA") > -1 || geo.indexOf("EU") > -1; };
+			geos.sort(function(g1, g2) {
+				if(isAggregate(g1) && !isAggregate(g2)) return 1;
+				if(!isAggregate(g1) && isAggregate(g2)) return -1;
+				return g1.localeCompare(g2);
+			});
 
 			var highlightGeo = function(geo){
 				//show curve
@@ -202,12 +207,19 @@
 			var info = chart.append("text").attr("id", "infoText").attr("x", width-280).attr("y", 30).text("");
 
 
+			//legend
+			width = 100;
+			var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom)
+
+			//legend title
+			lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 25).text("Focus on")
+			lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 40).text("country or year...")
+			var topLgd = 45;
+
 			//geo legend
-			width = 30;
-			var dy = margin.top+12;
-			d3.select("#legendGeo").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom)
-			.selectAll("text").data(geos).enter().append("text")
-			.attr("class", function(d) { return "lgd"; })
+			var dy = margin.top+topLgd;
+			lgd.append("g").selectAll("text").data(geos).enter().append("text")
+			.attr("class", "lgd")
 			.attr("geo", function(d) { return d; })
 			.attr("x", 0)
 			.attr("y", function(d) { dy+=12; return dy-10; })
@@ -217,17 +229,18 @@
 			;
 
 			//time legend
-			dy = margin.top+12;
-			d3.select("#legendTime").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom)
-			.selectAll("text").data(times).enter().append("text")
-			.attr("class", function(d) { return "lgd"; })
+			dy = margin.top+topLgd;
+			lgd.append("g").selectAll("text").data(times).enter().append("text")
+			.attr("class", "lgd")
 			.attr("time", function(d) { return d; })
-			.attr("x", 0)
+			.attr("x", 60)
 			.attr("y", function(d) { dy+=12; return dy-10; })
 			.text(function(d) { return d; })
 			.on("mouseover", function() { highlightTime(d3.select(this).attr("time")); })
 			.on("mouseout", function() { unHighlightTime(d3.select(this).attr("time")); })
 			;
+
+
 
 		}, function() {
 			console.log("Could not load data");
