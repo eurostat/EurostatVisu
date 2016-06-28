@@ -3,7 +3,7 @@ EurostatVisu
 
 EurostatVisu is a set of experiments on [Eurostat](http://ec.europa.eu/eurostat/) data visualisations.
 
-- [Economy’s Twists and Turns](http://jgaffuri.github.io/EurostatVisu/crisis_route.html)
+- [Economy’s twists and turns](http://jgaffuri.github.io/EurostatVisu/crisis_route.html)
 - [Price levels time series](http://jgaffuri.github.io/EurostatVisu/timeser.html)
 - [Country baskets composition, detailled by product](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst.html)
 - [Country baskets composition evolution accross time](http://jgaffuri.github.io/EurostatVisu/coicop_time_stack.html)
