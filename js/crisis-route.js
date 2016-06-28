@@ -60,7 +60,7 @@
 			gratInfl.append("text").attr("class","chartLabel").attr("x",4-margin.left).attr("y",height*0.5).attr("dy", ".35em").text("rate");
 
 			//the chart element
-			var chart = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			var chart = svg.append("g").attr("id", "chart").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 			//build dataset
 			var dataset = {};
@@ -81,31 +81,73 @@
 			var lineFunction = d3.svg.line()
 			.x(function(d) { return xScale(d.unemp); })
 			.y(function(d) { return yScale(d.infl); })
-			//.interpolate("linear")
-			.interpolate("cardinal")
+			.interpolate("cardinal") //.interpolate("linear")
 			;
 
-			//draw chart
+			//draw chart curves
+			var curves = chart.append("g").attr("id", "curves");
 			for(var i=0; i<geos.length; i++){
 				var geo = geos[i];
-				chart.append("path")
+				curves.append("path")
 				.attr("d", lineFunction(dataset[geo]))
 				.attr("id", "curve"+geo)
+				.attr("geo", geo)
 				.attr("stroke", "#555").attr("stroke-width", 1).attr("fill", "none")
 				.on("mouseover", function() {
 					var o = d3.select(this);
-					o.attr("stroke", "blue").attr("stroke-width", 3);
+					o.attr("stroke", "black").attr("stroke-width", 3);
 					var geoName = inflationData.Dimension("geo").Category(o.attr("id").replace("curve","")).label;
+					d3.selectAll(".pt[geo="+o.attr("geo")+"]").attr("display", "inline");
+					d3.selectAll(".lblTime[geo="+o.attr("geo")+"]").attr("display", "inline");
 					info.html(geoName);
 				})
 				.on("mouseout", function() {
-					d3.select(this).attr("stroke", "black").attr("stroke-width", 1);
+					var o = d3.select(this);
+					d3.select(this).attr("stroke", "#555").attr("stroke-width", 1);
+					d3.selectAll(".pt[geo="+o.attr("geo")+"]").attr("display", "none");
+					d3.selectAll(".lblTime[geo="+o.attr("geo")+"]").attr("display", "none");
 					info.html("");
 				})
 				;
 			}
 
-			//TODO add points with labels - year
+			//draw chart points
+			//TODO add points with labels - time. show them when passing over.
+			var points = chart.append("g").attr("id", "points");
+			var pointsLblTime = chart.append("g").attr("id", "pointsLblTime");
+			//var pointsLblGeo = chart.append("g").attr("id", "pointsLblGeo");
+			for(var i=0; i<geos.length; i++){
+				var geo = geos[i];
+				var g;
+
+				//circles
+				g = points .append("g").attr("id", "points"+geo);
+				g.selectAll("circle").data(dataset[geo]).enter().append("circle")
+				.attr("display", "none").attr("fill", "black").attr("stroke-width", 0)
+				.attr("class", function(d) { return "pt"; })
+				.attr("geo", function(d) { return d.geo; })
+				.attr("time", function(d) { return d.time; })
+				.attr("cx", function(d) { return xScale(d.unemp); })
+				.attr("cy", function(d) { return yScale(d.infl); })
+				.attr("r", 4)
+				;
+
+				//time labels
+				g = pointsLblTime.append("g").attr("id", "pointsLblTime"+geo);
+				g.selectAll("text").data(dataset[geo]).enter().append("text")
+				.attr("display", "none")//.attr("fill", "black").attr("stroke-width", 0)
+				.attr("class", function(d) { return "lblTime"; })
+				.attr("geo", function(d) { return d.geo; })
+				.attr("time", function(d) { return d.time; })
+				.attr("x", function(d) { return 5+xScale(d.unemp); })
+				.attr("y", function(d) { return -5+yScale(d.infl); })
+				.text(function(d) { return d.time; })
+				;
+
+				//TODO geo labels
+			}
+
+			//TODO show arrows in chart labels
 			//TODO add legend with country
 
 		}, function() {
