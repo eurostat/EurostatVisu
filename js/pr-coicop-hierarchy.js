@@ -35,7 +35,7 @@
 			for(var i=0; i<codes.length; i++){
 				var code = codes[i];
 				var father = data[code.substring(0, code.length-1)];
-				if(father) data[code].father = father;
+				if(father) data[code].father = father.code;
 				data[code].children = [];
 			}
 
@@ -43,6 +43,7 @@
 
 			//fill children list
 			for(var i=0; i<codes.length; i++) {
+				var code = codes[i];
 				var father = data[code].father;
 				if(!father) continue;
 				data[father].children.push(code);
