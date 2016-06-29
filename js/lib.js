@@ -9,15 +9,15 @@
 
 	/**
 	 * @template T
-	 * @param {Array.<T>} js
-	 * @param {string} indexColumn
+	 * @param {Array.<T>} arr
+	 * @param {string} indexAtt
 	 * @returns {Object.<string, T>}
 	 */
-	PrVis.index = function(js, indexColumn){
+	PrVis.index = function(arr, indexAtt){
 		var out={};
-		for(var i=0, nb=js.length; i<nb; i++){
-			var obj = js[i];
-			out[obj[indexColumn]]=obj;
+		for(var i=0, nb=arr.length; i<nb; i++){
+			var obj = arr[i];
+			out[obj[indexAtt]]=obj;
 		}
 		return out;
 	};

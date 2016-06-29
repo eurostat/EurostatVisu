@@ -22,10 +22,10 @@
 		.append("g")
 		.attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
 
-		d3.csv("data/coicop.dic", function(error, root) {
+		d3.csv("data/coicop.csv", function(error, data) {
 			if (error) throw error;
 			
-			console.log(root);
+			console.log(data);
 
 /*
 			{
