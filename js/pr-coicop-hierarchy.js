@@ -36,7 +36,7 @@
 				data[code].children = [];
 				for(var j=0; j<codes.length; j++){
 					var code_ = codes[i];
-					//TODO if... continue
+					if(code.indexOf(code_) == -1) continue;
 					data[code].children.push(code_);
 				}
 			}
