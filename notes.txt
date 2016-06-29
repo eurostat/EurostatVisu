@@ -1,33 +1,10 @@
-show COCIOP hierarchy as: http://bl.ocks.org/robschmuecker/7880033
+show COCIOP hierarchy
+http://bl.ocks.org/robschmuecker/7880033
 http://bl.ocks.org/mbostock/4063550
 
-show monthly data by coicop, re-using donut presentation, with value - COCICOP sunburst heatmap
-chart with contribution - slide 86
-
-Add linear heatmaps to timser visualisation
-stacked time series for decomposition by geo/product
+Income distribution
+source: SILC ilc_di01
 
 generic map for Eurostat
 
-
-
---- List of charts Existing charts in SE ---
-
-:
-
-Inflation in the euro area: http://ec.europa.eu/eurostat/statistics-explained/index.php/Inflation_in_the_euro_area
-Table 1: Euro area annual rate of change, by component
-*** Figure 1 + 2: Time series. Euro area annual rate of change, by component. Make it zoomable and panable
-* Figure 3: pie chart. Weight by product in euro area
-* Table 2: Weights.
-
-Inflation – methodology of the euro area flash estimate: http://ec.europa.eu/eurostat/statistics-explained/index.php/Inflation_%E2%80%93_methodology_of_the_euro_area_flash_estimate
-Table 1: Annual rates of change comparison between HICP and HICP_FE
-Figure 1: Bar chart. Mean absolute deviation by product groups
-Figure 3: smileys
-
-HICP - household consumption patterns: http://ec.europa.eu/eurostat/statistics-explained/index.php/HICP_-_household_consumption_patterns
-*** Figure 1: Bar chart. Product weights by country.
-Figure 2: pie charts. Country weights in EU and Euro area
-
-Inflation dashboard: http://ec.europa.eu/eurostat/inflation-dashboard/
+flow map: transport, trade, migration (migr)
