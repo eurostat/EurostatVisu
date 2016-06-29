@@ -26,19 +26,19 @@
 			if (error) throw error;
 
 			data = PrVis.index(data,"code");
-			var root = {name:"CP00", children:[
-			                                   {name:"CP01", children:[]},
-			                                   {name:"CP02", children:[]},
-			                                   {name:"CP03", children:[]},
-			                                   {name:"CP04", children:[]},
-			                                   {name:"CP05", children:[]},
-			                                   {name:"CP06", children:[]},
-			                                   {name:"CP07", children:[]},
-			                                   {name:"CP08", children:[]},
-			                                   {name:"CP09", children:[]},
-			                                   {name:"CP10", children:[]},
-			                                   {name:"CP11", children:[]},
-			                                   {name:"CP12", children:[]}
+			var root = {code:"CP00", children:[
+			                                   {code:"CP01", children:[]},
+			                                   {code:"CP02", children:[]},
+			                                   {code:"CP03", children:[]},
+			                                   {code:"CP04", children:[]},
+			                                   {code:"CP05", children:[]},
+			                                   {code:"CP06", children:[]},
+			                                   {code:"CP07", children:[]},
+			                                   {code:"CP08", children:[]},
+			                                   {code:"CP09", children:[]},
+			                                   {code:"CP10", children:[]},
+			                                   {code:"CP11", children:[]},
+			                                   {code:"CP12", children:[]}
 			                                   ]};
 
 			var nodes = tree.nodes(root),
@@ -63,7 +63,7 @@
 			.attr("dy", ".31em")
 			.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 			.attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-			.text(function(d) { return d.name; });
+			.text(function(d) { return data[d.code].desc; });
 		});
 
 		d3.select(self.frameElement).style("height", diameter - 150 + "px");
