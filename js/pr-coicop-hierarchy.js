@@ -24,7 +24,8 @@
 
 		d3.csv("data/coicop.csv", function(error, data) {
 			if (error) throw error;
-			
+
+			data = PrVis.index(data,"code");
 			console.log(data);
 
 /*
