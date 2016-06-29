@@ -26,22 +26,27 @@
 			if (error) throw error;
 
 			data = PrVis.index(data,"code");
-			var root = {code:"CP00", children:[
-			                                   {code:"CP01", children:[]},
-			                                   {code:"CP02", children:[]},
-			                                   {code:"CP03", children:[]},
-			                                   {code:"CP04", children:[]},
-			                                   {code:"CP05", children:[]},
-			                                   {code:"CP06", children:[]},
-			                                   {code:"CP07", children:[]},
-			                                   {code:"CP08", children:[]},
-			                                   {code:"CP09", children:[]},
-			                                   {code:"CP10", children:[]},
-			                                   {code:"CP11", children:[]},
-			                                   {code:"CP12", children:[]}
-			                                   ]};
+			var dataH = {code:"CP00", children:[]};
 
-			var nodes = tree.nodes(root),
+			var buildHierarchyFrom = function(root){
+				var rootCode = root.code;
+				if(rootCode === "CP00") rootCode = "CP0";
+				console.log(rootCode);
+
+				//find children codes in data
+				//TODO
+				var childrenCodes = [];
+
+				//for each, build object and launch recursivelly
+				for(var i=0; i<childrenCodes.length; i++){
+					var child = {code:childrenCodes[i], children:[]};
+					root.children.push(child);
+					buildHierarchyFrom(child);
+				}
+			};
+			buildHierarchyFrom("CP00");
+
+			var nodes = tree.nodes(dataH),
 			links = tree.links(nodes);
 
 			var link = svg.selectAll(".link")
@@ -63,7 +68,7 @@
 			.attr("dy", ".31em")
 			.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 			.attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-			.text(function(d) { return data[d.code].desc; });
+			.text(function(d) { return d.code+" - "+data[d.code].desc; });
 		});
 
 		d3.select(self.frameElement).style("height", diameter - 150 + "px");
