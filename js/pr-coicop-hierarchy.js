@@ -25,26 +25,38 @@
 		d3.csv("data/coicop.csv", function(error, data) {
 			if (error) throw error;
 
+			//index data
 			data = PrVis.index(data,"code");
+			var codes = Object.keys(data);
+			console.log(codes);
+
+			//build children;
+			for(var i=0; i<codes.length; i++){
+				var code = codes[i];
+				data[code].children = [];
+				for(var j=0; j<codes.length; j++){
+					var code_ = codes[i];
+					//TODO if... continue
+					data[code].children.push(code_);
+				}
+			}
+			console.log(data);
+
 			var dataH = {code:"CP00", children:[]};
-
 			var buildHierarchyFrom = function(root){
-				var rootCode = root.code;
-				if(rootCode === "CP00") rootCode = "CP0";
-				console.log(rootCode);
-
 				//find children codes in data
-				//TODO
-				var childrenCodes = [];
+				var childrenCodes = data[root.code].children;
+				//TODO something to do when no children? fill .size attribute?
 
 				//for each, build object and launch recursivelly
-				for(var i=0; i<childrenCodes.length; i++){
+				for(i=0; i<childrenCodes.length; i++){
 					var child = {code:childrenCodes[i], children:[]};
 					root.children.push(child);
 					buildHierarchyFrom(child);
 				}
 			};
-			buildHierarchyFrom("CP00");
+			buildHierarchyFrom(dataH);
+			data = null;
 
 			var nodes = tree.nodes(dataH),
 			links = tree.links(nodes);
