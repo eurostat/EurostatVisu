@@ -1,0 +1,122 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+	<head>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<title>The European Atlas of the Seas - Fishing Quotas Explorer</title>
+
+		<meta content="en" http-equiv="Content-Language">
+		<meta content="Help page of the European Atlas of the seas" name="description">
+		<meta content="http://ec.europa.eu/maritimeaffairs/atlas/maritime_atlas/" name="reference">
+		<meta content="DG/MARE and DG/JRC" name="creator">
+		<meta content="20/06/2014" name="date">
+		<meta content="Numeric code from the alphabetical classification list common to all the institutions" name="classification">
+		<meta content="European Atlas of the Seas,fisheries,Europe,energy,maritime data,wind farms,seabed mining,bathymetry,coast,erosion,Common Fisheries Policy,Integrated Maritime Policy,blue economy, maritime affairs,oceans,seas,cartography,maps" name="keywords">
+
+		<!--RESPONSIVE-->
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport">
+		
+		<!--TEMPLATE CSS-->
+		<link href="./stylesheets/ec.css" media="all" rel="stylesheet" type="text/css">
+		<link href="./stylesheets/ec-content.css" media="all" rel="stylesheet" type="text/css">
+		<link href="./stylesheets/ec-components-only.css" media="all" rel="stylesheet" type="text/css">
+		
+		<!--TEMPLATE JS-->
+		<script src="./scripts/ec.js" type="text/javascript"></script>
+		<script src="./scripts/ec-components.js" type="text/javascript"></script>
+		
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="js/lib/query-string.js"></script>
+
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src='js/lib/sankey.js'></script>
+
+<script src='js/speciesByYear.js?v=3'></script>
+<script src='js/speciesData.js?v=3'></script>
+<script src='js/countriesData.js?v=3'></script>
+<script src='js/countriesGeo.js?v=3'></script>
+<script src='js/FMZData.js?v=3'></script>
+<script src='js/FMZGeo.js?v=3'></script>
+<script src='js/quotas.js?v=3'></script>
+
+
+	</head>
+	
+	<body onload="load();" class="euShortContent" style="background-color:#559ae5" >
+		<div class="layout" id="layout" style="border:none" >
+
+			<!--HEADER-->
+			<div class="lang-en" id="header">
+				<p class="banner-flag">
+					<img alt="European Commission logo" id="banner-flag" src="./images/logo/logo_en.gif">
+				</p>
+				<p id="banner-title-text">European Atlas of the Seas<br>
+					<span>How to use the Atlas</span>
+				</p>
+				<span id="banner-image-right"></span>
+				<span class="title-en" id="banner-image-title"></span>
+				<p class="off-screen">Accessibility tools</p>
+				<ul class="reset-list" id="accessibility-menu">
+					<li class="m-home">
+						<a href="http://ec.europa.eu/site/index_en.htm"><span>Home</span></a>
+					</li>
+					<li class="m-menu">
+						<a onclick="return components.mobile.menu(this);" href="#menu"><span>Menu</span></a>
+					</li>
+					<li class="m-hide">
+						<a accesskey="1" href="#content">Go to content</a>
+					</li>
+				</ul>
+			</div>
+			<div id="path">
+              <p class="off-screen">Navigation path</p>
+              <ul class="reset-list">
+                        <li class="first"><a href="http://ec.europa.eu/">European Commission</a></li>
+                        <li><a href="http://ec.europa.eu/maritimeaffairs/">Maritime Affairs</a></li>
+                        <li><a href="http://ec.europa.eu/maritimeaffairs/atlas/">Atlas</a></li>
+                        <li>Fishing Quotas Explorer</li>
+              </ul>
+			</div>
+			
+			<!--BODY-->
+			<div class="layout-body">
+				<div class="layout-wrapper">
+                    <div class="layout-wrapper-reset">
+
+
+<div style="padding: 10px">
+<h1><span>Fishing Quotas Explorer</span></h1>
+<div style="">
+<strong><span id='title'></span></strong><br/>
+Year: <select id='yearsList' onchange='yearChanged()'></select>
+Species: <select id='speciesList' onchange='speciesChanged()'></select>
+</div>
+<div style="width: 150px;"><img id='speciesImage' src="" alt="" style="max-height:100%; max-width:100%; display: block; margin: 0,auto;" /></div>
+<div style="width:980px">
+<div id="chart" style="width:400px; height:600px; margin-right:10px; float: left;"></div>
+<div id="map" style="width:550px; height:600px;"></div>
+</div>
+<p id="fmzdesc"></p>
+<p>For more information on TACs and quotas, see the <a href="http://ec.europa.eu/fisheries/cfp/fishing_rules/tacs/index_en.htm" target="_blank">TACs and quotas page</a>. See more maps on <a href="http://ec.europa.eu/maritimeaffairs/atlas/maritime_atlas/#lang=EN;bkgd=5:1;mode=1;pos=11.754:54.605:5;theme=52:0.8:1;" target="_blank">the european atlas of the seas</a>.</p>
+</div>
+
+                    </div>
+                </div>
+				
+            </div>
+
+			<!--FOOTER-->
+			<div class="layout-footer">
+			<p>Last update: 07/06/2014</p>
+			</div>
+        </div>
+    </body>
+</html>
