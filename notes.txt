@@ -1,6 +1,4 @@
 show COCIOP hierarchy
-http://bl.ocks.org/robschmuecker/7880033
-http://bl.ocks.org/mbostock/4063550
 
 Income distribution
 source: SILC ilc_di01
