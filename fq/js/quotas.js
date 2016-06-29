@@ -1,4 +1,6 @@
-//julien Gaffuri - 04/2014 - http://sourceforge.net/users/jgaffuri
+//julien Gaffuri - 04/2014
+
+//TODO retrieve all quota json files
 
 var speciesByYear=JSON.parse(speciesByYearJSON);
 var speciesData=JSON.parse(speciesDataJSON);
@@ -85,9 +87,9 @@ function load() {
 
 
 	//build layers
-	//backLayer = L.tileLayer('http://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {"opacity": 0.3,});
+	backLayer = L.tileLayer('http://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}', {"opacity": 0.3,});
 	//backLayer = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.map-9d0r2yso/{z}/{x}/{y}.png', {"opacity": 1,});
-	backLayer = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.map-20v6611k/{z}/{x}/{y}.png', {"opacity": 1,});
+	//backLayer = L.tileLayer('https://a.tiles.mapbox.com/v3/examples.map-20v6611k/{z}/{x}/{y}.png', {"opacity": 1,});
 	//backLayer = L.tileLayer('https://b.tiles.mapbox.com/v3/examples.map-dev-fr/{z}/{x}/{y}.png', {"opacity": 1,});
 
 	//labelsLayer = L.tileLayer('http://server.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Reference/MapServer/tile/{z}/{y}/{x}', {});
@@ -107,16 +109,16 @@ function load() {
 		if(sel == null || sel.length==0)
 			return {color:nodeStrokeColorCNT, weight:nodeStrokeSizeCNT, fillColor:getMapFillColorCNTR(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
 
-		if( $.inArray(feature.id, sel) != -1 )
-			if(feature.id==sel_)
-				if(clicked)
-					return {color:selColor, weight:nodeStrokeSizeCNT*2.5, fillColor:getMapFillColorCNTR(feature), opacity:selOpacityMap, fillOpacity:nodeFillOpacityMap,};
-				else
-					return {color:nodeStrokeColorCNT, weight:nodeStrokeSizeCNT*2.5, fillColor:getMapFillColorCNTR(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
-			else
-				return {color:nodeStrokeColorCNT, weight:nodeStrokeSizeCNT, fillColor:getMapFillColorCNTR(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
-		else
-			return {color:nodeStrokeColorCNT, weight:nodeStrokeSizeCNT, fillColor:getMapFillColorCNTR(feature), opacity:nodeOpacityMap_, fillOpacity:nodeFillOpacityMap_,};
+			if( $.inArray(feature.id, sel) != -1 )
+				if(feature.id==sel_)
+					if(clicked)
+						return {color:selColor, weight:nodeStrokeSizeCNT*2.5, fillColor:getMapFillColorCNTR(feature), opacity:selOpacityMap, fillOpacity:nodeFillOpacityMap,};
+						else
+							return {color:nodeStrokeColorCNT, weight:nodeStrokeSizeCNT*2.5, fillColor:getMapFillColorCNTR(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
+							else
+								return {color:nodeStrokeColorCNT, weight:nodeStrokeSizeCNT, fillColor:getMapFillColorCNTR(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
+								else
+									return {color:nodeStrokeColorCNT, weight:nodeStrokeSizeCNT, fillColor:getMapFillColorCNTR(feature), opacity:nodeOpacityMap_, fillOpacity:nodeFillOpacityMap_,};
 	};
 
 	//FMZ style
@@ -124,16 +126,16 @@ function load() {
 		if(sel == null || sel.length==0)
 			return {color:nodeStrokeColorFMZ, weight:nodeStrokeSizeFMZ, fillColor:getFillColorFMZ(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
 
-		if( $.inArray(feature.id, sel) != -1 )
-			if(feature.id==sel_)
-				if(clicked)
-					return {color:selColor, weight:nodeStrokeSizeFMZ*2.5, fillColor:getFillColorFMZ(feature), opacity:selOpacityMap, fillOpacity:nodeFillOpacityMap,};
-				else
-					return {color:nodeStrokeColorFMZ, weight:nodeStrokeSizeFMZ*2.5, fillColor:getFillColorFMZ(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
-			else
-				return {color:nodeStrokeColorFMZ, weight:nodeStrokeSizeFMZ, fillColor:getFillColorFMZ(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
-		else
-			return {color:nodeStrokeColorFMZ, weight:nodeStrokeSizeFMZ, fillColor:getFillColorFMZ(feature), opacity:nodeOpacityMap_, fillOpacity:nodeFillOpacityMap_,};
+			if( $.inArray(feature.id, sel) != -1 )
+				if(feature.id==sel_)
+					if(clicked)
+						return {color:selColor, weight:nodeStrokeSizeFMZ*2.5, fillColor:getFillColorFMZ(feature), opacity:selOpacityMap, fillOpacity:nodeFillOpacityMap,};
+						else
+							return {color:nodeStrokeColorFMZ, weight:nodeStrokeSizeFMZ*2.5, fillColor:getFillColorFMZ(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
+							else
+								return {color:nodeStrokeColorFMZ, weight:nodeStrokeSizeFMZ, fillColor:getFillColorFMZ(feature), opacity:nodeOpacityMap, fillOpacity:nodeFillOpacityMap,};
+								else
+									return {color:nodeStrokeColorFMZ, weight:nodeStrokeSizeFMZ, fillColor:getFillColorFMZ(feature), opacity:nodeOpacityMap_, fillOpacity:nodeFillOpacityMap_,};
 	};
 
 	//add background
@@ -324,18 +326,18 @@ function speciesChanged() {
 		}
 		function mouseover(e){
 			var popup = $("<div></div>", {
-	            id: "popup",
-	            css: {position:"absolute",left:"0px",top:"0px",backgroundColor:"white",padding:"1px",border: "1px solid #ccc",fontSize:"12px"}
-	        });
-	        // Insert a headline into that popup
-	        $("<div></div>", { html: getNodeText(e.target.feature.id,"html")}).appendTo(popup);
-	        // Add the popup to the map
-	        popup.appendTo("#map");
+				id: "popup",
+				css: {position:"absolute",left:"0px",top:"0px",backgroundColor:"white",padding:"1px",border: "1px solid #ccc",fontSize:"12px"}
+			});
+			// Insert a headline into that popup
+			$("<div></div>", { html: getNodeText(e.target.feature.id,"html")}).appendTo(popup);
+			// Add the popup to the map
+			popup.appendTo("#map");
 			if(clicked) return;
 			focusNode(e.target.feature.id);
 		}
 		function mouseout(e){
-	        $("#popup").remove();
+			$("#popup").remove();
 			if(clicked) return;
 			unfocus();
 		}
