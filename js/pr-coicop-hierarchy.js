@@ -52,7 +52,7 @@
 			var buildHierarchyFrom = function(root){
 				//find children codes in data
 				var childrenCodes = data[root.code].childrenCodes;
-				if(!childrenCodes) continue;
+				if(!childrenCodes) return;
 				//TODO something to do when no children? fill .size attribute?
 
 				//for each, build object and launch recursivelly
