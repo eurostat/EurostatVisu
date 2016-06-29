@@ -41,7 +41,7 @@
 					for(var j=0; j<codes.length; j++){
 						if(i === j) continue;
 						var code_ = codes[j];
-						if(code.indexOf(code_) === -1) continue;
+						if(code_.indexOf(code) === -1) continue;
 						data[code].children.push(code_);
 					}
 				console.log(code,data[code].children);
