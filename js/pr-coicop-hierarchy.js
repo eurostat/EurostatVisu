@@ -31,22 +31,21 @@
 			data = PrVis.index(data,"code");
 			var codes = Object.keys(data);
 
-			//build children list
+			//link to father and build children list
 			for(var i=0; i<codes.length; i++){
 				var code = codes[i];
+				var father = data[code.substring(0, code.length-1)];
+				if(father) data[code].father = father;
 				data[code].children = [];
-				if(code === "CP00")
-					data[code].children = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
-				else
-					for(var j=0; j<codes.length; j++){
-						if(i === j) continue;
-						var code_ = codes[j];
-						if(code_.substring(0, code.length-1) != code) continue;
-						data[code].children.push(code_);
-					}
-				console.log(code,data[code].children);
 			}
 
+			//fill children list
+			for(var i=0; i<codes.length; i++) data[data[code].father].children.push(code);
+			data["CP00"].children = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
+
+			console.log(data);
+
+			/*
 			var dataH = {code:"CP00", children:[]};
 			var buildHierarchyFrom = function(root){
 				//find children codes in data
@@ -62,7 +61,7 @@
 			};
 			buildHierarchyFrom(dataH);
 			data = null;
-
+			 */
 			console.log(dataH);
 
 			var nodes = tree.nodes(dataH),
