@@ -44,8 +44,17 @@
 						if(code.indexOf(code_) === -1) continue;
 						data[code].children.push(code_);
 					}
+				console.log(code,data[code].children);
 			}
-			console.log(data);
+			//console.log(data);
+			/*console.log(data.CP00.children);
+			console.log(data.CP01.children);
+			console.log(data.CP011.children);
+			console.log(data.CP0111.children);
+			console.log(data.CP08.children);
+			console.log(data.CP12.children);
+			console.log(data.CP121.children);*/
+
 			/*
 			var dataH = {code:"CP00", children:[]};
 			var buildHierarchyFrom = function(root){
