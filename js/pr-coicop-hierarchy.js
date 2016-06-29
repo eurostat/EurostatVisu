@@ -33,12 +33,15 @@
 			for(var i=0; i<codes.length; i++){
 				var code = codes[i];
 				data[code].children = [];
-				for(var j=0; j<codes.length; j++){
-					var code_ = codes[i];
-					if(code_ === code) continue;
-					if(code.indexOf(code_) == -1) continue;
-					data[code].children.push(code_);
-				}
+				if(code === "CP00")
+					data[code].children = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
+				else
+					for(var j=0; j<codes.length; j++){
+						var code_ = codes[i];
+						if(code_ === code) continue;
+						if(code.indexOf(code_) == -1) continue;
+						data[code].children.push(code_);
+					}
 			}
 			console.log(data);
 
@@ -57,6 +60,8 @@
 			};
 			buildHierarchyFrom(dataH);
 			data = null;
+
+			console.log(dataH);
 
 			var nodes = tree.nodes(dataH),
 			links = tree.links(nodes);
