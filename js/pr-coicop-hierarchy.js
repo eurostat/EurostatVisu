@@ -33,27 +33,27 @@
 
 			//link to father and build children list
 			for(var i=0; i<codes.length; i++){
-				var code = codes[i];
-				var father = data[code.substring(0, code.length-1)];
-				if(father) data[code].father = father.code;
-				data[code].children = [];
+				var childCode = codes[i];
+				var father = data[childCode.substring(0, childCode.length-1)];
+				if(father) data[childCode].fatherCode = father.code;
+				data[childCode].childrenCodes = [];
 			}
 
 			//fill children list
 			for(var i=0; i<codes.length; i++) {
-				var code = codes[i];
-				var father = data[code].father;
-				if(!father) continue;
-				data[father].children.push(code);
+				var childCode = codes[i];
+				var fatherCode = data[childCode].father;
+				if(!fatherCode) continue;
+				data[fatherCode].childrenCodes.push(childCode);
 			}
-			data["CP00"].children = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
+			data["CP00"].childrenCodes = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
 
 			console.log(data);
-
+/*
 			var dataH = {code:"CP00", children:[]};
 			var buildHierarchyFrom = function(root){
 				//find children codes in data
-				var childrenCodes = data[root.code].children;
+				var childrenCodes = data[root.code].childrenCodes;
 				//TODO something to do when no children? fill .size attribute?
 
 				//for each, build object and launch recursivelly
@@ -65,7 +65,7 @@
 			};
 			buildHierarchyFrom(dataH);
 			data = null;
-
+*/
 			console.log(dataH);
 
 			var nodes = tree.nodes(dataH),
