@@ -48,8 +48,10 @@
 			}
 			data["CP00"].children = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
 
+			console.log(data);
+
 			var dataH = {code:"CP00", children:[]};
-			var buildHierarchyFrom = function(root){
+			/*var buildHierarchyFrom = function(root){
 				//find children codes in data
 				var childrenCodes = data[root.code].children;
 				//TODO something to do when no children? fill .size attribute?
@@ -61,7 +63,7 @@
 					buildHierarchyFrom(child);
 				}
 			};
-			buildHierarchyFrom(dataH);
+			buildHierarchyFrom(dataH);*/
 			data = null;
 
 			console.log(dataH);
