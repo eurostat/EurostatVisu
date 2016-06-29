@@ -39,11 +39,16 @@
 				data[code].children = [];
 			}
 
+			console.log(data);
+
 			//fill children list
-			for(var i=0; i<codes.length; i++) data[data[code].father].children.push(code);
+			for(var i=0; i<codes.length; i++) {
+				var father = data[code].father;
+				if(!father) continue;
+				data[father].children.push(code);
+			}
 			data["CP00"].children = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
 
-			console.log(data);
 
 			/*
 			var dataH = {code:"CP00", children:[]};
