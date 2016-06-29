@@ -28,7 +28,6 @@
 			//index data
 			data = PrVis.index(data,"code");
 			var codes = Object.keys(data);
-			console.log(codes);
 
 			//build children;
 			for(var i=0; i<codes.length; i++){
@@ -36,6 +35,7 @@
 				data[code].children = [];
 				for(var j=0; j<codes.length; j++){
 					var code_ = codes[i];
+					if(code_ === code) continue;
 					if(code.indexOf(code_) == -1) continue;
 					data[code].children.push(code_);
 				}
