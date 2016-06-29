@@ -41,21 +41,12 @@
 					for(var j=0; j<codes.length; j++){
 						if(i === j) continue;
 						var code_ = codes[j];
-						if(code_.indexOf(code) === -1) continue;
+						if(code.substring(0, code.length-1) != code_) continue;
 						data[code].children.push(code_);
 					}
 				console.log(code,data[code].children);
 			}
-			//console.log(data);
-			/*console.log(data.CP00.children);
-			console.log(data.CP01.children);
-			console.log(data.CP011.children);
-			console.log(data.CP0111.children);
-			console.log(data.CP08.children);
-			console.log(data.CP12.children);
-			console.log(data.CP121.children);*/
 
-			/*
 			var dataH = {code:"CP00", children:[]};
 			var buildHierarchyFrom = function(root){
 				//find children codes in data
@@ -71,7 +62,7 @@
 			};
 			buildHierarchyFrom(dataH);
 			data = null;
-			 */
+
 			console.log(dataH);
 
 			var nodes = tree.nodes(dataH),
