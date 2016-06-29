@@ -26,15 +26,21 @@
 			if (error) throw error;
 
 			data = PrVis.index(data,"code");
-			console.log(data);
+			var root = {name:"CP00", children:[
+			                                   {name:"CP01", children:[]},
+			                                   {name:"CP02", children:[]},
+			                                   {name:"CP03", children:[]},
+			                                   {name:"CP04", children:[]},
+			                                   {name:"CP05", children:[]},
+			                                   {name:"CP06", children:[]},
+			                                   {name:"CP07", children:[]},
+			                                   {name:"CP08", children:[]},
+			                                   {name:"CP09", children:[]},
+			                                   {name:"CP10", children:[]},
+			                                   {name:"CP11", children:[]},
+			                                   {name:"CP12", children:[]}
+			                                   ]};
 
-/*
-			{
-				"name": "CP00",
-				"children": [{"name": "CP01", "size": 3938}]
-			}	*/		
-
-			
 			var nodes = tree.nodes(root),
 			links = tree.links(nodes);
 
