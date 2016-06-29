@@ -41,7 +41,7 @@
 					for(var j=0; j<codes.length; j++){
 						if(i === j) continue;
 						var code_ = codes[j];
-						if(code.substring(0, code.length-1) != code_) continue;
+						if(code_.substring(0, code.length-1) != code) continue;
 						data[code].children.push(code_);
 					}
 				console.log(code,data[code].children);
