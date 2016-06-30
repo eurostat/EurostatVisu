@@ -1,6 +1,6 @@
 show COCIOP hierarchy
 
-Income distribution
+income distribution
 source: SILC ilc_di01
 
 generic map for Eurostat
