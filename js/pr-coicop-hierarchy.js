@@ -10,7 +10,7 @@
 		//http://bl.ocks.org/mbostock/4063550
 		//sunburst
 
-		var diameter = 960;
+		var diameter = 1300;
 
 		var tree = d3.layout.tree()
 		.size([360, diameter / 2 - 120])
@@ -34,40 +34,25 @@
 			//link to father
 			for(var i=0; i<codes.length; i++){
 				var childCode = codes[i];
+				if( ["A","B","C","D","E","F","G","H","I","J","K","L"].indexOf(childCode.substring(childCode.length-1, childCode.length)) != -1 ) continue;
+				//if(childCode.indexOf("C") != -1) continue;
 				var father = data[childCode.substring(0, childCode.length-1)];
-				if(father) data[childCode].fatherCode = father.code;
+				if(father) data[childCode].father = father;
+				//else console.log(childCode);
 			}
 
-			//fill children list
+			//link to children
 			for(i=0; i<codes.length; i++) {
-				childCode = codes[i];
-				var fatherCode = data[childCode].fatherCode;
-				if(!fatherCode) continue;
-				if(!data[fatherCode].childrenCodes) data[fatherCode].childrenCodes = [];
-				data[fatherCode].childrenCodes.push(childCode);
+				var child = data[codes[i]];
+				if(!child.father) continue;
+				if(!child.father.children) child.father.children = [];
+				child.father.children.push(child);
 			}
-			data["CP00"].childrenCodes = ["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"];
+			data.CP00.children = [data.CP01,data.CP02,data.CP03,data.CP04,data.CP05,data.CP06,data.CP07,data.CP08,data.CP09,data.CP10,data.CP11,data.CP12];
 
-			var dataH = {code:"CP00", children:[]};
-			var buildHierarchyFrom = function(root){
-				//find children codes in data
-				var childrenCodes = data[root.code].childrenCodes;
-				if(!childrenCodes) return;
-				//TODO something to do when no children? fill .size attribute?
+			data = data.CP00;
 
-				//for each, build object and launch recursivelly
-				for(i=0; i<childrenCodes.length; i++){
-					var child = {code:childrenCodes[i], children:[]};
-					root.children.push(child);
-					buildHierarchyFrom(child);
-				}
-			};
-			buildHierarchyFrom(dataH);
-			data = null;
-
-			console.log(dataH);
-
-			var nodes = tree.nodes(dataH),
+			var nodes = tree.nodes(data),
 			links = tree.links(nodes);
 
 			var link = svg.selectAll(".link")
@@ -89,13 +74,10 @@
 			.attr("dy", ".31em")
 			.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 			.attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-			.text(function(d) { return d.code+" - "+data[d.code].desc; });
+			.text(function(d) { return d.code/*+" - "+d.desc*/; });
 		});
 
 		d3.select(self.frameElement).style("height", diameter - 150 + "px");
-
-
-
 
 	});
 }(jQuery));
