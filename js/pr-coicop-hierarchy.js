@@ -5,23 +5,39 @@
  */
 (function($) {
 	$(function() {
-		//http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html
+		//TODO mouse pan?
 
 		//http://bl.ocks.org/mbostock/4063550
-		//sunburst
 
-		var diameter = 2000;
+		//TODO sunburst
+		//https://bl.ocks.org/mbostock/4348373
+		//https://bl.ocks.org/kerryrodden/477c1bfb081b783f80ad
+
+		var diameter = 2200;
+		var svgPadding = 300;
 
 		//SVG element
 		var svg = d3.select("#chart").append("svg")
-			.attr("width", diameter).attr("height", diameter - 150)
+			.attr("width", diameter+2*svgPadding).attr("height", diameter+2*svgPadding)
 			.append("g")
-			.attr("transform", "translate(" + diameter/2 + "," + diameter/2 + ")");
+			.attr("transform", "translate(" + (diameter/2+svgPadding) + "," + (diameter/2+svgPadding) + ")");
 
 		var tree = d3.layout.tree()
 			.size([360, diameter/2])
 			.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
+
+
+		//colors
+		var color = colorbrewer.Set3[12];
+		var coicopToColor = function(coicop){
+			var fam = coicop.substring(0,4);
+			if(fam==="CP00") return "black";
+			return color[+(fam.replace("CP",""))-1];
+		};
+
+
+		//load coicop data
 		d3.csv("data/coicop.csv", function(error, data) {
 			if (error) throw error;
 
@@ -68,15 +84,22 @@
 				.enter().append("g")
 				.attr("class", "node")
 				.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
-
+			//draw circles
 			node.append("circle")
-				.attr("r", 4.5);
-
+				.attr("r", 4)
+				.attr("fill",function(d) { return coicopToColor(d.code); });
+			//draw labels - code
 			node.append("text")
 				.attr("dy", ".31em")
 				.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-				.attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
-				.text(function(d) { return d.code+" - "+d.desc; });
+				.attr("transform", function(d) { return d.x < 180 ? "translate(8,-4)" : "rotate(180)translate(-8,-4)"; })
+				.text(function(d) { return d.code; });
+			//draw labels - description
+			node.append("text")
+				.attr("dy", ".31em")
+				.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+				.attr("transform", function(d) { return d.x < 180 ? "translate(8,4)" : "rotate(180)translate(-8,4)"; })
+				.text(function(d) { return d.desc; });
 		});
 
 		//d3.select(self.frameElement).style("height", diameter - 150 + "px");
