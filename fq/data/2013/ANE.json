@@ -1,0 +1,1 @@
+{"nodes":[{"name":"PRT"},{"name":"FRA"},{"name":"99000028"},{"name":"27000366"},{"name":"ESP"}],"links":[{"stockCode":"ANE\/08.","source":4,"value":15226.0,"target":3},{"stockCode":"ANE\/9\/3411","source":4,"value":6726.57,"target":2},{"stockCode":"ANE\/08.","source":1,"value":3590.9,"target":3},{"stockCode":"ANE\/9\/3411","source":0,"value":2787.38,"target":2}]}

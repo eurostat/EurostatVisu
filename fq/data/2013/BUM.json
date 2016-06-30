@@ -1,0 +1,1 @@
+{"nodes":[{"name":"PRT"},{"name":"99000226"},{"name":"FRA"},{"name":"ESP"}],"links":[{"stockCode":"BUM\/ATLANT","source":3,"value":16.92,"target":1},{"stockCode":"BUM\/ATLANT","source":2,"value":397.6,"target":1},{"stockCode":"BUM\/ATLANT","source":0,"value":38.83,"target":1}]}

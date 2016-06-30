@@ -1,0 +1,1 @@
+{"nodes":[{"name":"PRT"},{"name":"99000264"},{"name":"99000257"},{"name":"ESP"}],"links":[{"stockCode":"SWO\/AN05N","source":3,"value":6949.0,"target":2},{"stockCode":"SWO\/AS05N","source":3,"value":4924.9,"target":1},{"stockCode":"SWO\/AN05N","source":0,"value":1263.0,"target":2},{"stockCode":"SWO\/AS05N","source":0,"value":454.2,"target":1}]}

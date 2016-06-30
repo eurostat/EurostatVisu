@@ -1,0 +1,1 @@
+{"nodes":[{"name":""},{"name":"PRT"},{"name":"NOR"},{"name":"27000618"},{"name":"EST"}],"links":[{"stockCode":"HAL\/514GRN","source":4,"value":20.0,"target":3},{"stockCode":"HAL\/514GN","source":2,"value":75.0,"target":3},{"stockCode":"HAL\/N01GN","source":2,"value":75.0,"target":0},{"stockCode":"HAL\/514GRN","source":1,"value":980.0,"target":3}]}
