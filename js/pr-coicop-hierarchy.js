@@ -39,8 +39,8 @@
 			}
 
 			//fill children list
-			for(var i=0; i<codes.length; i++) {
-				var childCode = codes[i];
+			for(i=0; i<codes.length; i++) {
+				childCode = codes[i];
 				var fatherCode = data[childCode].fatherCode;
 				if(!fatherCode) continue;
 				if(!data[fatherCode].childrenCodes) data[fatherCode].childrenCodes = [];
@@ -80,7 +80,7 @@
 			.data(nodes)
 			.enter().append("g")
 			.attr("class", "node")
-			.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+			.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
 
 			node.append("circle")
 			.attr("r", 4.5);
