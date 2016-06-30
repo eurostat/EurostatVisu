@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/coicop.csv" afterPath="$PROJECT_DIR$/data/coicop.csv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/pr-coicop-hierarchy.js" afterPath="$PROJECT_DIR$/js/pr-coicop-hierarchy.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +26,8 @@
       <file leaf-file-name="pr-coicop-hierarchy.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/pr-coicop-hierarchy.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6566901">
-              <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+            <state vertical-scroll-proportion="0.8679578">
+              <caret line="81" column="10" selection-start-line="81" selection-start-column="10" selection-end-line="81" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -358,8 +356,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/pr-coicop-hierarchy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6566901">
-          <caret line="76" column="62" selection-start-line="76" selection-start-column="62" selection-end-line="76" selection-end-column="62" />
+        <state vertical-scroll-proportion="0.8679578">
+          <caret line="81" column="10" selection-start-line="81" selection-start-column="10" selection-end-line="81" selection-end-column="10" />
           <folding />
         </state>
       </provider>
