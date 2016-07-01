@@ -27,9 +27,13 @@
 			.size([360, diameter/2])
 			.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
+		//return the coicop level, from 1 to 5
+		var getLevel = function(coicop){
+			if(coicop == "00") return 1;
+			return coicop.length;
+		};
 
-
-		//colors
+		//returns the color of coicop family
 		var color = colorbrewer.Set3[12];
 		var coicopToColor = function(coicop){
 			var fam = coicop.substring(0,2);
@@ -89,19 +93,32 @@
 				.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
 			//draw circles
 			node.append("circle")
-				.attr("r", 4)
-				.attr("fill",function(d) { return coicopToColor(d.code); });
+				.attr("r", function(d) {
+					return 4;
+				})
+				.attr("fill",function(d) {
+					return coicopToColor(d.code);
+				});
+
 			//draw labels - code
 			node.append("text")
 				.attr("dy", ".31em")
-				.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-				.attr("transform", function(d) { return d.x < 180 ? "translate(8,-4)" : "rotate(180)translate(-8,-4)"; })
+				.attr("text-anchor", function(d) {
+					return d.x < 180 ? "start" : "end";
+				})
+				.attr("transform", function(d) {
+					return d.x < 180 ? "translate(8,-4)" : "rotate(180)translate(-8,-4)";
+				})
 				.text(function(d) { return d.code; });
 			//draw labels - description
 			node.append("text")
 				.attr("dy", ".31em")
-				.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-				.attr("transform", function(d) { return d.x < 180 ? "translate(8,4)" : "rotate(180)translate(-8,4)"; })
+				.attr("text-anchor", function(d) {
+					return d.x < 180 ? "start" : "end";
+				})
+				.attr("transform", function(d) {
+					return d.x < 180 ? "translate(8,4)" : "rotate(180)translate(-8,4)";
+				})
 				.text(function(d) { return d.desc; });
 		});
 
