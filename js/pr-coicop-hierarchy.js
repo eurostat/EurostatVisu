@@ -96,7 +96,7 @@
 				.attr("dy", ".31em")
 				.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 				.attr("transform", function(d) { return d.x < 180 ? "translate(8,-4)" : "rotate(180)translate(-8,-4)"; })
-				.text(function(d) { return d.code.substring(2,d.code.length); });
+				.text(function(d) { return d.code; });
 			//draw labels - description
 			node.append("text")
 				.attr("dy", ".31em")
