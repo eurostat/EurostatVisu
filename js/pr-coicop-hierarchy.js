@@ -58,7 +58,6 @@
 			for(i=0; i<codes.length; i++){
 				var childCode = codes[i];
 				if( ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S"].indexOf(childCode.substring(childCode.length-1, childCode.length)) != -1 ) continue;
-				//if(childCode.indexOf("C") != -1) continue;
 				var father = data[childCode.substring(0, childCode.length-1)];
 				if(father) data[childCode].father = father;
 				//else console.log(childCode);
@@ -73,6 +72,12 @@
 			}
 			data["00"].children = [data["01"],data["02"],data["03"],data["04"],data["05"],data["06"],data["07"],data["08"],data["09"],data["10"],data["11"],data["12"]];
 			data = data["00"];
+
+			//TODO use that?
+			/*var root = d3.stratify()
+				.id(function(d) { return d.name; })
+				.parentId(function(d) { return d.parent; })
+			(table);*/
 
 			//TODO see options
 			var nodes = tree.nodes(data),
