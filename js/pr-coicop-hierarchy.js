@@ -91,18 +91,26 @@
 				.enter().append("g")
 				.attr("class", "node")
 				.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
+
+			var circleSize = [0,16,13,10,6,4];
+			var fontSize = [0,18,16,12,10,9];
+			var getFontSize = function(d) { return fontSize[getLevel(d.code)]; };
+
 			//draw circles
 			node.append("circle")
 				.attr("r", function(d) {
-					return 4;
+					return circleSize[getLevel(d.code)];
 				})
 				.attr("fill",function(d) {
 					return coicopToColor(d.code);
 				});
 
+			//TODO adapt text position + text size
+			//TODO on mouse over on nodes: show text?
 			//draw labels - code
 			node.append("text")
 				.attr("dy", ".31em")
+				.attr("font-size", getFontSize)
 				.attr("text-anchor", function(d) {
 					return d.x < 180 ? "start" : "end";
 				})
@@ -113,6 +121,7 @@
 			//draw labels - description
 			node.append("text")
 				.attr("dy", ".31em")
+				.attr("font-size", getFontSize)
 				.attr("text-anchor", function(d) {
 					return d.x < 180 ? "start" : "end";
 				})
