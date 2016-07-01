@@ -5,6 +5,7 @@
  */
 (function($) {
 	$(function() {
+		//TODO adapt label depending on level
 		//TODO mouse pan?
 
 		//http://bl.ocks.org/mbostock/4063550
@@ -31,9 +32,9 @@
 		//colors
 		var color = colorbrewer.Set3[12];
 		var coicopToColor = function(coicop){
-			var fam = coicop.substring(0,4);
-			if(fam==="CP00") return "black";
-			return color[+(fam.replace("CP",""))-1];
+			var fam = coicop.substring(0,2);
+			if(fam==="00") return "black";
+			return color[+(fam)-1];
 		};
 
 
@@ -41,12 +42,15 @@
 		d3.csv("data/coicop.csv", function(error, data) {
 			if (error) throw error;
 
+			//remove CPs
+			for(var i=0; i<data.length; i++) data[i].code = data[i].code.replace("CP","");
+
 			//index data
 			data = PrVis.index(data,"code");
 			var codes = Object.keys(data);
 
 			//link to father
-			for(var i=0; i<codes.length; i++){
+			for(i=0; i<codes.length; i++){
 				var childCode = codes[i];
 				if( ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S"].indexOf(childCode.substring(childCode.length-1, childCode.length)) != -1 ) continue;
 				//if(childCode.indexOf("C") != -1) continue;
@@ -62,9 +66,8 @@
 				if(!child.father.children) child.father.children = [];
 				child.father.children.push(child);
 			}
-			data.CP00.children = [data.CP01,data.CP02,data.CP03,data.CP04,data.CP05,data.CP06,data.CP07,data.CP08,data.CP09,data.CP10,data.CP11,data.CP12];
-
-			data = data.CP00;
+			data["00"].children = [data["01"],data["02"],data["03"],data["04"],data["05"],data["06"],data["07"],data["08"],data["09"],data["10"],data["11"],data["12"]];
+			data = data["00"];
 
 			var nodes = tree.nodes(data),
 				links = tree.links(nodes);
