@@ -23,6 +23,7 @@
 			.append("g")
 			.attr("transform", "translate(" + (diameter/2+svgPadding) + "," + (diameter/2+svgPadding) + ")");
 
+		//TODO see options https://github.com/d3/d3-hierarchy/blob/master/README.md#tree
 		var tree = d3.layout.tree()
 			.size([360, diameter/2])
 			.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
@@ -37,7 +38,7 @@
 		var color = colorbrewer.Set3[12];
 		var coicopToColor = function(coicop){
 			var fam = coicop.substring(0,2);
-			if(fam==="00") return "black";
+			if(fam==="00") return "gray";
 			return color[+(fam)-1];
 		};
 
@@ -73,6 +74,7 @@
 			data["00"].children = [data["01"],data["02"],data["03"],data["04"],data["05"],data["06"],data["07"],data["08"],data["09"],data["10"],data["11"],data["12"]];
 			data = data["00"];
 
+			//TODO see options
 			var nodes = tree.nodes(data),
 				links = tree.links(nodes);
 
@@ -92,7 +94,7 @@
 				.attr("class", "node")
 				.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
 
-			var circleSize = [0,16,13,10,6,4];
+			var circleSize = [0,20,13,7,5,3];
 			var fontSize = [0,18,16,12,10,9];
 			var getFontSize = function(d) { return fontSize[getLevel(d.code)]; };
 
@@ -105,33 +107,35 @@
 					return coicopToColor(d.code);
 				});
 
-			//TODO adapt text position + text size
+			//TODO adapt text position
 			//TODO on mouse over on nodes: show text?
 			//draw labels - code
 			node.append("text")
 				.attr("dy", ".31em")
 				.attr("font-size", getFontSize)
-				.attr("text-anchor", function(d) {
-					return d.x < 180 ? "start" : "end";
-				})
+				.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
 				.attr("transform", function(d) {
-					return d.x < 180 ? "translate(8,-4)" : "rotate(180)translate(-8,-4)";
+					var level = getLevel(d.code);
+					switch(level){
+						case 1: return "rotate("+ (90-d.x) +")translate(80,-30)";
+						//case 2: return "rotate("+ (90-d.x) +")";
+						case 2: return d.x < 180 ? "translate(18,0)" : "rotate(180)translate(-18,0)";
+						case 3: return d.x < 180 ? "translate(11,0)" : "rotate(180)translate(-11,0)";
+						case 4: return d.x < 180 ? "translate(8,0)" : "rotate(180)translate(-8,0)";
+						case 5: return d.x < 180 ? "translate(8,0)" : "rotate(180)translate(-8,0)";
+					}
 				})
-				.text(function(d) { return d.code; });
-			//draw labels - description
-			node.append("text")
-				.attr("dy", ".31em")
-				.attr("font-size", getFontSize)
-				.attr("text-anchor", function(d) {
-					return d.x < 180 ? "start" : "end";
-				})
-				.attr("transform", function(d) {
-					return d.x < 180 ? "translate(8,4)" : "rotate(180)translate(-8,4)";
-				})
-				.text(function(d) { return d.desc; });
+				.text(function(d) {
+					var level = getLevel(d.code);
+					switch(level){
+						case 1: return d.desc + " ("+d.code+")";
+						case 2: return d.desc + " ("+d.code+")";
+						case 3: return d.desc + " ("+d.code+")";
+						case 4: return d.desc + " ("+d.code+")";
+						case 5: return d.desc + " ("+d.code+")";
+					}
+				});
 		});
-
-		//d3.select(self.frameElement).style("height", diameter - 150 + "px");
 
 	});
 }(jQuery));
