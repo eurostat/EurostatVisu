@@ -43,15 +43,15 @@
 
                     var get19Twentilevalue = function(){
                         //TODO
-                        return 0;
+                        return 0.5*getValue("DECILE10");
                     };
                     var get2Twentilevalue = function(){
                         //TODO
-                        return 0;
+                        return 0.5*getValue("DECILE1");
                     };
 
                     //scales
-                    var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
+                    var xScale = d3.scale.linear().domain([0,50]).range([0, width]); //TODO adapt max
                     var yScale = d3.scale.linear().domain([0,100]).range([0, height]);
 
                     //clear previous
