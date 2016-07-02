@@ -37,12 +37,7 @@
                 //filter and sort geos
                 //geos.splice(geos.indexOf("US"),1);
                 //geos.splice(geos.indexOf("TR"),1);
-                var isAggregate = function(geo){ return geo.indexOf("EA") > -1 || geo.indexOf("EU") > -1; };
-                geos.sort(function(g1, g2) {
-                    if(isAggregate(g1) && !isAggregate(g2)) return 1;
-                    if(!isAggregate(g1) && isAggregate(g2)) return -1;
-                    return g1.localeCompare(g2);
-                });
+                geos.sort(EstLib.geoComparison);
 
                 var highlightGeo = function(geo){
                     //move curve to front and show
