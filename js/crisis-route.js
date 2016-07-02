@@ -93,7 +93,7 @@
 
 
                 var margin = {top: 15, right: 10, bottom: 40, left: 50};
-                var width = 800 - margin.left - margin.right, height = 500 - margin.top - margin.bottom;
+                var width = 1000 - margin.left - margin.right, height = 600 - margin.top - margin.bottom;
                 var svg = d3.select("#curves").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom);
 
                 //unemployment scale
