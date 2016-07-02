@@ -17,9 +17,6 @@
                 .append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")")
             ;
 
-        var geoSel = "FR";
-        var timeSel = "2013";
-
         $.when(
             //get income distribution data
             $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",quantile:quantiles})})
@@ -39,11 +36,13 @@
                         return d.value || 0;
                     };
 
+                    //TODO correct
                     var get2Twentilevalue = function(){
                         var v = getValue("DECILE1");
                         for(i=1;i<=5;i++) v -= getValue("PERCENTILE"+i);
                         return v;
                     };
+                    //TODO correct
                     var get19Twentilevalue = function(){
                         var v = getValue("DECILE10");
                         for(i=95;i<=99;i++) v -= getValue("PERCENTILE"+i);
@@ -58,9 +57,7 @@
                     chart.selectAll("*").remove();
 
                     //background
-                    chart.append("rect").attr("fill","#eee")
-                        .attr("y",yScale(0)).attr("x",xScale(0)).attr("width",xScale(100)).attr("height",yScale(100));
-
+                    //chart.append("rect").attr("fill","#eee").attr("y",yScale(0)).attr("x",xScale(0)).attr("width",xScale(100)).attr("height",yScale(100));
 
                     //draw chart rectangles
                     var rects = chart.append("g").attr("id","disrect");
@@ -84,36 +81,59 @@
 
                 };
 
+                //TODO
+                var geoSel = "EU28";
+                var timeSel = "2013";
+
+                var showGeo = function(geo){
+                    geoSel=geo; updateChart();
+                    //bold legend label
+                    d3.selectAll(".lgdG").attr("font-weight","normal").attr("fill","black");
+                    d3.selectAll(".lgdG[geo="+geo+"]").attr("font-weight","bold").attr("fill","maroon");
+                    //title
+                    d3.select("#geoTitle").text(geo);
+                };
+                //var hideGeo = function(geo){};
+                var showTime = function(time){
+                    timeSel=time; updateChart();
+                    //bold legend label
+                    d3.selectAll(".lgdT").attr("font-weight","normal").attr("fill","black");
+                    d3.selectAll(".lgdT[time='"+time+"']").attr("font-weight","bold").attr("fill","maroon");
+                    //title
+                    d3.select("#timeTitle").text(time);
+                };
+                //var hideTime = function(time){};
+
                 //legend
                 //width = 100;
                 var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom);
                 var topLgd = 10;
 
-                //geo legend
+                //geo legend TODO better show
                 var geos = data.Dimension("geo").id;
                 geos.sort(EstLib.geoComparison);
                 var dy = margin.top+topLgd;
                 lgd.append("g").selectAll("text").data(geos).enter().append("text")
-                    .attr("class", "lgd")
+                    .attr("class", "lgd lgdG")
                     .attr("geo", function(d) { return d; })
                     .attr("x", 0)
-                    .attr("y", function() { dy+=12; return dy-10; })
+                    .attr("y", function() { dy+=10; return dy-10; })
                     .text(function(d) { return d; })
-                    .on("mouseover", function() { geoSel = d3.select(this).attr("geo"); updateChart(); })
-                    //.on("mouseout", function() { unHighlightGeo(d3.select(this).attr("geo")); })
+                    .on("mouseover", function() { showGeo(d3.select(this).attr("geo")); })
+                    //.on("mouseout", function() { hideGeo(d3.select(this).attr("geo")); })
                 ;
 
                 //time legend
                 var times = data.Dimension("time").id;
                 dy = margin.top+topLgd;
                 lgd.append("g").selectAll("text").data(times).enter().append("text")
-                    .attr("class", "lgd")
+                    .attr("class", "lgd lgdT")
                     .attr("time", function(d) { return d; })
                     .attr("x", 60)
-                    .attr("y", function() { dy+=12; return dy-10; })
+                    .attr("y", function() { dy+=10; return dy-10; })
                     .text(function(d) { return d; })
-                    .on("mouseover", function() { timeSel = d3.select(this).attr("time"); updateChart(); })
-                    //.on("mouseout", function() { unHighlightTime(d3.select(this).attr("time")); })
+                    .on("mouseover", function() { showTime(d3.select(this).attr("time")); })
+                    //.on("mouseout", function() { hideTime(d3.select(this).attr("time")); })
                 ;
 
                 updateChart();
