@@ -12,7 +12,6 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - [Food prices time series](http://jgaffuri.github.io/EurostatVisu/FPMT_timeser.html)
 - [Inflation table](http://jgaffuri.github.io/EurostatVisu/table1.html)
 - [The COICOP classification](http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html)
-- Any idea?
 
 # Technical details
 
