@@ -74,11 +74,11 @@
                     //first 5 percentiles
                     for(i=0;i<=4;i++) addRect(rects,10*getValue("PERCENTILE"+(i+1)),i,1);
                     //second twentile
-                    addRect(rects,5*get2Twentilevalue(),5,5);
+                    addRect(rects,2*get2Twentilevalue(),5,5);
                     //8 deciles in the middle
-                    for(i=2;i<=9;i++) addRect(rects,getValue("DECILE"+i),10*(i-1),10);
+                    for(i=2;i<=9;i++) addRect(rects,1*getValue("DECILE"+i),10*(i-1),10);
                     //19th twentile
-                    addRect(rects,5*get19Twentilevalue(),90,5);
+                    addRect(rects,2*get19Twentilevalue(),90,5);
                     //last 5 percentiles
                     for(i=95;i<=99;i++) addRect(rects,10*getValue("PERCENTILE"+i),i,1);
 
