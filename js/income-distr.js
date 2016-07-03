@@ -21,6 +21,8 @@
         var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom);
         var topLgd = 10;
 
+        //info div
+        var infoDiv = d3.select("#info").attr("style", "height:"+ (height + margin.top + margin.bottom) + "px");
 
         $.when(
             //get income distribution data
@@ -112,31 +114,42 @@
                     var rects = chart.append("g").attr("id","disrect");
 
                     //draw distribution rectangle
-                    var addRect = function(value,pos,size){
+                    var addRect = function(quantile,factor,pos,size){
+                        var value = getValue(quantile);
                         rects.append("rect").attr("y",yScale(pos)).attr("x",xScale(0))
-                            .attr("width",xScale(value)).attr("height",yScale(size));
-                        //TODO onmouseover
+                            .attr("width",xScale( factor*value )).attr("height",yScale(size))
+                            .on("mouseover", function() {
+                                infoDiv.text(quantile + " = " + value + "%");
+                                //TODO more text
+                                //TODO do not center text
+                                //TODO change rect style
+                            })
+                            .on("mouseout", function() {
+                                infoDiv.text("");
+                                //TODO change rect style
+                            })
+                        ;
                     };
 
                     if(detailledDataPresent(true)){
                         //first 5 percentiles
-                        for(i=0;i<=4;i++) addRect(10*getValue("PERCENTILE"+(i+1)),i,1);
+                        for(i=0;i<=4;i++) addRect("PERCENTILE"+(i+1),10,i,1);
                         //second twentile
-                        addRect(2*get2Twentilevalue(),5,5);
+                        //TODO addRect(2*get2Twentilevalue(),5,5);
                     } else {
                         //first decile
-                        addRect(1*getValue("DECILE1"),0,10);
+                        addRect("DECILE1",1,0,10);
                     }
                     //8 deciles in the middle
-                    for(i=2;i<=9;i++) addRect(1*getValue("DECILE"+i),10*(i-1),10);
+                    for(i=2;i<=9;i++) addRect("DECILE"+i,1,10*(i-1),10);
                     if(detailledDataPresent(false)){
                         //19th twentile
-                        addRect(2*get19Twentilevalue(),90,5);
+                        //TODO addRect(2*get19Twentilevalue(),90,5);
                         //last 5 percentiles
-                        for(i=95;i<=99;i++) addRect(10*getValue("PERCENTILE"+i),i,1);
+                        for(i=95;i<=99;i++) addRect("PERCENTILE"+i,10,i,1);
                     } else {
                         //last decile
-                        addRect(1*getValue("DECILE10"),90,10);
+                        addRect("DECILE10",1,90,10);
                     }
 
                     //bold geo legend label
