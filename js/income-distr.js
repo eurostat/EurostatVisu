@@ -146,7 +146,7 @@
                     d3.selectAll(".lgdT").attr("font-weight","normal").attr("fill","black");
                     d3.selectAll(".lgdT[time='"+timeSel+"']").attr("font-weight","bold").attr("fill","maroon");
                     //update title
-                    d3.select("#geoTitle").text(geoSel); //TODO text!
+                    d3.select("#geoTitle").text(data.Dimension("geo").Category(geoSel).label);
                     d3.select("#timeTitle").text(timeSel);
                 };
 
