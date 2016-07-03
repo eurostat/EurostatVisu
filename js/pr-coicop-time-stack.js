@@ -115,7 +115,7 @@
 
 					//get years interval
 					var years = ds.Dimension("time").id,
-					yearMin = +years[0], yearMax = +years[years.length-1]
+					yearMin = +years[0], yearMax = +years[years.length-1];
 
 					//structure dataset
 					data = [];
@@ -148,13 +148,16 @@
 					.on("mouseover", function(d) { highlightCoicop(d.coicop); })
 					.on("mouseout", function(d) { unHighlightCoicop(d.coicop); })
 					//.interpolate("monotone") TODO test that
+					;
 
 					//year labels
 					grat.selectAll("*").remove();
 					var xAxis = d3.svg.axis().scale(xScale).tickSize(-height).tickValues(years).tickFormat(function(d) {return d;}).orient("bottom");
 					grat.call(xAxis);
 					//rotate labels
-					grat.selectAll(".xaxis text").attr("transform", function(d) { return "translate(" + (10+this.getBBox().height*-2) + "," + this.getBBox().height + ")rotate(-45)"; });
+					grat.selectAll(".xaxis text").attr("transform", function() {
+						return "translate(" + (10+this.getBBox().height*-2) + "," + this.getBBox().height + ")rotate(-45)";
+					});
 
 				}, function() {
 					console.log("Could not load product weight data for "+geoSel);

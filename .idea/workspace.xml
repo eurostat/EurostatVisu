@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/income-distr.js" afterPath="$PROJECT_DIR$/js/income-distr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/pr-coicop-time-stack.js" afterPath="$PROJECT_DIR$/js/pr-coicop-time-stack.js" />
     </list>
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,8 +23,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/income-distr.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pr-coicop-time-stack.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/pr-coicop-time-stack.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -95,6 +104,7 @@
         <option value="$PROJECT_DIR$/crisis_route.html" />
         <option value="$PROJECT_DIR$/income_distr.html" />
         <option value="$PROJECT_DIR$/js/income-distr.js" />
+        <option value="$PROJECT_DIR$/js/pr-coicop-time-stack.js" />
       </list>
     </option>
   </component>
@@ -444,14 +454,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/pr-coicop-time-stack.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.9026549">
-          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/pr-coicop-sunburst.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3031496">
@@ -503,6 +505,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/pr-coicop-time-stack.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
