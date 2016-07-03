@@ -36,9 +36,8 @@
 
 
                 //the selection
-                //TODO get from URL
-                var geoSel = "EU28";
-                var timeSel = "2013";
+                var geoSel = PrVis.getParameterByName("geo") || "EU28";
+                var timeSel = PrVis.getParameterByName("time") || "2013";
 
                 //fill geo legend TODO better show
                 var geos = data.Dimension("geo").id;

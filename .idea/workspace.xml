@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/pr-coicop-time-stack.js" afterPath="$PROJECT_DIR$/js/pr-coicop-time-stack.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/income-distr.js" afterPath="$PROJECT_DIR$/js/income-distr.js" />
     </list>
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -23,21 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/income-distr.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pr-coicop-time-stack.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/js/pr-coicop-time-stack.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.66021127">
+              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -46,7 +36,7 @@
       <file leaf-file-name="income_distr.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/income_distr.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-18.916666">
               <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -68,7 +58,7 @@
       <file leaf-file-name="crisis_route.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/crisis_route.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-8.916667">
               <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -103,8 +93,8 @@
         <option value="$PROJECT_DIR$/js/eurostat-lib.js" />
         <option value="$PROJECT_DIR$/crisis_route.html" />
         <option value="$PROJECT_DIR$/income_distr.html" />
-        <option value="$PROJECT_DIR$/js/income-distr.js" />
         <option value="$PROJECT_DIR$/js/pr-coicop-time-stack.js" />
+        <option value="$PROJECT_DIR$/js/income-distr.js" />
       </list>
     </option>
   </component>
@@ -476,16 +466,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crisis_route.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/js/crisis-route.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -494,9 +474,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/js/pr-coicop-time-stack.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3620352">
+          <caret line="92" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crisis_route.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.916667">
+          <caret line="64" column="0" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/income_distr.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="-18.916666">
           <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -506,16 +504,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/pr-coicop-time-stack.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.66021127">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding />
         </state>
       </provider>
