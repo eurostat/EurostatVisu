@@ -114,8 +114,7 @@
                     var rects = chart.append("g").attr("id","disrect");
 
                     //draw distribution rectangle
-                    var addRect = function(quantile,factor,pos,size){
-                        var value = getValue(quantile);
+                    var addRect = function(quantile,factor,value,pos,size){
                         rects.append("rect").attr("y",yScale(pos)).attr("x",xScale(0))
                             .attr("width",xScale( factor*value )).attr("height",yScale(size))
                             .on("mouseover", function() {
@@ -133,23 +132,25 @@
 
                     if(detailledDataPresent(true)){
                         //first 5 percentiles
-                        for(i=0;i<=4;i++) addRect("PERCENTILE"+(i+1),10,i,1);
+                        for(i=0;i<=4;i++) addRect("Percentile "+(i+1),10,getValue("PERCENTILE"+(i+1)),i,1);
                         //second twentile
-                        //TODO addRect(2*get2Twentilevalue(),5,5);
+                        addRect("Twentile 2",2,get2Twentilevalue(),5,5);
                     } else {
                         //first decile
-                        addRect("DECILE1",1,0,10);
+                        addRect("Decile 1",1,getValue("DECILE1"),0,10);
                     }
+
                     //8 deciles in the middle
-                    for(i=2;i<=9;i++) addRect("DECILE"+i,1,10*(i-1),10);
+                    for(i=2;i<=9;i++) addRect("Decile "+i,1,getValue("DECILE"+i),10*(i-1),10);
+
                     if(detailledDataPresent(false)){
                         //19th twentile
-                        //TODO addRect(2*get19Twentilevalue(),90,5);
+                        addRect("Twentile 19",2,get19Twentilevalue(),90,5);
                         //last 5 percentiles
-                        for(i=95;i<=99;i++) addRect("PERCENTILE"+i,10,i,1);
+                        for(i=95;i<=99;i++) addRect("Percentile "+i,10,getValue("PERCENTILE"+i),i,1);
                     } else {
                         //last decile
-                        addRect("DECILE10",1,90,10);
+                        addRect("Decile 10",1,getValue("DECILE10"),90,10);
                     }
 
                     //bold geo legend label
