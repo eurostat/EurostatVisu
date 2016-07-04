@@ -5,7 +5,7 @@
  * @author julien Gaffuri
  *
  */
-(function($, PrVis) {
+(function($) {
 	$(function() {
 		//http://bl.ocks.org/mbostock/4060954
 		//http://bl.ocks.org/mbostock/3943967
@@ -88,7 +88,7 @@
 			cType.buttonset();
 
 			//build geolist
-			PrVis.fillGeoList(geoList, geoDim.id, function(geo){return geoDim.Category(geo).label;});
+			EstLib.fillGeoList(geoList, geoDim.id, function(geo){return geoDim.Category(geo).label;});
 			var geoURL = PrVis.getParameterByName("geo") || "EA";
 			$('#geoList option[value="'+geoURL+'"]').attr('selected', 'selected');
 			geoList.selectmenu({
@@ -171,4 +171,4 @@
 			console.log("Could not load initialisation data");
 		});
 	});
-}(jQuery, window.PrVis = window.PrVis || {} ));
+}(jQuery));

@@ -98,7 +98,7 @@
                 };
 
                 //chart axis scales
-                var xScale = d3.scale.linear().domain([-0.5,40]).range([0, width]); //TODO adapt max?
+                var xScale = d3.scale.linear().domain([-0.5,40]).range([0, width]); //TODO adapt max? min?
                 var yScale = d3.scale.linear().domain([0,100]).range([0, height]);
 
                 //update the chart
