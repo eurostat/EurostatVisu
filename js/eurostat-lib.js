@@ -15,7 +15,7 @@
 		var url = [];
 		url.push(EstLib.getEstatRestDataURLBase,"v",version,"/",format,"/",language,"/",table,"?");
 		if(params)
-			for (param in params) {
+			for (var param in params) {
 				var o = params[param];
 				if(Array.isArray(o))
 					for(var i=0;i<o.length;i++)
@@ -43,42 +43,41 @@
 		return geo.indexOf("EA") > -1 || geo.indexOf("EU") > -1 || geo.indexOf("NMS") > -1;
 	};
 
-	EstLib.geoComparison = function(g1, g2) {
-		if(EstLib.isGeoAggregate(g1) && !EstLib.isGeoAggregate(g2)) return 1;
-		if(!EstLib.isGeoAggregate(g1) && EstLib.isGeoAggregate(g2)) return -1;
-		return g1.localeCompare(g2);
+	EstLib.geoComparison = function(geoToNameFun){
+		geoToNameFun = geoToNameFun || function(a){return a;};
+		return function(g1, g2) {
+			if(EstLib.isGeoAggregate(g1) && !EstLib.isGeoAggregate(g2)) return 1;
+			if(!EstLib.isGeoAggregate(g1) && EstLib.isGeoAggregate(g2)) return -1;
+			var g1_ = geoToNameFun(g1);
+			var g2_ = geoToNameFun(g2);
+			return g1_.localeCompare(g2_);
+		}
 	};
 
 
 	//fill a selection list with geo + aggregates
-	PrVis.fillGeoList = function(geoList, geos, geoToNameFun){
+	EstLib.fillGeoList = function(geoList, geos, geoToNameFun){
 		geoToNameFun = geoToNameFun || function(a){return a;};
 
 		//sort by name
-		geos.sort(function(g1, g2){
-			var g1_ = geoToNameFun(g1);
-			var g2_ = geoToNameFun(g2);
-			if(g1_.substring(0,4)==="Euro" && g2_.substring(0,4)!=="Euro") return -1;
-			if(g1_.substring(0,4)!=="Euro" && g2_.substring(0,4)==="Euro") return 1;
-			return g1_.localeCompare(g2_);
-		});
+		geos.sort(EstLib.geoComparison(geoToNameFun));
 
 		//sort aggregates and countries
 		var geosA = [], geosC = [];
 		for(var i=0; i<geos.length; i++)
-			if(geoToNameFun(geos[i]).substring(0,4)==="Euro")
+			if(EstLib.isGeoAggregate(geos[i]))
 				geosA.push(geos[i]);
 			else
 				geosC.push(geos[i]);
 
 		//build option group for aggregates
 		var optgroupA = $("<optgroup>").attr("label", "European aggregates").appendTo(geoList);
-		for(var i=0; i<geosA.length; i++)
+		for(i=0; i<geosA.length; i++)
 			$("<option>").attr("value",geosA[i]).text( geoToNameFun(geosA[i]) ).appendTo(optgroupA);
 
 		//build option group for countries
 		var optgroupC = $("<optgroup>").attr("label", "Countries").appendTo(geoList);
-		for(var i=0; i<geosC.length; i++)
+		for(i=0; i<geosC.length; i++)
 			$("<option>").attr("value",geosC[i]).text( geoToNameFun(geosC[i]) ).appendTo(optgroupC);
 	};
 

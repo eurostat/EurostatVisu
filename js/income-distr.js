@@ -10,7 +10,7 @@
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 0, left: 0};
-        var width = 150 - margin.left - margin.right, height = 150 - margin.top - margin.bottom;
+        var width = 250 - margin.left - margin.right, height = 250 - margin.top - margin.bottom;
         var chart = d3.select("#chart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -43,7 +43,7 @@
 
                 //build geolist
                 var geos = data.Dimension("geo").id;
-                PrVis.fillGeoList(geoList, geos, function(geo){return data.Dimension("geo").Category(geo).label;});
+                EstLib.fillGeoList(geoList, geos, function(geo){return data.Dimension("geo").Category(geo).label;});
                 $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
                 geoList.selectmenu({
                     change:function(){ geoSel=geoList.find(":selected").attr("value"); update(); }
@@ -57,7 +57,7 @@
                     max: +times[times.length-1],
                     step: 1,
                     value: timeSel,
-                    change: function( event, ui ) { timeSel= ""+sli.slider("value"); update(); }
+                    change: function() { timeSel= ""+sli.slider("value"); update(); }
                 }).each(function() {
                     //TODO add time labels
                     //var opt = $(this).data().uiSlider.options;
@@ -95,7 +95,7 @@
                     //TODO
                     //check presence of 5 percentiles
                     //var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:quantile});
-                    return true;
+                    return false;
                 };
 
                 //chart axis scales
