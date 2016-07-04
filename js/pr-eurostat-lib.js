@@ -33,38 +33,6 @@
 	};
 
 
-	//fill a selection list with geo + aggregates
-	PrVis.fillGeoList = function(geoList, geos, geoToNameFun){
-		geoToNameFun = geoToNameFun || function(a){return a;};
-
-		//sort by name
-		geos.sort(function(g1, g2){
-			var g1_ = geoToNameFun(g1);
-			var g2_ = geoToNameFun(g2);
-			if(g1_.substring(0,4)==="Euro" && g2_.substring(0,4)!=="Euro") return -1;
-			if(g1_.substring(0,4)!=="Euro" && g2_.substring(0,4)==="Euro") return 1;
-			return g1_.localeCompare(g2_);
-		});
-
-		//sort aggregates and countries
-		var geosA = [], geosC = []; 
-		for(var i=0; i<geos.length; i++)
-			if(geoToNameFun(geos[i]).substring(0,4)==="Euro")
-				geosA.push(geos[i]);
-			else
-				geosC.push(geos[i]);
-
-		//build option group for aggregates
-		var optgroupA = $("<optgroup>").attr("label", "European aggregates").appendTo(geoList);
-		for(var i=0; i<geosA.length; i++)
-			$("<option>").attr("value",geosA[i]).text( geoToNameFun(geosA[i]) ).appendTo(optgroupA);
-
-		//build option group for countries
-		var optgroupC = $("<optgroup>").attr("label", "Countries").appendTo(geoList);
-		for(var i=0; i<geosC.length; i++)
-			$("<option>").attr("value",geosC[i]).text( geoToNameFun(geosC[i]) ).appendTo(optgroupC);
-	};
-
 	//fill a selection list with coicop + aggregates
 	PrVis.fillCoicopList = function(coicopList, indentChar, coicopDict){
 		indentChar = indentChar || "---";

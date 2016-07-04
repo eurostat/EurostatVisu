@@ -17,9 +17,14 @@
                 .append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")")
             ;
 
-        //build legend svg element
+        //build legend svg element TODO remove!
         var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom);
         var topLgd = 10;
+
+        //geo list and time slider
+        var geoList = $("#geoList"); //TODO reduce font size
+        var sli = $("#timeslider");
+        sli.css("width",width);
 
         //info div
         var infoDiv = d3.select("#info").attr("style", "height:"+ (height + margin.top + margin.bottom) + "px");
@@ -41,27 +46,23 @@
                 var geoSel = PrVis.getParameterByName("geo") || "EU28";
                 var timeSel = PrVis.getParameterByName("time") || "2013";
 
-                //fill geo legend TODO better show
+                //build geolist
                 var geos = data.Dimension("geo").id;
-                geos.sort(EstLib.geoComparison);
-                var dy = margin.top+topLgd;
-                lgd.append("g").selectAll("text").data(geos).enter().append("text")
-                    .attr("class", "lgd lgdG")
-                    .attr("geo", function(d) { return d; })
-                    .attr("x", 0)
-                    .attr("y", function() { dy+=10; return dy-10; })
-                    .text(function(d) { return d; })
-                    .on("mouseover", function() { geoSel=d3.select(this).attr("geo"); update(); })
-                    //.on("mouseout", function() { hideGeo(d3.select(this).attr("geo")); })
-                ;
+                PrVis.fillGeoList(geoList, geos, function(geo){return data.Dimension("geo").Category(geo).label;});
+                $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
+                geoList.selectmenu({
+                    change:function(){ geoSel=geoList.find(":selected").attr("value"); update(); }
+                })
+                    .selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
 
-                //fill time legend
+
+                //fill time legend TODO slider
                 var times = data.Dimension("time").id;
                 dy = margin.top+topLgd;
                 lgd.append("g").selectAll("text").data(times).enter().append("text")
                     .attr("class", "lgd lgdT")
                     .attr("time", function(d) { return d; })
-                    .attr("x", 60)
+                    .attr("x", 0)
                     .attr("y", function() { dy+=10; return dy-10; })
                     .text(function(d) { return d; })
                     .on("mouseover", function() { timeSel= d3.select(this).attr("time"); update(); })
@@ -153,9 +154,8 @@
                         addRect("Decile 10",1,getValue("DECILE10"),90,10);
                     }
 
-                    //bold geo legend label
-                    d3.selectAll(".lgdG").attr("font-weight","normal").attr("fill","black");
-                    d3.selectAll(".lgdG[geo="+geoSel+"]").attr("font-weight","bold").attr("fill","maroon");
+                    //select geoSel in list
+                    $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
                     //bold time legend label
                     d3.selectAll(".lgdT").attr("font-weight","normal").attr("fill","black");
                     d3.selectAll(".lgdT[time='"+timeSel+"']").attr("font-weight","bold").attr("fill","maroon");
