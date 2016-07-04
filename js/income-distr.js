@@ -75,19 +75,17 @@
                     return d.value || 0;
                 };
 
-                //compute second twentile from first decile and five first percentiles
+                //compute second twentile as first decile value minus five first percentiles values
                 var get2Twentilevalue = function(){
-                    //TODO correct
                     var v = getValue("DECILE1");
                     for(i=1;i<=5;i++) v -= getValue("PERCENTILE"+i);
-                    return v;
+                    return Math.round(v*10)/10;
                 };
-                //compute 19th twentile from last decile and five last percentiles
+                //compute 19th twentile value as last decile value, minus five last percentiles values
                 var get19Twentilevalue = function(){
-                    //TODO correct
                     var v = getValue("DECILE10");
                     for(i=95;i<=99;i++) v -= getValue("PERCENTILE"+i);
-                    return v;
+                    return Math.round(v*10)/10;
                 };
 
                 //check if percentile data is available
@@ -95,11 +93,12 @@
                     //TODO
                     //check presence of 5 percentiles
                     //var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:quantile});
-                    return false;
+                    //return false;
+                    return true;
                 };
 
                 //chart axis scales
-                var xScale = d3.scale.linear().domain([0,40]).range([0, width]); //TODO adapt max?
+                var xScale = d3.scale.linear().domain([-0.5,40]).range([0, width]); //TODO adapt max?
                 var yScale = d3.scale.linear().domain([0,100]).range([0, height]);
 
                 //update the chart
@@ -112,12 +111,17 @@
 
                     //draw distribution rectangle
                     var addRect = function(quantileType,quantileNb,factor,value,pos,size){
-                        rects.append("rect").attr("y",yScale(pos)).attr("x",xScale(0))
-                            .attr("width",xScale( factor*value )).attr("height",yScale(size))
+                        rects.append("rect").attr("y",yScale(pos)).attr("x",value<0?-xScale(-factor*value):0)
+                            .attr("width",value<0?0:xScale(factor*value)).attr("height",yScale(size))
                             .attr("fill","peru")
                             .on("mouseover", function() {
-                                infoDiv.text(quantileType + " " + quantileNb + " = " + value + "%");
-                                //TODO improve text
+                                var text = ["The income of the ",quantileNb," poorest "]; //TODO st,nd,rd,th
+                                if(quantileType==="P") text.push("percent");
+                                else if(quantileType==="D") text.push("tenth");
+                                else if(quantileType==="T") text.push("twentieth");
+                                text.push(" of the population is ",value,"% of the total income.");
+                                //TODO. Add: "If the income was equally distributed, it should be XXX%"
+                                infoDiv.text(text.join(""));
                                 d3.select(this).attr("fill","darkred ");
                             })
                             .on("mouseout", function() {
@@ -129,25 +133,25 @@
 
                     if(detailledDataPresent(true)){
                         //first 5 percentiles
-                        for(i=0;i<=4;i++) addRect("Percentile",i+1,10,getValue("PERCENTILE"+(i+1)),i,1);
+                        for(i=0;i<=4;i++) addRect("P",i+1,10,getValue("PERCENTILE"+(i+1)),i,1);
                         //second twentile
-                        addRect("Twentile",2,2,get2Twentilevalue(),5,5);
+                        addRect("T",2,2,get2Twentilevalue(),5,5);
                     } else {
                         //first decile
-                        addRect("Decile",1,1,getValue("DECILE1"),0,10);
+                        addRect("D",1,1,getValue("DECILE1"),0,10);
                     }
 
                     //8 deciles in the middle
-                    for(i=2;i<=9;i++) addRect("Decile",i,1,getValue("DECILE"+i),10*(i-1),10);
+                    for(i=2;i<=9;i++) addRect("D",i,1,getValue("DECILE"+i),10*(i-1),10);
 
                     if(detailledDataPresent(false)){
                         //19th twentile
-                        addRect("Twentile",19,2,get19Twentilevalue(),90,5);
+                        addRect("T",19,2,get19Twentilevalue(),90,5);
                         //last 5 percentiles
-                        for(i=95;i<=99;i++) addRect("Percentile",i,10,getValue("PERCENTILE"+i),i,1);
+                        for(i=95;i<=99;i++) addRect("P",i,10,getValue("PERCENTILE"+i),i,1);
                     } else {
                         //last decile
-                        addRect("Decile",10,1,getValue("DECILE10"),90,10);
+                        addRect("D",10,1,getValue("DECILE10"),90,10);
                     }
 
                     //select geoSel in list
