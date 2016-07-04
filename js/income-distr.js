@@ -17,10 +17,6 @@
                 .append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")")
             ;
 
-        //build legend svg element TODO remove!
-        var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom);
-        var topLgd = 10;
-
         //geo list and time slider
         var geoList = $("#geoList"); //TODO reduce font size
         var sli = $("#timeslider");
@@ -28,6 +24,10 @@
 
         //info div
         var infoDiv = d3.select("#info").attr("style", "height:"+ (height + margin.top + margin.bottom) + "px");
+
+        //the selection
+        var geoSel = PrVis.getParameterByName("geo") || "EU28";
+        var timeSel = PrVis.getParameterByName("time") || "2013";
 
         $.when(
             //get income distribution data
@@ -41,11 +41,6 @@
                 //decode data
                 data = JSONstat(data).Dataset(0);
 
-
-                //the selection
-                var geoSel = PrVis.getParameterByName("geo") || "EU28";
-                var timeSel = PrVis.getParameterByName("time") || "2013";
-
                 //build geolist
                 var geos = data.Dimension("geo").id;
                 PrVis.fillGeoList(geoList, geos, function(geo){return data.Dimension("geo").Category(geo).label;});
@@ -55,19 +50,22 @@
                 })
                     .selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
 
-
-                //fill time legend TODO slider
+                //build time slider
                 var times = data.Dimension("time").id;
-                dy = margin.top+topLgd;
-                lgd.append("g").selectAll("text").data(times).enter().append("text")
-                    .attr("class", "lgd lgdT")
-                    .attr("time", function(d) { return d; })
-                    .attr("x", 0)
-                    .attr("y", function() { dy+=10; return dy-10; })
-                    .text(function(d) { return d; })
-                    .on("mouseover", function() { timeSel= d3.select(this).attr("time"); update(); })
-                    //.on("mouseout", function() { hideTime(d3.select(this).attr("time")); })
-                ;
+                sli.slider({
+                    min: +times[0],
+                    max: +times[times.length-1],
+                    step: 1,
+                    value: timeSel,
+                    change: function( event, ui ) { timeSel= ""+sli.slider("value"); update(); }
+                }).each(function() {
+                    //TODO add time labels
+                    //var opt = $(this).data().uiSlider.options;
+                    //var www = opt.max - opt.min;
+                    //for (var i = opt.min; i <= opt.max; i+=opt.step)
+                    //    sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
+                });
+
 
 
                 //try to retrieve a quantile value
