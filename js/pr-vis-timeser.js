@@ -97,7 +97,7 @@
 			var legend = new Rickshaw.Graph.Legend( {
 				graph: graph,
 				element: document.getElementById('legend'),
-				naturalOrder:true,
+				naturalOrder:true
 			} );
 
 			//change legend style
@@ -207,7 +207,7 @@
 			pan = true;
 			xC = e.offsetX;
 		});
-		gDiv.mouseup(function(e){
+		gDiv.mouseup(function(){
 			pan = false;
 			xC = 0;
 		});
@@ -242,7 +242,7 @@
 				dt = 0.5*w*temporalResMin;
 				newV0 = mid - dt;
 				newV1 = mid + dt;
-			};
+			}
 
 			focusOn([newV0,newV1]);
 		});
@@ -271,7 +271,7 @@
 		var sliR = $("#timerange");
 		new Rickshaw.Graph.RangeSlider( {
 			graph: graph,
-			element: sliR.get(0),
+			element: sliR.get(0)
 		} );
 		var dsl = PrVis.getParameterByName("dsl");
 		if(dsl){
@@ -413,8 +413,8 @@
 				}
 			}
 
-			var buf = [];
-			for(var i=0; i<params.length; i++) buf.push(params[i].p+"="+params[i].v);
+			buf = [];
+			for(i=0; i<params.length; i++) buf.push(params[i].p+"="+params[i].v);
 			$("#URLtext").val( window.location.origin + window.location.pathname + (buf.length>0?"?"+buf.join("&"):"") );
 		};
 
@@ -433,7 +433,7 @@
 			geoDict = geos.dimension.geo.category.label;
 			EstLib.overrideCountryNames(geoDict);
 			geos = JSONstat(geos).Dataset(0);
-			PrVis.fillGeoList(geoList, geos.Dimension("geo").id, function(geo){return geoDict[geo];});
+			EstLib.fillGeoList(geoList, geos.Dimension("geo").id, function(geo){return geoDict[geo];});
 			geoList.selectmenu({
 				change : function(){ updateAddRemButtonText(); },
 				width:800
