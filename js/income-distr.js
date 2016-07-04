@@ -9,8 +9,8 @@
         var quantiles = ["PERCENTILE100","PERCENTILE99","PERCENTILE98","PERCENTILE97","PERCENTILE96","PERCENTILE95","DECILE10","DECILE9","DECILE8","DECILE7","DECILE6","DECILE5","DECILE4","DECILE3","DECILE2","DECILE1","PERCENTILE5","PERCENTILE4","PERCENTILE3","PERCENTILE2","PERCENTILE1"];
 
         //build svg element
-        var margin = {top: 0, right: 0, bottom: 10, left: 10};
-        var width = 500 - margin.left - margin.right, height = 300 - margin.top - margin.bottom;
+        var margin = {top: 0, right: 0, bottom: 0, left: 0};
+        var width = 150 - margin.left - margin.right, height = 150 - margin.top - margin.bottom;
         var chart = d3.select("#chart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
