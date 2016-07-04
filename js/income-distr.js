@@ -98,14 +98,12 @@
                     return true;
                 };
 
+                //chart axis scales
+                var xScale = d3.scale.linear().domain([0,40]).range([0, width]); //TODO adapt max?
+                var yScale = d3.scale.linear().domain([0,100]).range([0, height]);
 
                 //update the chart
                 var update = function(){
-
-                    //scales
-                    var xScale = d3.scale.linear().domain([0,50]).range([0, width]); //TODO adapt max
-                    var yScale = d3.scale.linear().domain([0,100]).range([0, height]);
-
                     //clear previous
                     chart.selectAll("*").remove();
 
@@ -116,15 +114,15 @@
                     var addRect = function(quantile,factor,value,pos,size){
                         rects.append("rect").attr("y",yScale(pos)).attr("x",xScale(0))
                             .attr("width",xScale( factor*value )).attr("height",yScale(size))
+                            .attr("fill","peru")
                             .on("mouseover", function() {
                                 infoDiv.text(quantile + " = " + value + "%");
-                                //TODO more text
-                                //TODO do not center text
-                                //TODO change rect style
+                                //TODO improve text
+                                d3.select(this).attr("fill","darkred ");
                             })
                             .on("mouseout", function() {
                                 infoDiv.text("");
-                                //TODO change rect style
+                                d3.select(this).attr("fill","peru");
                             })
                         ;
                     };
