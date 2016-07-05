@@ -5,7 +5,6 @@
  */
 (function($) {
     $(function() {
-        //TODO show axis label
         //TODO show median
         //TODO background rectangle
         //TODO time slider position
@@ -20,10 +19,19 @@
             .attr("height", height + margin.top + margin.bottom);
         var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
 
+        //define arrow marker
+        svg.append("defs").append("marker")
+            .attr({"id":"arrow", "viewBox":"0 -5 10 10", "refX":5, "refY":0, "markerWidth":3, "markerHeight":3, "orient":"auto"})
+            .append("path").attr("d", "M0,-5L10,0L0,5");
+
         //draw axis labels
         var labelsG = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
-        labelsG.append("text").attr("class","chartLabels").attr("x",10).attr("y",height+15).text("Lowest incomes");
-        labelsG.append("text").attr("class","chartLabels").attr("x",width-100).attr("y",height+15).text("Highest incomes");
+        labelsG.append("text").attr("class","chartLabels").attr("x",47).attr("y",height+17).text("Lowest incomes");
+        labelsG.append('line').attr({class:"arrow", "x1":150, "y1":height+25, "x2":40, "y2":height+25});
+        labelsG.append("text").attr("class","chartLabels").attr("x",width-150).attr("y",height+17).text("Highest incomes");
+        labelsG.append('line').attr({class:"arrow", "x1":width-150, "y1":height+25, "x2":width-45, "y2":height+25});
+        labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(0,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text("Income level");
+        labelsG.append('line').attr({class:"arrow", "x1":8, "y1":height*0.5+5, "x2":8, "y2":height*0.5-90});
 
         //geo list and time slider
         var geoList = $("#geoList");
