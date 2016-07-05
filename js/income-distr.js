@@ -6,10 +6,8 @@
 (function($) {
     $(function() {
 
-        var quantiles = ["PERCENTILE100","PERCENTILE99","PERCENTILE98","PERCENTILE97","PERCENTILE96","PERCENTILE95","DECILE10","DECILE9","DECILE8","DECILE7","DECILE6","DECILE5","DECILE4","DECILE3","DECILE2","DECILE1","PERCENTILE5","PERCENTILE4","PERCENTILE3","PERCENTILE2","PERCENTILE1"];
-
         //build svg element
-        var margin = {top: 0, right: 0, bottom: 0, left: 0};
+        var margin = {top: 0, right: 0, bottom: 0, left: 5};
         var width = 250 - margin.left - margin.right, height = 250 - margin.top - margin.bottom;
         var chart = d3.select("#chart").append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -29,9 +27,14 @@
         var geoSel = PrVis.getParameterByName("geo") || "EU28";
         var timeSel = PrVis.getParameterByName("time") || "2013";
 
+        //some quantile data
+        var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},D:{percentage:10,text:"tenth"}};
+
         $.when(
             //get income distribution data
-            $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",quantile:quantiles})})
+            $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
+                quantile:["PERCENTILE100","PERCENTILE99","PERCENTILE98","PERCENTILE97","PERCENTILE96","PERCENTILE95","DECILE10","DECILE9","DECILE8","DECILE7","DECILE6","DECILE5","DECILE4","DECILE3","DECILE2","DECILE1","PERCENTILE5","PERCENTILE4","PERCENTILE3","PERCENTILE2","PERCENTILE1"]
+            })})
         ).then(function(data) {
                 var i;
 
@@ -58,7 +61,7 @@
                     step: 1,
                     value: timeSel,
                     change: function() { timeSel= ""+sli.slider("value"); update(); }
-                    /*slide: function() { timeSel= ""+sli.slider("value"); update(); }*/ //TODO
+                    //slide: function() { timeSel= ""+sli.slider("value"); update(); }
                 }).each(function() {
                     var opt = $(this).data().uiSlider.options;
                     var www = opt.max - opt.min;
@@ -94,13 +97,16 @@
                     //check presence of 5 percentiles
                     for(var i=0;i<=4;i++){
                         var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"PERCENTILE"+nbs[i]});
-                        if(!d || !d.value) return false;
+                        if(!d || !d.value){
+                            console.log("No percentile data for PERCENTILE"+nbs[i]);
+                            return false;
+                        }
                     }
                     return true;
                 };
 
                 //chart axis scales
-                var xScale = d3.scale.linear().domain([-0.5,40]).range([0, width]); //TODO adapt max? min?
+                var xScale = d3.scale.linear().domain([0,40]).range([0, width]); //TODO adapt max? min?
                 var yScale = d3.scale.linear().domain([0,100]).range([0, height]);
 
                 //update the chart
@@ -117,15 +123,11 @@
                             .attr("width",value<0?0:xScale(factor*value)).attr("height",yScale(size))
                             .attr("fill","peru")
                             .on("mouseover", function() {
-                                var html = ["The income of the ",PrVis.getNumbered(quantileNb)," poorest "]; //TODO st,nd,rd,th
-                                if(quantileType==="P") html.push("percent");
-                                else if(quantileType==="D") html.push("tenth");
-                                else if(quantileType==="T") html.push("twentieth");
+                                var html = [];
+                                html.push("The income of the ",PrVis.getNumbered(quantileNb)," poorest ");
+                                html.push(quantileDict[quantileType].text);
                                 html.push(" of the population is ",value,"% of the total income.<br>If the income was equally distributed, it should be ");
-                                if(quantileType==="P") html.push("1");
-                                else if(quantileType==="D") html.push("10");
-                                else if(quantileType==="T") html.push("5");
-                                html.push("%.");
+                                html.push(quantileDict[quantileType].percentage,"%.");
                                 infoDiv.html(html.join(""));
                                 d3.select(this).attr("fill","darkred ");
                             })
