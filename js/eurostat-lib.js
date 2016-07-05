@@ -37,6 +37,7 @@
 		if(dict.EU) dict.EU = "European Union";
 		if(dict.EEA) dict.EEA = "European Economic Area";
 		if(dict.DE) dict.DE = "Germany";
+		if(dict.MK) dict.MK = "Macedonia (FYRM)";
 	};
 
 	EstLib.isGeoAggregate = function(geo){

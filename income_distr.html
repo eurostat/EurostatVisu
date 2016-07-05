@@ -20,16 +20,26 @@
             font-family: sans-serif;
         }
 
+        h1 {
+            font-size: 22px;
+        }
+
         #disrect rect {
             /*fill: peru;*/
             stroke-width: 0.5;
             stroke: lightgray;
         }
 
-        .lgd {
-            font-family: sans-serif;
-            font-size: 10px;
-            cursor: default;
+        #timeslider label {
+            position: absolute;
+            width: 20px;
+            margin-top: 20px;
+            margin-left: -10px;
+            text-align: center;
+        }
+
+        .ui-widget {
+            font-size: 13px !important;
         }
 
         p {
@@ -43,15 +53,13 @@
 <body>
 <h1>Income distribution in <span id="geoTitle">-</span> in <span id="timeTitle">-</span></h1>
 <div id="chart" style="float: left; margin-right: 10px;"></div>
-<div id="info"></div>
-
-<div id="geoListDiv" style="margin-top: 10px;">
-    <select name="geoN" id="geoList"></select>
+<div>
+    <div id="geoListDiv">
+        <select name="geoN" id="geoList"></select>
+    </div>
+    <div id="info" style="margin-top: 20px;"></div>
 </div>
-
-<div style="margin-top: 10px;">
-    <div id="timeslider"></div>
-</div>
+<div id="timeslider"></div>
 
 <div><p>Sources: <a href="http://ec.europa.eu/eurostat/">Eurostat</a> databases on income distribution (<a href="http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview">EU-SILC</a>). More information <a href="http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics">here</a>.</p></div>
 </body>

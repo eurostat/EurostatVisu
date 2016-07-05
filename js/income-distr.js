@@ -18,7 +18,7 @@
             ;
 
         //geo list and time slider
-        var geoList = $("#geoList"); //TODO reduce font size
+        var geoList = $("#geoList");
         var sli = $("#timeslider");
         sli.css("width",width);
 
