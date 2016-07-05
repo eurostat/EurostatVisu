@@ -5,13 +5,12 @@
  */
 (function($) {
     $(function() {
-        //TODO remove unecessary years
         //TODO better show when no data
         //TODO show quintiles, quartiles, etc.
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 0, left: 5};
-        var width = 250 - margin.left - margin.right, height = 250 - margin.top - margin.bottom;
+        var width = 400 - margin.left - margin.right, height = 250 - margin.top - margin.bottom;
         var chart = d3.select("#chart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -102,7 +101,7 @@
                     for(var i=0;i<=4;i++){
                         var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"PERCENTILE"+nbs[i]});
                         if(!d || !d.value){
-                            console.log("No percentile data for PERCENTILE"+nbs[i]);
+                            //console.log("No percentile data for PERCENTILE"+nbs[i]);
                             return false;
                         }
                     }
@@ -110,8 +109,9 @@
                 };
 
                 //chart axis scales
-                var xScale = d3.scale.linear().domain([0,40]).range([0, width]); //TODO adapt max? min?
-                var yScale = d3.scale.linear().domain([0,100]).range([0, height]);
+                var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
+                var yMax = 40;
+                var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]); //TODO adapt max? min?
 
                 //update the chart
                 var update = function(){
@@ -123,8 +123,8 @@
 
                     //draw distribution rectangle
                     var addRect = function(quantileType,quantileNb,factor,value,pos,size){
-                        rects.append("rect").attr("y",yScale(pos)).attr("x",value<0?-xScale(-factor*value):0)
-                            .attr("width",value<0?0:xScale(factor*value)).attr("height",yScale(size))
+                        rects.append("rect").attr("y",yScale(yMax-factor*value)).attr("x",xScale(pos))
+                            .attr("width",xScale(size)).attr("height",yScale(factor*value))
                             .attr("fill","peru")
                             .on("mouseover", function() {
                                 //TODO improve text
