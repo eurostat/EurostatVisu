@@ -6,7 +6,6 @@
 (function($) {
     $(function() {
         //TODO show median
-        //TODO background rectangle
         //TODO time slider position
         //TODO better show when no data
         //TODO show quintiles, quartiles, etc.
@@ -30,8 +29,8 @@
         labelsG.append('line').attr({class:"arrow", "x1":150, "y1":height+25, "x2":40, "y2":height+25});
         labelsG.append("text").attr("class","chartLabels").attr("x",width-150).attr("y",height+17).text("Highest incomes");
         labelsG.append('line').attr({class:"arrow", "x1":width-150, "y1":height+25, "x2":width-45, "y2":height+25});
-        labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(0,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text("Income level");
-        labelsG.append('line').attr({class:"arrow", "x1":8, "y1":height*0.5+5, "x2":8, "y2":height*0.5-90});
+        labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(17,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text("Income level");
+        labelsG.append('line').attr({class:"arrow", "x1":25, "y1":height*0.5+5, "x2":25, "y2":height*0.5-90});
 
         //geo list and time slider
         var geoList = $("#geoList");
@@ -168,6 +167,9 @@
                             })
                         ;
                     };
+
+                    //background rectangle
+                    rects.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"});
 
                     if(percentileDataPresent(true)){
                         //first 5 percentiles
