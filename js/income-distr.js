@@ -7,6 +7,7 @@
     $(function() {
         //TODO better show when no data
         //TODO show quintiles, quartiles, etc.
+        //TODO show median
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 0, left: 5};
@@ -30,7 +31,7 @@
         var timeSel = PrVis.getParameterByName("time") || "2013";
 
         //some quantile data
-        var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},D:{percentage:10,text:"tenth"}};
+        var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},TF:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
 
         $.when(
             //get income distribution data
@@ -82,15 +83,15 @@
                 };
 
                 //compute second twentile as first decile value minus five first percentiles values
-                var get2Twentilevalue = function(){
+                var get2TwentileValue = function(){
                     var v = getValue("DECILE1");
                     for(i=1;i<=5;i++) v -= getValue("PERCENTILE"+i);
                     return Math.round(v*10)/10;
                 };
                 //compute 19th twentile value as last decile value, minus five last percentiles values
-                var get19Twentilevalue = function(){
+                var getTwentyFifthValue = function(){
                     var v = getValue("DECILE10");
-                    for(i=95;i<=99;i++) v -= getValue("PERCENTILE"+i);
+                    for(i=95;i<=100;i++) v -= getValue("PERCENTILE"+i);
                     return Math.round(v*10)/10;
                 };
 
@@ -110,8 +111,8 @@
 
                 //chart axis scales
                 var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
-                var yMax = 40;
-                var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]); //TODO adapt max? min?
+                var yMax = 75; //TODO adapt max? min?
+                var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
 
                 //update the chart
                 var update = function(){
@@ -127,7 +128,7 @@
                             .attr("width",xScale(size)).attr("height",yScale(factor*value))
                             .attr("fill","peru")
                             .on("mouseover", function() {
-                                //TODO improve text
+                                //TODO improve text - for twentyfifth
                                 var html = [];
                                 html.push(
                                     "The income of the <b>",
@@ -157,7 +158,7 @@
                         //first 5 percentiles
                         for(i=0;i<=4;i++) addRect("P",i+1,10,getValue("PERCENTILE"+(i+1)),i,1);
                         //second twentile
-                        addRect("T",2,2,get2Twentilevalue(),5,5);
+                        addRect("T",2,2,get2TwentileValue(),5,5);
                     } else {
                         //first decile
                         addRect("D",1,1,getValue("DECILE1"),0,10);
@@ -167,10 +168,10 @@
                     for(i=2;i<=9;i++) addRect("D",i,1,getValue("DECILE"+i),10*(i-1),10);
 
                     if(percentileDataPresent(false)){
-                        //19th twentile
-                        addRect("T",19,2,get19Twentilevalue(),90,5);
+                        //19th twentyfifth
+                        addRect("TF",24,2.5,getTwentyFifthValue(),90,4);
                         //last 5 percentiles
-                        for(i=95;i<=99;i++) addRect("P",i,10,getValue("PERCENTILE"+i),i,1);
+                        for(i=95;i<=100;i++) addRect("P",i,10,getValue("PERCENTILE"+i),i-1,1);
                     } else {
                         //last decile
                         addRect("D",10,1,getValue("DECILE10"),90,10);
