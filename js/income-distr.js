@@ -5,7 +5,6 @@
  */
 (function($) {
     $(function() {
-        //TODO time slider position
         //TODO better show when no data
         //TODO show quintiles, quartiles, etc.
 
@@ -37,7 +36,7 @@
         sli.css("width",200);
 
         //info div
-        var infoDiv = d3.select("#info").attr("style", "height:"+ (height + margin.top + margin.bottom - 34) + "px");
+        var infoDiv = d3.select("#info");
 
         //the selection
         var geoSel = PrVis.getParameterByName("geo") || "EU28";
