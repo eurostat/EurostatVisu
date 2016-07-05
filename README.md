@@ -9,9 +9,9 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - [Country baskets composition, detailled by product](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst.html)
 - [Country baskets composition evolution accross time](http://jgaffuri.github.io/EurostatVisu/coicop_time_stack.html)
 - [Fishing quotas](http://jgaffuri.github.io/EurostatVisu/fq/quotas.html)
+- [The COICOP classification](http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html)
 - [Food prices time series](http://jgaffuri.github.io/EurostatVisu/FPMT_timeser.html)
 - [Inflation table](http://jgaffuri.github.io/EurostatVisu/table1.html)
-- [The COICOP classification](http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html)
 
 # Technical details
 
