@@ -5,6 +5,9 @@
  */
 (function($) {
     $(function() {
+        //TODO remove unecessary years
+        //TODO better show when no data
+        //TODO show quintiles, quartiles, etc.
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 0, left: 5};
@@ -75,6 +78,7 @@
                 var getValue = function(quantile){
                     var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:quantile});
                     if(!d) return 0;
+                    //if(d.value<0) console.log(quantile,d.value)
                     return d.value || 0;
                 };
 
@@ -125,10 +129,20 @@
                             .on("mouseover", function() {
                                 //TODO improve text
                                 var html = [];
-                                html.push("The income of the ",PrVis.getNumbered(quantileNb)," poorest ");
-                                html.push(quantileDict[quantileType].text);
-                                html.push(" of the population is ",value,"% of the total income.<br>If the income was equally distributed, it should be ");
-                                html.push(quantileDict[quantileType].percentage,"%.");
+                                html.push(
+                                    "The income of the <b>",
+                                    PrVis.getNumbered(quantileNb),
+                                    " ",
+                                    quantileDict[quantileType].text,
+                                    "</b> of the population with the ",
+                                    "lowest",
+                                    " income is <b>",
+                                    value,
+                                    "%</b> of the total income.<br>If the income was equally distributed, it would be <b>",
+                                    quantileDict[quantileType].percentage,
+                                    "%</b>."
+                                    //TODO it is then X times more/less than it would be. The income is X times higher/lower than the average income.
+                                );
                                 infoDiv.html(html.join(""));
                                 d3.select(this).attr("fill","darkred ");
                             })
