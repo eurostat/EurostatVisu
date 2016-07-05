@@ -115,13 +115,16 @@
                             .attr("width",value<0?0:xScale(factor*value)).attr("height",yScale(size))
                             .attr("fill","peru")
                             .on("mouseover", function() {
-                                var text = ["The income of the ",quantileNb," poorest "]; //TODO st,nd,rd,th
-                                if(quantileType==="P") text.push("percent");
-                                else if(quantileType==="D") text.push("tenth");
-                                else if(quantileType==="T") text.push("twentieth");
-                                text.push(" of the population is ",value,"% of the total income.");
-                                //TODO. Add: "If the income was equally distributed, it should be XXX%"
-                                infoDiv.text(text.join(""));
+                                var html = ["The income of the ",quantileNb," poorest "]; //TODO st,nd,rd,th
+                                if(quantileType==="P") html.push("percent");
+                                else if(quantileType==="D") html.push("tenth");
+                                else if(quantileType==="T") html.push("twentieth");
+                                html.push(" of the population is ",value,"% of the total income.<br>If the income was equally distributed, it should be ");
+                                if(quantileType==="P") html.push("1");
+                                else if(quantileType==="D") html.push("10");
+                                else if(quantileType==="T") html.push("5");
+                                html.push("%.");
+                                infoDiv.html(html.join(""));
                                 d3.select(this).attr("fill","darkred ");
                             })
                             .on("mouseout", function() {
