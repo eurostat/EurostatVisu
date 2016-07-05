@@ -90,10 +90,12 @@
 
                 //check if percentile data is available
                 var percentileDataPresent = function(first){
-                    //TODO
+                    var nbs = first? [1,2,3,4,5] : [95,96,97,98,99];
                     //check presence of 5 percentiles
-                    //var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:quantile});
-                    //return false;
+                    for(var i=0;i<=4;i++){
+                        var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"PERCENTILE"+nbs[i]});
+                        if(!d || !d.value) return false;
+                    }
                     return true;
                 };
 
@@ -115,7 +117,7 @@
                             .attr("width",value<0?0:xScale(factor*value)).attr("height",yScale(size))
                             .attr("fill","peru")
                             .on("mouseover", function() {
-                                var html = ["The income of the ",quantileNb," poorest "]; //TODO st,nd,rd,th
+                                var html = ["The income of the ",PrVis.getNumbered(quantileNb)," poorest "]; //TODO st,nd,rd,th
                                 if(quantileType==="P") html.push("percent");
                                 else if(quantileType==="D") html.push("tenth");
                                 else if(quantileType==="T") html.push("twentieth");

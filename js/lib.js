@@ -1,7 +1,7 @@
 /**
- * 
+ *
  * Generic functions
- * 
+ *
  * @author julien Gaffuri
  *
  */
@@ -119,26 +119,26 @@
 	PrVis.getParameterByName = function(name) {
 		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-		results = regex.exec(location.search);
+			results = regex.exec(location.search);
 		return !results? null : decodeURIComponent(results[1].replace(/\+/g, " "));
 	};
 
 	/*
-     indexOfObjectInArray = function(arr, id, idProp) {
-     for(var i=0; i<arr.length; i++)
-     if (arr[i][idProp] === id) return i;
-     return -1;
-     };
+	 indexOfObjectInArray = function(arr, id, idProp) {
+	 for(var i=0; i<arr.length; i++)
+	 if (arr[i][idProp] === id) return i;
+	 return -1;
+	 };
 	 */
 
 	/*indexOfObjectProperty = function(obj, prop) {
-     var i=0;
-     for(var prop_ in obj) {
-     if(prop_ == prop) return i;
-     i++;
-     }
-     return -1;
-     };*/
+	 var i=0;
+	 for(var prop_ in obj) {
+	 if(prop_ == prop) return i;
+	 i++;
+	 }
+	 return -1;
+	 };*/
 
 	PrVis.serializeXmlNode = function(xmlNode) {
 		if (typeof window.XMLSerializer != "undefined") {
@@ -182,32 +182,32 @@
 		end.y = d3.round(end.y,3);
 		var arcSweep = endAngle - startAngle <= 180 ? "0" : "1";
 		return [
-		        "M", start.x, start.y,
-		        "A", radius, radius, 0, arcSweep, 0, end.x, end.y,
-		        "L", x, y,
-		        "L", start.x, start.y
-		        ].join(" ");
+			"M", start.x, start.y,
+			"A", radius, radius, 0, arcSweep, 0, end.x, end.y,
+			"L", x, y,
+			"L", start.x, start.y
+		].join(" ");
 	};
 
 
 
 	/*PrVis.setURLParameter = function(paramName, paramValue){
-     var url = window.location.href;
-     if (url.indexOf(paramName + "=") >= 0){
-     var prefix = url.substring(0, url.indexOf(paramName));
-     var suffix = url.substring(url.indexOf(paramName));
-     suffix = suffix.substring(suffix.indexOf("=") + 1);
-     suffix = (suffix.indexOf("&") >= 0) ? suffix.substring(suffix.indexOf("&")) : "";
-     url = prefix + paramName + "=" + paramValue + suffix;
-     }
-     else{
-     if (url.indexOf("?") < 0)
-     url += "?" + paramName + "=" + paramValue;
-     else
-     url += "&" + paramName + "=" + paramValue;
-     }
-     window.location.href = url;
-     };*/
+	 var url = window.location.href;
+	 if (url.indexOf(paramName + "=") >= 0){
+	 var prefix = url.substring(0, url.indexOf(paramName));
+	 var suffix = url.substring(url.indexOf(paramName));
+	 suffix = suffix.substring(suffix.indexOf("=") + 1);
+	 suffix = (suffix.indexOf("&") >= 0) ? suffix.substring(suffix.indexOf("&")) : "";
+	 url = prefix + paramName + "=" + paramValue + suffix;
+	 }
+	 else{
+	 if (url.indexOf("?") < 0)
+	 url += "?" + paramName + "=" + paramValue;
+	 else
+	 url += "&" + paramName + "=" + paramValue;
+	 }
+	 window.location.href = url;
+	 };*/
 
 
 
@@ -256,87 +256,87 @@
 
 	PrVis.loadAutoComplete = function(id, data, minLength){
 		$( "#"+id )
-		// don't navigate away from the field on tab when selecting an item
-		.bind( "keydown", function( event ) {
-			if ( event.keyCode === $.ui.keyCode.TAB &&
+			// don't navigate away from the field on tab when selecting an item
+			.bind( "keydown", function( event ) {
+				if ( event.keyCode === $.ui.keyCode.TAB &&
 					$( this ).autocomplete( "instance" ).menu.active ) {
-				event.preventDefault();
-			}
-		})
-		.autocomplete({
-			minLength: minLength,
-			source: function( request, response ) {
-				// delegate back to autocomplete, but extract the last term
-				response( $.ui.autocomplete.filter(
+					event.preventDefault();
+				}
+			})
+			.autocomplete({
+				minLength: minLength,
+				source: function( request, response ) {
+					// delegate back to autocomplete, but extract the last term
+					response( $.ui.autocomplete.filter(
 						data, PrVis.extractLast( request.term ) ) );
-			},
-			focus: function() { return false; },
-			select: function( event, ui ) {
-				var terms = PrVis.split( this.value );
-				// remove the current input
-				terms.pop();
-				// add the selected item
-				terms.push( ui.item.value );
-				// add placeholder to get the comma-and-space at the end
-				terms.push( "" );
-				this.value = terms.join( ", " );
+				},
+				focus: function() { return false; },
+				select: function( event, ui ) {
+					var terms = PrVis.split( this.value );
+					// remove the current input
+					terms.pop();
+					// add the selected item
+					terms.push( ui.item.value );
+					// add placeholder to get the comma-and-space at the end
+					terms.push( "" );
+					this.value = terms.join( ", " );
 
-				//ensures new input is checked
-				$(this).trigger("input");
+					//ensures new input is checked
+					$(this).trigger("input");
 
-				return false;
-			}
-		})
-		.autocomplete( "instance" )._renderItem = function( ul, item ) {
+					return false;
+				}
+			})
+			.autocomplete( "instance" )._renderItem = function( ul, item ) {
 			return $("<li>")
-			.append( "<a>" + item.label + "</a>" )
-			.appendTo(ul);
+				.append( "<a>" + item.label + "</a>" )
+				.appendTo(ul);
 		};
 	};
 
 
 	PrVis.loadAutoCompleteRemote = function(id, data, minLength, cacheLoadFunction){
 		$( "#"+id )
-		// don't navigate away from the field on tab when selecting an item
-		.bind( "keydown", function( event ) {
-			if ( event.keyCode === $.ui.keyCode.TAB &&
+			// don't navigate away from the field on tab when selecting an item
+			.bind( "keydown", function( event ) {
+				if ( event.keyCode === $.ui.keyCode.TAB &&
 					$( this ).autocomplete( "instance" ).menu.active ) {
-				event.preventDefault();
-			}
-		})
-		.autocomplete({
-			minLength: minLength,
-			source: function(request, response) {
-				var term = PrVis.extractLast(request.term);
-				if(!term || term.length<minLength) return;
-				$.when(
+					event.preventDefault();
+				}
+			})
+			.autocomplete({
+				minLength: minLength,
+				source: function(request, response) {
+					var term = PrVis.extractLast(request.term);
+					if(!term || term.length<minLength) return;
+					$.when(
 						PrVis.ajax({data:data+term + "%25"} )
-				).then(function(data) {
-					//for(var i=0; i<data.length; i++) data[i].VALUE = PrVis.replaceAll(data[i].VALUE, ",", " -");
-					response( PrVis.arrayKeysToLowerCase(data) );
-				}, function(XMLHttpRequest, textStatus) { console.warn(textStatus); }
-				);
-			},
-			focus: function() { return false; },
-			select: function( event, ui ) {
-				var terms = PrVis.split( this.value );
-				// remove the current input
-				terms.pop();
-				// add the selected item
-				terms.push( ui.item.value );
-				// add placeholder to get the comma-and-space at the end
-				terms.push( "" );
-				this.value = terms.join( ", " );
+					).then(function(data) {
+							//for(var i=0; i<data.length; i++) data[i].VALUE = PrVis.replaceAll(data[i].VALUE, ",", " -");
+							response( PrVis.arrayKeysToLowerCase(data) );
+						}, function(XMLHttpRequest, textStatus) { console.warn(textStatus); }
+					);
+				},
+				focus: function() { return false; },
+				select: function( event, ui ) {
+					var terms = PrVis.split( this.value );
+					// remove the current input
+					terms.pop();
+					// add the selected item
+					terms.push( ui.item.value );
+					// add placeholder to get the comma-and-space at the end
+					terms.push( "" );
+					this.value = terms.join( ", " );
 
-				//load into cache
-				if(cacheLoadFunction) cacheLoadFunction(ui.item.id, true);
+					//load into cache
+					if(cacheLoadFunction) cacheLoadFunction(ui.item.id, true);
 
-				//ensures new input is checked
-				$(this).trigger("input");
+					//ensures new input is checked
+					$(this).trigger("input");
 
-				return false;
-			}
-		});
+					return false;
+				}
+			});
 	};
 
 	/**
@@ -371,26 +371,26 @@
 	 * @return{string}
 	 */
 	/*PrVis.capitaliseStr = function(str){
-     return str.replace(/^[a-z]/, function(m){ return m.toUpperCase(); });
-     };*/
+	 return str.replace(/^[a-z]/, function(m){ return m.toUpperCase(); });
+	 };*/
 
 //	the color input has to be EXACTLY 7 characters, like #08a35c
 //	percent parameter is between -1.0 and 1.0
 	/*PrVis.shadeColor = function(color, percent) {
-     var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
-     return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
-     };*/
+	 var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+	 return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+	 };*/
 
 //	the color input has to be EXACTLY 7 characters, like #08a35c
 //	p parameter is between 0 and 1.0
 	/*PrVis.blendColors = function(c0, c1, p) {
-     var f=parseInt(c0.slice(1),16),t=parseInt(c1.slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF,R2=t>>16,G2=t>>8&0x00FF,B2=t&0x0000FF;
-     return "#"+(0x1000000+(Math.round((R2-R1)*p)+R1)*0x10000+(Math.round((G2-G1)*p)+G1)*0x100+(Math.round((B2-B1)*p)+B1)).toString(16).slice(1);
-     };*/
+	 var f=parseInt(c0.slice(1),16),t=parseInt(c1.slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF,R2=t>>16,G2=t>>8&0x00FF,B2=t&0x0000FF;
+	 return "#"+(0x1000000+(Math.round((R2-R1)*p)+R1)*0x10000+(Math.round((G2-G1)*p)+G1)*0x100+(Math.round((B2-B1)*p)+B1)).toString(16).slice(1);
+	 };*/
 
 	/*function numberWithSpaces(x) {
-     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-     };*/
+	 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+	 };*/
 
 	/**
 	 * @param{string} string
@@ -446,14 +446,14 @@
 		var d = $("<div>");
 
 		/*var svg = $("<svg>").attr("width",130).attr("height",15).attr("title",ttp);
-         $("<rect>").attr("width",20).attr("height",15).attr("style","fill:"+fillColor+";stroke-width:1px;stroke:#aaa").appendTo(svg);
-         $("<text>").attr("x",25).attr("y",13).attr("fill","black").html(text).appendTo(svg);
-         d.append(svg);*/
+		 $("<rect>").attr("width",20).attr("height",15).attr("style","fill:"+fillColor+";stroke-width:1px;stroke:#aaa").appendTo(svg);
+		 $("<text>").attr("x",25).attr("y",13).attr("fill","black").html(text).appendTo(svg);
+		 d.append(svg);*/
 		d.append(
-				"<svg width=130 height=15 title='"+ttp+"'>" +
-				"<rect width=20 height=15 style='fill:"+fillColor+";stroke-width:1px;stroke:#aaa' />" +
-				"<text x=25 y=13 fill=black>"+text+"</text>" +
-				"</svg>"
+			"<svg width=130 height=15 title='"+ttp+"'>" +
+			"<rect width=20 height=15 style='fill:"+fillColor+";stroke-width:1px;stroke:#aaa' />" +
+			"<text x=25 y=13 fill=black>"+text+"</text>" +
+			"</svg>"
 		);
 		return d;
 	};
@@ -554,16 +554,16 @@
 			x.push(alpha.charAt(b10 & 0x3f));
 		}
 		switch (s.length - imax) {
-		case 1:
-			b10 = getbyte(s,i) << 16;
-			x.push(alpha.charAt(b10 >> 18) + alpha.charAt((b10 >> 12) & 0x3F) +
+			case 1:
+				b10 = getbyte(s,i) << 16;
+				x.push(alpha.charAt(b10 >> 18) + alpha.charAt((b10 >> 12) & 0x3F) +
 					padchar + padchar);
-			break;
-		case 2:
-			b10 = (getbyte(s,i) << 16) | (getbyte(s,i+1) << 8);
-			x.push(alpha.charAt(b10 >> 18) + alpha.charAt((b10 >> 12) & 0x3F) +
+				break;
+			case 2:
+				b10 = (getbyte(s,i) << 16) | (getbyte(s,i+1) << 8);
+				x.push(alpha.charAt(b10 >> 18) + alpha.charAt((b10 >> 12) & 0x3F) +
 					alpha.charAt((b10 >> 6) & 0x3f) + padchar);
-			break;
+				break;
 		}
 		return x.join('');
 	};
@@ -587,46 +587,56 @@
 	};
 
 	/*
-     PrVis.fireEvent = function(element, event){
-     var e;
-     if(document.createEventObject){
-     // for IE
-     try {
-     e = document.createEventObject();
-     jQuery(element).change();
-     return element.fireEvent('on'+event,e);
-     } catch(e) {}
-     } else{
-     e = document.createEvent("HTMLEvents");
-     e.initEvent(event, true, true);
-     return !element.dispatchEvent(e);
-     }
-     }
+	 PrVis.fireEvent = function(element, event){
+	 var e;
+	 if(document.createEventObject){
+	 // for IE
+	 try {
+	 e = document.createEventObject();
+	 jQuery(element).change();
+	 return element.fireEvent('on'+event,e);
+	 } catch(e) {}
+	 } else{
+	 e = document.createEvent("HTMLEvents");
+	 e.initEvent(event, true, true);
+	 return !element.dispatchEvent(e);
+	 }
+	 }
 	 */
 	/*PrVis.fireEvent = function(el, etype){
-     if (el.fireEvent) {
-     el.fireEvent('on' + etype);
-     } else {
-     var evObj = document.createEvent('Events');
-     evObj.initEvent(etype, true, false);
-     el.dispatchEvent(evObj);
-     }
-     };*/
+	 if (el.fireEvent) {
+	 el.fireEvent('on' + etype);
+	 } else {
+	 var evObj = document.createEvent('Events');
+	 evObj.initEvent(etype, true, false);
+	 el.dispatchEvent(evObj);
+	 }
+	 };*/
 	/*PrVis.fireEvent = function(el, etype) {
-     var event;
-     if (document.createEvent) {
-     event = document.createEvent("HTMLEvents");
-     event.initEvent(etype, true, true);
-     } else {
-     event = document.createEventObject();
-     event.eventType = etype;
-     }
-     event.eventName = etype;
-     if (el.dispatchEvent) {
-     el.dispatchEvent(event);
-     } else {
-     el.fireEvent("on" + etype, event);
-     }
-     }*/
+	 var event;
+	 if (document.createEvent) {
+	 event = document.createEvent("HTMLEvents");
+	 event.initEvent(etype, true, true);
+	 } else {
+	 event = document.createEventObject();
+	 event.eventType = etype;
+	 }
+	 event.eventName = etype;
+	 if (el.dispatchEvent) {
+	 el.dispatchEvent(event);
+	 } else {
+	 el.fireEvent("on" + etype, event);
+	 }
+	 }*/
+
+	//transform 1 into 1st, 2 into 2nd, 3 into 3rd, etc...
+	PrVis.getNumbered = function(number){
+		switch(number){
+			case 1: return "1st";
+			case 2: return "2nd";
+			case 3: return "3rd";
+			default: return number+"th";
+		}
+	};
 
 }(jQuery, window.PrVis = window.PrVis || {} ));
