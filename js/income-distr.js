@@ -20,10 +20,10 @@
         //geo list and time slider
         var geoList = $("#geoList");
         var sli = $("#timeslider");
-        sli.css("width",width);
+        sli.css("width",300);
 
         //info div
-        var infoDiv = d3.select("#info").attr("style", "height:"+ (height + margin.top + margin.bottom) + "px");
+        var infoDiv = d3.select("#info").attr("style", "height:"+ (height + margin.top + margin.bottom - 34) + "px");
 
         //the selection
         var geoSel = PrVis.getParameterByName("geo") || "EU28";
@@ -58,12 +58,12 @@
                     step: 1,
                     value: timeSel,
                     change: function() { timeSel= ""+sli.slider("value"); update(); }
+                    /*slide: function() { timeSel= ""+sli.slider("value"); update(); }*/ //TODO
                 }).each(function() {
-                    //TODO add time labels
-                    //var opt = $(this).data().uiSlider.options;
-                    //var www = opt.max - opt.min;
-                    //for (var i = opt.min; i <= opt.max; i+=opt.step)
-                    //    sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
+                    var opt = $(this).data().uiSlider.options;
+                    var www = opt.max - opt.min;
+                    for (var i = opt.min; i <= opt.max; i+=5)
+                        sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
                 });
 
 
@@ -89,7 +89,7 @@
                 };
 
                 //check if percentile data is available
-                var detailledDataPresent = function(first){
+                var percentileDataPresent = function(first){
                     //TODO
                     //check presence of 5 percentiles
                     //var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:quantile});
@@ -134,7 +134,7 @@
                         ;
                     };
 
-                    if(detailledDataPresent(true)){
+                    if(percentileDataPresent(true)){
                         //first 5 percentiles
                         for(i=0;i<=4;i++) addRect("P",i+1,10,getValue("PERCENTILE"+(i+1)),i,1);
                         //second twentile
@@ -147,7 +147,7 @@
                     //8 deciles in the middle
                     for(i=2;i<=9;i++) addRect("D",i,1,getValue("DECILE"+i),10*(i-1),10);
 
-                    if(detailledDataPresent(false)){
+                    if(percentileDataPresent(false)){
                         //19th twentile
                         addRect("T",19,2,get19Twentilevalue(),90,5);
                         //last 5 percentiles
