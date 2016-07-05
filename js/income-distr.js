@@ -5,7 +5,6 @@
  */
 (function($) {
     $(function() {
-        //TODO show median
         //TODO time slider position
         //TODO better show when no data
         //TODO show quintiles, quartiles, etc.
@@ -193,6 +192,10 @@
                         //last decile
                         addRect("D",10,1,getValue("DECILE10"),90,10);
                     }
+
+                    //average line
+                    chart.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
+                    chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text("Average income");
 
                     //select geoSel in list
                     $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
