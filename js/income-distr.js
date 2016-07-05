@@ -11,7 +11,7 @@
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 0, left: 5};
-        var width = 400 - margin.left - margin.right, height = 250 - margin.top - margin.bottom;
+        var width = 600 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
         var chart = d3.select("#chart").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
@@ -21,7 +21,7 @@
         //geo list and time slider
         var geoList = $("#geoList");
         var sli = $("#timeslider");
-        sli.css("width",400);
+        sli.css("width",200);
 
         //info div
         var infoDiv = d3.select("#info").attr("style", "height:"+ (height + margin.top + margin.bottom - 34) + "px");
