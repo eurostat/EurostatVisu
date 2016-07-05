@@ -5,10 +5,10 @@
  */
 (function($) {
 	$(function() {
-		//TODO adapt label depending on level
-		//TODO mouse pan?
-
 		//http://bl.ocks.org/mbostock/4063550
+
+		//TODO mouse pan
+		//TODO adapt label depending on level
 
 		//TODO sunburst
 		//https://bl.ocks.org/mbostock/4348373

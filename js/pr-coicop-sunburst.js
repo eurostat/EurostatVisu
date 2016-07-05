@@ -150,7 +150,7 @@
 						$("#yearTXT").text(sli.slider("value"));
 						updateChart();
 					},
-					slide: function( event, ui ) {
+					slide: function( event, ui ) { //TODO work well???
 						$("#yearTXT").text(sli.slider("value"));
 						updateChart();
 					}

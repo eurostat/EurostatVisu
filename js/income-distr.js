@@ -123,6 +123,7 @@
                             .attr("width",value<0?0:xScale(factor*value)).attr("height",yScale(size))
                             .attr("fill","peru")
                             .on("mouseover", function() {
+                                //TODO improve text
                                 var html = [];
                                 html.push("The income of the ",PrVis.getNumbered(quantileNb)," poorest ");
                                 html.push(quantileDict[quantileType].text);
