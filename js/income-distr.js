@@ -5,18 +5,25 @@
  */
 (function($) {
     $(function() {
+        //TODO show axis label
+        //TODO show median
+        //TODO background rectangle
+        //TODO time slider position
         //TODO better show when no data
         //TODO show quintiles, quartiles, etc.
-        //TODO show median
 
         //build svg element
-        var margin = {top: 0, right: 0, bottom: 0, left: 5};
+        var margin = {top: 0, right: 0, bottom: 30, left: 30};
         var width = 600 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
-        var chart = d3.select("#chart").append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")")
-            ;
+        var svg = d3.select("#chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom);
+        var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
+
+        //draw axis labels
+        var labelsG = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
+        labelsG.append("text").attr("class","chartLabels").attr("x",10).attr("y",height+15).text("Lowest incomes");
+        labelsG.append("text").attr("class","chartLabels").attr("x",width-100).attr("y",height+15).text("Highest incomes");
 
         //geo list and time slider
         var geoList = $("#geoList");
