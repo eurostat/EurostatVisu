@@ -5,14 +5,13 @@
  */
 (function($) {
     $(function() {
-        //TODO deal with negative values
         //TODO show quintiles, quartiles, etc.
 
         //TODO extract rect function
         //TODO make small multiples
 
         //build svg element
-        var margin = {top: 0, right: 0, bottom: 30, left: 30};
+        var margin = {top: 0, right: 0, bottom: 40, left: 30};
         var width = 600 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
         var svg = d3.select("#chart").append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -150,35 +149,48 @@
 
                     //draw distribution rectangle
                     var addRect = function(quantileType,quantileNb,factor,value,pos,size){
-                        rects.append("rect").attr("y",yScale(yMax-factor*value)).attr("x",xScale(pos))
-                            .attr("width",xScale(size)).attr("height",yScale(factor*value))
+                        rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(value<0?yMax:yMax-factor*value))
+                            .attr("width",xScale(size)).attr("height",yScale(factor*Math.abs(value)))
                             .attr("fill","peru")
                             .on("mouseover", function() {
                                 var html = [];
                                 var q = quantileDict[quantileType];
                                 var lowestIncome = 100/(quantileNb*q.percentage) >= 2;
                                 var coeff = value/q.percentage;
-                                html.push(
-                                    "The income of the <b>",
-                                    PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
-                                    " ",
-                                    q.text,
-                                    "</b> of the population with the ",
-                                    lowestIncome?"lowest":"highest",
-                                    " income is <b>",
-                                    value,
-                                    "%</b> of the total income.<br>If the income was equally distributed, it would be <b>",
-                                    q.percentage,
-                                    "%</b>. This income is ",
-                                    coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
-                                    "<b>",
-                                    Math.round(10*(coeff>1?coeff:1/coeff))/10,
-                                    " times ",
-                                    coeff>1?"higher":"lower",
-                                    "</b>",
-                                    coeff>2||coeff<0.5?"</span>":"",
-                                    " than the average income."
-                                );
+                                if(value<0)
+                                    html.push(
+                                        "The income of the <b>",
+                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
+                                        " ",
+                                        q.text,
+                                        "</b> of the population with the ",
+                                        lowestIncome?"lowest":"highest",
+                                        " income is <span style='color: crimson'>negative</span>: <b>",
+                                        value,
+                                        "%</b> of the total country income."
+                                    );
+                                else
+                                    html.push(
+                                        "The income of the <b>",
+                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
+                                        " ",
+                                        q.text,
+                                        "</b> of the population with the ",
+                                        lowestIncome?"lowest":"highest",
+                                        " income is <b>",
+                                        value,
+                                        "%</b> of the total country income.<br>If the income was equally distributed, it would be <b>",
+                                        q.percentage,
+                                        "%</b>. This income is ",
+                                        coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
+                                        "<b>",
+                                        Math.round(10*(coeff>1?coeff:1/coeff))/10,
+                                        " times ",
+                                        coeff>1?"higher":"lower",
+                                        "</b>",
+                                        coeff>2||coeff<0.5?"</span>":"",
+                                        " than the average income."
+                                    );
                                 infoDiv.html(html.join(""));
                                 d3.select(this).attr("fill","darkred ");
                             })
