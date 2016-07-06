@@ -9,6 +9,9 @@
         //TODO deal with negative values
         //TODO show quintiles, quartiles, etc.
 
+        //TODO extract rect function
+        //TODO make small multiples
+
         //build svg element
         var margin = {top: 0, right: 0, bottom: 30, left: 30};
         var width = 600 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;

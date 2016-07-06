@@ -26,10 +26,10 @@
       <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/income-distr.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.44894367">
-              <caret line="156" column="0" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.31690142">
+              <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
               <folding>
-                <marker date="1467831661811" expanded="true" signature="8265:8279" placeholder="..." />
+                <marker date="1467831742431" expanded="true" signature="8339:8353" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -278,7 +278,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
-            <marker date="1467831661811" expanded="true" signature="8265:8279" placeholder="..." />
+            <marker date="1467831742431" expanded="true" signature="8339:8353" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -513,10 +513,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44894367">
-          <caret line="156" column="0" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.31690142">
+          <caret line="12" column="35" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
           <folding>
-            <marker date="1467831661811" expanded="true" signature="8265:8279" placeholder="..." />
+            <marker date="1467831742431" expanded="true" signature="8339:8353" placeholder="..." />
           </folding>
         </state>
       </provider>
