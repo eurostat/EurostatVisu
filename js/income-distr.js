@@ -141,10 +141,10 @@
                             .attr("width",xScale(size)).attr("height",yScale(factor*value))
                             .attr("fill","peru")
                             .on("mouseover", function() {
-                                //TODO improve text - for twentyfifth
                                 var html = [];
                                 var q = quantileDict[quantileType];
                                 var lowestIncome = 100/(quantileNb*q.percentage) >= 2;
+                                var coeff = value/q.percentage;
                                 html.push(
                                     "The income of the <b>",
                                     PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
@@ -154,10 +154,17 @@
                                     lowestIncome?"lowest":"highest",
                                     " income is <b>",
                                     value,
-                                    "%</b> of the total income.<br>If the income was equally distributed, it would be <b>",
-                                    quantileDict[quantileType].percentage,
-                                    "%</b>."
-                                    //TODO it is then X times more/less than it would be. The income is X times higher/lower than the average income.
+                                    "%</b> of the total income. If the income was equally distributed, it would be <b>",
+                                    q.percentage,
+                                    "%</b>. In other words, this income is ",
+                                    coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
+                                    "<b>",
+                                    Math.round(10*(coeff>1?coeff:1/coeff))/10,
+                                    " times ",
+                                    coeff>1?"higher":"lower",
+                                    "</b>",
+                                    coeff>2||coeff<0.5?"</span>":"",
+                                    " than the average income."
                                 );
                                 infoDiv.html(html.join(""));
                                 d3.select(this).attr("fill","darkred ");
