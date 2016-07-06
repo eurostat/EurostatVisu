@@ -3,7 +3,7 @@ EurostatVisu
 
 EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eurostat/) data (mainly). The visualisations currently available are the following:
 
-- [Income distribution](http://jgaffuri.github.io/EurostatVisu/income_distr.html)
+- [Income disparities in European countries](http://jgaffuri.github.io/EurostatVisu/income_distr.html)
 - [Economy’s twists and turns](http://jgaffuri.github.io/EurostatVisu/crisis_route.html)
 - [Price levels time series](http://jgaffuri.github.io/EurostatVisu/timeser.html)
 - [Country baskets composition, detailled by product](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst.html)
