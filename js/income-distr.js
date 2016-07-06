@@ -177,7 +177,7 @@
                                         lowestIncome?"lowest":"highest",
                                         " income is <b>",
                                         value,
-                                        "%</b> of the total country income.<br>If the income was equally distributed, it would be <b>",
+                                        "%</b> of the total country income.<br>If the country income was equally distributed, it would be <b>",
                                         q.percentage,
                                         "%</b>. This income is ",
                                         coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
