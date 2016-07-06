@@ -7,6 +7,7 @@
     $(function() {
         //TODO show quintiles, quartiles, etc.
         //TODO extract rect function and make 'small multiples' visualisation
+        //TODO slider refresh
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 40, left: 30};
