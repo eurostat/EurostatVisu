@@ -6,9 +6,7 @@
 (function($) {
     $(function() {
         //TODO show quintiles, quartiles, etc.
-
-        //TODO extract rect function
-        //TODO make small multiples
+        //TODO extract rect function and make 'small multiples' visualisation
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 40, left: 30};
