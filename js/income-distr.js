@@ -7,7 +7,7 @@
     $(function() {
         //TODO show quintiles, quartiles, etc.
         //TODO show message when no data available
-        //TODO deal with negativ values
+        //TODO deal with negative values
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 30, left: 30};
