@@ -5,9 +5,9 @@
  */
 (function($) {
     $(function() {
-        //TODO show quintiles, quartiles, etc.
         //TODO show message when no data available
         //TODO deal with negative values
+        //TODO show quintiles, quartiles, etc.
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 30, left: 30};
@@ -154,9 +154,9 @@
                                     lowestIncome?"lowest":"highest",
                                     " income is <b>",
                                     value,
-                                    "%</b> of the total income. If the income was equally distributed, it would be <b>",
+                                    "%</b> of the total income.<br>If the income was equally distributed, it would be <b>",
                                     q.percentage,
-                                    "%</b>. In other words, this income is ",
+                                    "%</b>. This income is ",
                                     coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
                                     "<b>",
                                     Math.round(10*(coeff>1?coeff:1/coeff))/10,
