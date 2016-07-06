@@ -5,7 +5,6 @@
  */
 (function($) {
     $(function() {
-        //TODO show message when no data available
         //TODO deal with negative values
         //TODO show quintiles, quartiles, etc.
 
@@ -125,6 +124,17 @@
                     return true;
                 };
 
+                //check if all decile data is available
+                var decileDataPresent = function(){
+                    for(var i=1;i<=10;i++){
+                        var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"DECILE"+i});
+                        if(!d || !d.value){
+                            return false;
+                        }
+                    }
+                    return true;
+                };
+
                 //chart axis scales
                 var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
                 var yMax = 75; //TODO adapt max? min?
@@ -182,32 +192,39 @@
                     //background rectangle
                     rects.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"});
 
-                    if(percentileDataPresent(true)){
-                        //first 5 percentiles
-                        for(i=0;i<=4;i++) addRect("P",i+1,10,getValue("PERCENTILE"+(i+1)),i,1);
-                        //second twentile
-                        addRect("T",2,2,get2TwentileValue(),5,5);
+                    if(!percentileDataPresent(true) && !percentileDataPresent(false) && !decileDataPresent()) {
+                        console.log("No data");
+                        //TODO
+                        //chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text("Average income");
                     } else {
-                        //first decile
-                        addRect("D",1,1,getValue("DECILE1"),0,10);
+
+                        if(percentileDataPresent(true)){
+                            //first 5 percentiles
+                            for(i=0;i<=4;i++) addRect("P",i+1,10,getValue("PERCENTILE"+(i+1)),i,1);
+                            //second twentile
+                            addRect("T",2,2,get2TwentileValue(),5,5);
+                        } else {
+                            //first decile
+                            addRect("D",1,1,getValue("DECILE1"),0,10);
+                        }
+
+                        //8 deciles in the middle
+                        for(i=2;i<=9;i++) addRect("D",i,1,getValue("DECILE"+i),10*(i-1),10);
+
+                        if(percentileDataPresent(false)){
+                            //19th twentyfifth
+                            addRect("TF",24,2.5,getTwentyFifthValue(),90,4);
+                            //last 5 percentiles
+                            for(i=95;i<=100;i++) addRect("P",i,10,getValue("PERCENTILE"+i),i-1,1);
+                        } else {
+                            //last decile
+                            addRect("D",10,1,getValue("DECILE10"),90,10);
+                        }
+
+                        //draw average line
+                        chart.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
+                        chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text("Average income");
                     }
-
-                    //8 deciles in the middle
-                    for(i=2;i<=9;i++) addRect("D",i,1,getValue("DECILE"+i),10*(i-1),10);
-
-                    if(percentileDataPresent(false)){
-                        //19th twentyfifth
-                        addRect("TF",24,2.5,getTwentyFifthValue(),90,4);
-                        //last 5 percentiles
-                        for(i=95;i<=100;i++) addRect("P",i,10,getValue("PERCENTILE"+i),i-1,1);
-                    } else {
-                        //last decile
-                        addRect("D",10,1,getValue("DECILE10"),90,10);
-                    }
-
-                    //average line
-                    chart.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
-                    chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text("Average income");
 
                     //select geoSel in list
                     $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
