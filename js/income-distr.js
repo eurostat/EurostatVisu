@@ -143,13 +143,15 @@
                             .on("mouseover", function() {
                                 //TODO improve text - for twentyfifth
                                 var html = [];
+                                var q = quantileDict[quantileType];
+                                var lowestIncome = 100/(quantileNb*q.percentage) >= 2;
                                 html.push(
                                     "The income of the <b>",
-                                    PrVis.getNumbered(quantileNb),
+                                    PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
                                     " ",
-                                    quantileDict[quantileType].text,
+                                    q.text,
                                     "</b> of the population with the ",
-                                    "lowest",
+                                    lowestIncome?"lowest":"highest",
                                     " income is <b>",
                                     value,
                                     "%</b> of the total income.<br>If the income was equally distributed, it would be <b>",
