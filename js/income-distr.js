@@ -193,10 +193,12 @@
                     rects.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"});
 
                     if(!percentileDataPresent(true) && !percentileDataPresent(false) && !decileDataPresent()) {
-                        console.log("No data");
-                        //TODO
-                        //chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text("Average income");
+                        //if no data, write message and hide labels
+                        chart.append("text").attr({x:width*0.5-30,y:height*0.5,"font-size":"18px"}).text("No data");
+                        labelsG.style("opacity", 0);
                     } else {
+                        //show labels
+                        labelsG.style("opacity", 1);
 
                         if(percentileDataPresent(true)){
                             //first 5 percentiles
