@@ -9,6 +9,19 @@
         //TODO extract rect function and make 'small multiples' visualisation
         //TODO slider refresh
 
+        //get language
+        var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
+
+        //TODO translate
+        var dict = {
+            en:{title:"Income disparities in Europe"},
+            fr:{title:"Disparités de revenus en Europe"}
+        };
+        dict = dict[lg] || dict.en;
+
+        //write page title
+        document.title = dict.title;
+
         //build svg element
         var margin = {top: 0, right: 0, bottom: 40, left: 30};
         var width = 600 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;

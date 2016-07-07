@@ -639,4 +639,13 @@
 		}
 	};
 
+
+	/**
+	 * Returns browser language
+	 * @return {string}
+	 */
+	PrVis.getLang = function(){
+		return navigator.language || navigator.languages[0] || navigator.browserLanguage;
+	};
+
 }(jQuery, window.PrVis = window.PrVis || {} ));
