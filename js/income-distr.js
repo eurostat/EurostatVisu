@@ -12,7 +12,6 @@
         //get language
         var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
 
-        //TODO translate - http://stackoverflow.com/questions/228835/best-practice-javascript-and-multilanguage
         var dict = {
             en:{title:"Income disparities in Europe"},
             fr:{title:"Disparités de revenus en Europe"}
