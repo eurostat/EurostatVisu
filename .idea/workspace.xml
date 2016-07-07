@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/income-distr.js" afterPath="$PROJECT_DIR$/js/income-distr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/lib.js" afterPath="$PROJECT_DIR$/js/lib.js" />
     </list>
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,10 +27,10 @@
         <entry file="file://$PROJECT_DIR$/js/income-distr.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.3697183">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
               <folding>
-                <marker date="1467917522261" expanded="true" signature="8873:8887" placeholder="..." />
-                <marker date="1467917522261" expanded="true" signature="10022:10036" placeholder="..." />
+                <marker date="1467917604266" expanded="true" signature="8960:8974" placeholder="..." />
+                <marker date="1467917604266" expanded="true" signature="10109:10123" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -269,8 +268,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
-            <marker date="1467917522261" expanded="true" signature="8873:8887" placeholder="..." />
-            <marker date="1467917522261" expanded="true" signature="10022:10036" placeholder="..." />
+            <marker date="1467917604266" expanded="true" signature="8960:8974" placeholder="..." />
+            <marker date="1467917604266" expanded="true" signature="10109:10123" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -506,10 +505,10 @@
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3697183">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <caret line="14" column="27" selection-start-line="14" selection-start-column="27" selection-end-line="14" selection-end-column="27" />
           <folding>
-            <marker date="1467917522261" expanded="true" signature="8873:8887" placeholder="..." />
-            <marker date="1467917522261" expanded="true" signature="10022:10036" placeholder="..." />
+            <marker date="1467917604266" expanded="true" signature="8960:8974" placeholder="..." />
+            <marker date="1467917604266" expanded="true" signature="10109:10123" placeholder="..." />
           </folding>
         </state>
       </provider>
