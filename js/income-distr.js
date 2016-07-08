@@ -37,7 +37,11 @@
                 times:"times",
                 higher:"higher",
                 lower:"lower",
-                thanav:"than the average income"
+                thanav:"than the average income",
+                percent:"percent",
+                twentieth:"twentieth",
+                twentyfifth:"twentyfifth",
+                tenth:"tenth"
             },
             fr:{
                 title:"Disparités de revenus en Europe",
@@ -60,7 +64,11 @@
                 times:"fois",
                 higher:"plus hauts",
                 lower:"plus bas",
-                thanav:"que le revenu moyen"
+                thanav:"que le revenu moyen",
+                percent:"pourcent",
+                twentieth:"vingtième",
+                twentyfifth:"vingtcinquième",
+                tenth:"dixième"
             }
         };
 
@@ -238,7 +246,7 @@
                                         dict.incomeof, " <b>",
                                         PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
                                         " ",
-                                        q.text,
+                                        dict[q.text],
                                         "</b> ",dict.ofpopwith," ",
                                         lowestIncome?dict.lowest:dict.highest,
                                         " ",dict.incomeis," <b>",
