@@ -5,6 +5,8 @@
  */
 (function($) {
     $(function() {
+        //TODO graticule
+        //TODO translate
         //TODO show quintiles, quartiles, etc.
         //TODO extract rect function and make 'small multiples' visualisation
         //TODO slider refresh
@@ -13,8 +15,27 @@
         var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
 
         var dict = {
-            en:{title:"Income disparities in Europe"},
-            fr:{title:"Disparités de revenus en Europe"}
+            en:{
+                title:"Income disparities in Europe",
+                title1:"Income disparities",
+                title2:"in",
+                country:"Country",
+                year:"Year",
+                avincome:"Average income",
+                lowincome:"Lowest incomes",
+                higincome:"Highest incomes",
+                incomelev:"Income level"
+            },
+            fr:{
+                title:"Disparités de revenus en Europe",
+                title1:"Disparités de revenus",
+                title2:"en",
+                country:"Pays",
+                avincome:"Revenu moyen",
+                lowincome:"Bas revenus",
+                higincome:"Hauts revenus",
+                incomelev:"Niveau de revenu"
+            }
         };
         dict = dict[lg] || dict.en;
 
@@ -36,11 +57,11 @@
 
         //draw axis labels
         var labelsG = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
-        labelsG.append("text").attr("class","chartLabels").attr("x",47).attr("y",height+17).text("Lowest incomes");
+        labelsG.append("text").attr("class","chartLabels").attr("x",47).attr("y",height+17).text(dict.lowincome);
         labelsG.append('line').attr({class:"arrow", "x1":150, "y1":height+25, "x2":40, "y2":height+25});
-        labelsG.append("text").attr("class","chartLabels").attr("x",width-150).attr("y",height+17).text("Highest incomes");
+        labelsG.append("text").attr("class","chartLabels").attr("x",width-150).attr("y",height+17).text(dict.higincome);
         labelsG.append('line').attr({class:"arrow", "x1":width-150, "y1":height+25, "x2":width-45, "y2":height+25});
-        labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(17,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text("Income level");
+        labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(17,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text(dict.incomelev);
         labelsG.append('line').attr({class:"arrow", "x1":25, "y1":height*0.5+5, "x2":25, "y2":height*0.5-90});
 
         //geo list and time slider
@@ -248,7 +269,7 @@
 
                         //draw average line
                         chart.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
-                        chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text("Average income");
+                        chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text(dict.avincome);
                     }
 
                     //select geoSel in list
