@@ -89,6 +89,11 @@
             .attr("height", height + margin.top + margin.bottom);
         var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
 
+        //chart axis scales
+        var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
+        var yMax = 75; //TODO adapt max? min?
+        var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
+
         //define arrow marker
         svg.append("defs").append("marker")
             .attr({"id":"arrow", "viewBox":"0 -5 10 10", "refX":5, "refY":0, "markerWidth":3, "markerHeight":3, "orient":"auto"})
@@ -102,6 +107,13 @@
         labelsG.append('line').attr({class:"arrow", "x1":width-150, "y1":height+25, "x2":width-45, "y2":height+25});
         labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(17,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text(dict.incomelev);
         labelsG.append('line').attr({class:"arrow", "x1":25, "y1":height*0.5+5, "x2":25, "y2":height*0.5-90});
+
+        //draw y graticule
+        for(var y=20; y<yMax; y+=10)
+            labelsG.append('line').attr({class:"graticuleYline", x1:0, y1:height-yScale(y), x2:width, y2:height-yScale(y)});
+        //draw average line
+        labelsG.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
+        labelsG.append("text").attr({x:5,y:height-yScale(10)-3,"font-size":"11px"}).text(dict.avincome);
 
         //geo list and time slider
         var geoList = $("#geoList");
@@ -206,11 +218,6 @@
                     return true;
                 };
 
-                //chart axis scales
-                var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
-                var yMax = 75; //TODO adapt max? min?
-                var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
-
                 //update the chart
                 var update = function(){
                     //clear previous
@@ -307,12 +314,6 @@
                             //last decile
                             addRect("D",10,1,getValue("DECILE10"),90,10);
                         }
-
-                        //draw average line
-                        labelsG.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
-                        labelsG.append("text").attr({x:5,y:height-yScale(10)-3,"font-size":"11px"}).text(dict.avincome);
-                        for(var y=20; y<yMax; y+=10)
-                            labelsG.append('line').attr({class:"graticuleYline", x1:0, y1:height-yScale(y), x2:width, y2:height-yScale(y)});
                     }
 
                     //select geoSel in list
