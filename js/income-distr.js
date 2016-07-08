@@ -14,6 +14,7 @@
         //get language
         var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
 
+        //build translation dictionnary
         var dict = {
             en:{
                 title:"Income disparities in Europe",
@@ -38,14 +39,10 @@
                 incomelev:"Niveau de revenu"
             }
         };
-        dict = dict[lg] || dict.en;
 
-        PrVis.writeText = function(dict){
-            for (var p in dict) {
-                var elt = $("#"+p);
-                if(elt) elt.html(dict[p]);
-            }
-        };
+        //select dictionnary
+        dict = dict[lg] || dict.en;
+        //try to fill page with translated terms
         PrVis.writeText(dict);
 
 

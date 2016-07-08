@@ -648,4 +648,17 @@
 		return navigator.language || navigator.languages[0] || navigator.browserLanguage;
 	};
 
+
+	/**
+	 * Try to fill page elements with dictionnary terms
+	 * @param{object} dict
+	 */
+	PrVis.writeText = function(dict){
+		for (var p in dict) {
+			var elt = $("#"+p);
+			if(elt) elt.html(dict[p]);
+		}
+	};
+
+
 }(jQuery, window.PrVis = window.PrVis || {} ));
