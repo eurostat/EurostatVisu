@@ -19,8 +19,8 @@
                 title:"Income disparities in Europe",
                 title1:"Income disparities",
                 title2:"in",
-                country:"Country",
-                year:"Year",
+                countryText:"Country",
+                yearText:"Year",
                 avincome:"Average income",
                 lowincome:"Lowest incomes",
                 higincome:"Highest incomes",
@@ -30,7 +30,8 @@
                 title:"Disparités de revenus en Europe",
                 title1:"Disparités de revenus",
                 title2:"en",
-                country:"Pays",
+                countryText:"Pays",
+                yearText:"Année",
                 avincome:"Revenu moyen",
                 lowincome:"Bas revenus",
                 higincome:"Hauts revenus",
@@ -38,6 +39,15 @@
             }
         };
         dict = dict[lg] || dict.en;
+
+        PrVis.writeText = function(dict){
+            for (var p in dict) {
+                var elt = $("#"+p);
+                if(elt) elt.html(dict[p]);
+            }
+        };
+        PrVis.writeText(dict);
+
 
         //write page title
         document.title = dict.title;
@@ -83,7 +93,8 @@
             //get income distribution data
             $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
                 quantile:["PERCENTILE100","PERCENTILE99","PERCENTILE98","PERCENTILE97","PERCENTILE96","PERCENTILE95","DECILE10","DECILE9","DECILE8","DECILE7","DECILE6","DECILE5","DECILE4","DECILE3","DECILE2","DECILE1","PERCENTILE5","PERCENTILE4","PERCENTILE3","PERCENTILE2","PERCENTILE1"]
-            })})
+            }, lg
+            )})
         ).then(function(data) {
                 var i;
 

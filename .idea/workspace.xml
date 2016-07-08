@@ -4,7 +4,6 @@
     <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/income-distr.js" afterPath="$PROJECT_DIR$/js/income-distr.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/income_distr.html" afterPath="$PROJECT_DIR$/income_distr.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,12 +27,22 @@
       <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/income-distr.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.39612675">
-              <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5088063">
+              <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
               <folding>
-                <marker date="1467989111246" expanded="true" signature="9545:9559" placeholder="..." />
-                <marker date="1467989111246" expanded="true" signature="10694:10708" placeholder="..." />
+                <marker date="1467989809880" expanded="true" signature="9821:9835" placeholder="..." />
+                <marker date="1467989809880" expanded="true" signature="10970:10984" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="eurostat-lib.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/eurostat-lib.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="10" column="26" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="26" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -41,8 +50,8 @@
       <file leaf-file-name="income_distr.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/income_distr.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.916666">
-              <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+            <state vertical-scroll-proportion="-5.1666665">
+              <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -270,8 +279,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1467989111246" expanded="true" signature="9545:9559" placeholder="..." />
-            <marker date="1467989111246" expanded="true" signature="10694:10708" placeholder="..." />
+            <marker date="1467989809880" expanded="true" signature="9821:9835" placeholder="..." />
+            <marker date="1467989809880" expanded="true" signature="10970:10984" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -291,8 +300,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
-            <marker date="1467989111246" expanded="true" signature="9545:9559" placeholder="..." />
-            <marker date="1467989111246" expanded="true" signature="10694:10708" placeholder="..." />
+            <marker date="1467989809880" expanded="true" signature="9821:9835" placeholder="..." />
+            <marker date="1467989809880" expanded="true" signature="10970:10984" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -472,13 +481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/eurostat-lib.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/notes.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.079225354">
@@ -519,19 +521,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/income_distr.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.916666">
-          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
+        <state vertical-scroll-proportion="-5.1666665">
+          <caret line="67" column="0" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/eurostat-lib.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="26" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39612675">
-          <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.5088063">
+          <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding>
-            <marker date="1467989111246" expanded="true" signature="9545:9559" placeholder="..." />
-            <marker date="1467989111246" expanded="true" signature="10694:10708" placeholder="..." />
+            <marker date="1467989809880" expanded="true" signature="9821:9835" placeholder="..." />
+            <marker date="1467989809880" expanded="true" signature="10970:10984" placeholder="..." />
           </folding>
         </state>
       </provider>
