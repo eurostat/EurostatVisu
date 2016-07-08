@@ -6,7 +6,7 @@
 (function($) {
     $(function() {
         //TODO graticule
-        //TODO translate text
+        //TODO text accent bug
         //TODO show quintiles, quartiles, etc.
         //TODO extract rect function and make 'small multiples' visualisation
         //TODO slider refresh
