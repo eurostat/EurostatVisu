@@ -5,7 +5,6 @@
  */
 (function($) {
     $(function() {
-        //TODO graticule
         //TODO text accent bug
         //TODO german translation
         //TODO show quintiles, quartiles, etc.
@@ -310,8 +309,10 @@
                         }
 
                         //draw average line
-                        chart.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
-                        chart.append("text").attr({x:5,y:height-yScale(10)-5,"font-size":"11px"}).text(dict.avincome);
+                        labelsG.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
+                        labelsG.append("text").attr({x:5,y:height-yScale(10)-3,"font-size":"11px"}).text(dict.avincome);
+                        for(var y=20; y<yMax; y+=10)
+                            labelsG.append('line').attr({class:"graticuleYline", x1:0, y1:height-yScale(y), x2:width, y2:height-yScale(y)});
                     }
 
                     //select geoSel in list

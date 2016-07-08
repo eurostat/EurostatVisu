@@ -28,11 +28,11 @@
       <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/income-distr.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.18485916">
+              <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding>
-                <marker date="1467992674745" expanded="true" signature="11199:11213" placeholder="..." />
-                <marker date="1467992674745" expanded="true" signature="12358:12372" placeholder="..." />
+                <marker date="1467993319397" expanded="true" signature="11174:11188" placeholder="..." />
+                <marker date="1467993319397" expanded="true" signature="12333:12347" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -127,20 +127,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="EurostatVisu" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="EurostatVisu" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="EurostatVisu" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -260,8 +246,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1467992674745" expanded="true" signature="11199:11213" placeholder="..." />
-            <marker date="1467992674745" expanded="true" signature="12358:12372" placeholder="..." />
+            <marker date="1467993319397" expanded="true" signature="11174:11188" placeholder="..." />
+            <marker date="1467993319397" expanded="true" signature="12333:12347" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -281,8 +267,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
-            <marker date="1467992674745" expanded="true" signature="11199:11213" placeholder="..." />
-            <marker date="1467992674745" expanded="true" signature="12358:12372" placeholder="..." />
+            <marker date="1467993319397" expanded="true" signature="11174:11188" placeholder="..." />
+            <marker date="1467993319397" expanded="true" signature="12333:12347" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -523,11 +509,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.18485916">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding>
-            <marker date="1467992674745" expanded="true" signature="11199:11213" placeholder="..." />
-            <marker date="1467992674745" expanded="true" signature="12358:12372" placeholder="..." />
+            <marker date="1467993319397" expanded="true" signature="11174:11188" placeholder="..." />
+            <marker date="1467993319397" expanded="true" signature="12333:12347" placeholder="..." />
           </folding>
         </state>
       </provider>
