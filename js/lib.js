@@ -630,12 +630,21 @@
 	 }*/
 
 	//transform 1 into 1st, 2 into 2nd, 3 into 3rd, etc...
-	PrVis.getNumbered = function(number){
-		switch(number){
-			case 1: return "1st";
-			case 2: return "2nd";
-			case 3: return "3rd";
-			default: return number+"th";
+	PrVis.getNumbered = function(number,lg){
+		lg=lg||"en";
+		switch(lg){
+			case "fr":
+				switch(number){
+					case 1: return "1er";
+					default: return number+"ème";
+				}
+			default:
+				switch(number){
+					case 1: return "1st";
+					case 2: return "2nd";
+					case 3: return "3rd";
+					default: return number+"th";
+				}
 		}
 	};
 

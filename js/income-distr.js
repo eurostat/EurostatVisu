@@ -6,7 +6,7 @@
 (function($) {
     $(function() {
         //TODO graticule
-        //TODO translate
+        //TODO translate text
         //TODO show quintiles, quartiles, etc.
         //TODO extract rect function and make 'small multiples' visualisation
         //TODO slider refresh
@@ -25,7 +25,19 @@
                 avincome:"Average income",
                 lowincome:"Lowest incomes",
                 higincome:"Highest incomes",
-                incomelev:"Income level"
+                incomelev:"Income level",
+                incomeof:"The income of the",
+                ofpopwith:"of the population with the",
+                lowest:"lowest",
+                highest:"highest",
+                incomeis:"income is",
+                oftotal:"of the total country income",
+                ifincomewas:"If the country income was equally distributed, it would be",
+                thisincis:"This income is",
+                times:"times",
+                higher:"higher",
+                lower:"lower",
+                thanav:"than the average income"
             },
             fr:{
                 title:"Disparités de revenus en Europe",
@@ -36,7 +48,19 @@
                 avincome:"Revenu moyen",
                 lowincome:"Bas revenus",
                 higincome:"Hauts revenus",
-                incomelev:"Niveau de revenu"
+                incomelev:"Niveau de revenu",
+                incomeof:"Les revenus du",
+                ofpopwith:"de la population avec les",
+                lowest:"plus bas",
+                highest:"plus hauts",
+                incomeis:"revenus est",
+                oftotal:"du total des revenus du pays",
+                ifincomewas:"Si les revenus étaient équitablement répartis, ce serait",
+                thisincis:"Ces revenus sont",
+                times:"fois",
+                higher:"plus hauts",
+                lower:"plus bas",
+                thanav:"que le revenu moyen"
             }
         };
 
@@ -89,8 +113,8 @@
         $.when(
             //get income distribution data
             $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
-                quantile:["PERCENTILE100","PERCENTILE99","PERCENTILE98","PERCENTILE97","PERCENTILE96","PERCENTILE95","DECILE10","DECILE9","DECILE8","DECILE7","DECILE6","DECILE5","DECILE4","DECILE3","DECILE2","DECILE1","PERCENTILE5","PERCENTILE4","PERCENTILE3","PERCENTILE2","PERCENTILE1"]
-            }, lg
+                    quantile:["PERCENTILE100","PERCENTILE99","PERCENTILE98","PERCENTILE97","PERCENTILE96","PERCENTILE95","DECILE10","DECILE9","DECILE8","DECILE7","DECILE6","DECILE5","DECILE4","DECILE3","DECILE2","DECILE1","PERCENTILE5","PERCENTILE4","PERCENTILE3","PERCENTILE2","PERCENTILE1"]
+                }, lg
             )})
         ).then(function(data) {
                 var i;
@@ -211,25 +235,26 @@
                                     );
                                 else
                                     html.push(
-                                        "The income of the <b>",
-                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
+                                        dict.incomeof, " <b>",
+                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
                                         " ",
                                         q.text,
-                                        "</b> of the population with the ",
-                                        lowestIncome?"lowest":"highest",
-                                        " income is <b>",
+                                        "</b> ",dict.ofpopwith," ",
+                                        lowestIncome?dict.lowest:dict.highest,
+                                        " ",dict.incomeis," <b>",
                                         value,
-                                        "%</b> of the total country income.<br>If the country income was equally distributed, it would be <b>",
+                                        "%</b> ",dict.oftotal,".<br>",
+                                        dict.ifincomewas," <b>",
                                         q.percentage,
-                                        "%</b>. This income is ",
+                                        "%</b>. ",dict.thisincis," ",
                                         coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
                                         "<b>",
                                         Math.round(10*(coeff>1?coeff:1/coeff))/10,
-                                        " times ",
-                                        coeff>1?"higher":"lower",
+                                        " ",dict.times," ",
+                                        coeff>1?dict.higher:dict.lower,
                                         "</b>",
                                         coeff>2||coeff<0.5?"</span>":"",
-                                        " than the average income."
+                                        " ",dict.thanav,"."
                                     );
                                 infoDiv.html(html.join(""));
                                 d3.select(this).attr("fill","darkred ");
