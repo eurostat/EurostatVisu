@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/income-distr.js" afterPath="$PROJECT_DIR$/js/income-distr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/income_distr.html" afterPath="$PROJECT_DIR$/income_distr.html" />
-    </list>
+    <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="" />
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,15 +21,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/income-distr.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.50176054">
+            <state vertical-scroll-proportion="0.0">
               <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
               <folding>
                 <marker date="1467993604224" expanded="true" signature="11582:11596" placeholder="..." />
                 <marker date="1467993604224" expanded="true" signature="12741:12755" placeholder="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="zsvg.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/zsvg.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-16.25">
+              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="zsvg.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/zsvg.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.50176054">
+              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -84,6 +101,8 @@
         <option value="$PROJECT_DIR$/js/lib.js" />
         <option value="$PROJECT_DIR$/income_distr.html" />
         <option value="$PROJECT_DIR$/js/income-distr.js" />
+        <option value="$PROJECT_DIR$/zsvg.html" />
+        <option value="$PROJECT_DIR$/js/zsvg.js" />
       </list>
     </option>
   </component>
@@ -536,12 +555,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.50176054">
+        <state vertical-scroll-proportion="0.0">
           <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
           <folding>
             <marker date="1467993604224" expanded="true" signature="11582:11596" placeholder="..." />
             <marker date="1467993604224" expanded="true" signature="12741:12755" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/zsvg.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.25">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/zsvg.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.50176054">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
