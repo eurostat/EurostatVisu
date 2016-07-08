@@ -7,6 +7,7 @@
     $(function() {
         //TODO graticule
         //TODO text accent bug
+        //TODO german translation
         //TODO show quintiles, quartiles, etc.
         //TODO extract rect function and make 'small multiples' visualisation
         //TODO slider refresh
@@ -83,7 +84,7 @@
 
         //build svg element
         var margin = {top: 0, right: 0, bottom: 40, left: 30};
-        var width = 600 - margin.left - margin.right, height = 400 - margin.top - margin.bottom;
+        var width = 500 - margin.left - margin.right, height = 300 - margin.top - margin.bottom;
         var svg = d3.select("#chart").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom);
