@@ -41,7 +41,8 @@
                 percent:"percent",
                 twentieth:"twentieth",
                 twentyfifth:"twentyfifth",
-                tenth:"tenth"
+                tenth:"tenth",
+                sourceTxt:"Sources: <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> databases on income distribution (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). More information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>here</a>."
             },
             fr:{
                 title:"Disparités de revenus en Europe",
@@ -68,7 +69,8 @@
                 percent:"pourcent",
                 twentieth:"vingtième",
                 twentyfifth:"vingtcinquième",
-                tenth:"dixième"
+                tenth:"dixième",
+                sourceTxt:"Sources: Bases de données <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> sur la répartition des revenus (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). Plus d'information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>ici</a>."
             }
         };
 
