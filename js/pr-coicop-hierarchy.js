@@ -7,9 +7,11 @@
 	$(function() {
 		//http://bl.ocks.org/mbostock/4063550
 
-		//TODO mouse pan
-		//TODO adapt label depending on level
+		//TODO pan & zoom
+		//http://bl.ocks.org/mbostock/3680999
+		//https://bl.ocks.org/mbostock/6123708
 
+		//TODO adapt label depending on level
 		//TODO sunburst
 		//https://bl.ocks.org/mbostock/4348373
 		//https://bl.ocks.org/kerryrodden/477c1bfb081b783f80ad
@@ -19,9 +21,18 @@
 
 		//SVG element
 		var svg = d3.select("#chart").append("svg")
+			//.attr("width", 800).attr("height", 400)
 			.attr("width", diameter+2*svgPadding).attr("height", diameter+2*svgPadding)
+			//.append("g")
+			//.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
 			.append("g")
 			.attr("transform", "translate(" + (diameter/2+svgPadding) + "," + (diameter/2+svgPadding) + ")");
+
+		/*/for zoom/pan
+		 svg.append("rect").attr("class", "overlay").attr("width", 800).attr("height", 400);
+		 function zoom() {
+		 svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+		 }*/
 
 		//TODO see options https://github.com/d3/d3-hierarchy/blob/master/README.md#tree
 		var tree = d3.layout.tree()
@@ -75,9 +86,9 @@
 
 			//TODO use that?
 			/*var root = d3.stratify()
-				.id(function(d) { return d.name; })
-				.parentId(function(d) { return d.parent; })
-			(table);*/
+			 .id(function(d) { return d.name; })
+			 .parentId(function(d) { return d.parent; })
+			 (table);*/
 
 			//TODO see options
 			var nodes = tree.nodes(data),
