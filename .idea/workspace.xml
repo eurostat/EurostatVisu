@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/coicop_hierarchy.html" afterPath="$PROJECT_DIR$/coicop_hierarchy.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/pr-coicop-hierarchy.js" afterPath="$PROJECT_DIR$/js/pr-coicop-hierarchy.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/income-distr.js" afterPath="$PROJECT_DIR$/js/income-distr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,12 +24,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pr-coicop-hierarchy.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pr-coicop-hierarchy.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/pr-coicop-hierarchy.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.76584506">
-              <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="income-distr.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/income-distr.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.31690142">
+              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding>
+                <marker date="1468428918810" expanded="true" signature="12263:12277" placeholder="..." />
+                <marker date="1468428918810" expanded="true" signature="13422:13436" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -37,7 +50,7 @@
       <file leaf-file-name="coicop_hierarchy.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/coicop_hierarchy.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.916666">
+            <state vertical-scroll-proportion="0.0">
               <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
               <folding />
             </state>
@@ -74,11 +87,11 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/js/lib.js" />
         <option value="$PROJECT_DIR$/income_distr.html" />
-        <option value="$PROJECT_DIR$/js/income-distr.js" />
         <option value="$PROJECT_DIR$/zsvg.html" />
         <option value="$PROJECT_DIR$/js/zsvg.js" />
         <option value="$PROJECT_DIR$/coicop_hierarchy.html" />
         <option value="$PROJECT_DIR$/js/pr-coicop-hierarchy.js" />
+        <option value="$PROJECT_DIR$/js/income-distr.js" />
       </list>
     </option>
   </component>
@@ -263,13 +276,29 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/js/pr-coicop-hierarchy.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/coicop_hierarchy.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="90" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
           <folding>
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1468428918810" expanded="true" signature="12263:12277" placeholder="..." />
+            <marker date="1468428918810" expanded="true" signature="13422:13436" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -279,20 +308,20 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1468428918810" expanded="true" signature="12263:12277" placeholder="..." />
+            <marker date="1468428918810" expanded="true" signature="13422:13436" placeholder="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
         </state>
-      </provider>
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/income-distr.js">
@@ -300,8 +329,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1468428918810" expanded="true" signature="12263:12277" placeholder="..." />
+            <marker date="1468428918810" expanded="true" signature="13422:13436" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -489,13 +518,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5">
           <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
         </state>
-      </provider>
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/eurostat-lib.js">
@@ -509,7 +538,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="632" column="4" selection-start-line="632" selection-start-column="4" selection-end-line="632" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -517,22 +545,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.22794117">
           <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/income-distr.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18485916">
-          <caret line="7" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
-            <marker date="1468162134629" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -540,13 +552,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/coicop_hierarchy.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.916666">
+        <state vertical-scroll-proportion="0.0">
           <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
           <folding />
         </state>
@@ -554,9 +565,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/pr-coicop-hierarchy.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.76584506">
-          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/income-distr.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31690142">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <marker date="1468428918810" expanded="true" signature="12263:12277" placeholder="..." />
+            <marker date="1468428918810" expanded="true" signature="13422:13436" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>

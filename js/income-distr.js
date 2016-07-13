@@ -5,7 +5,6 @@
  */
 (function($) {
     $(function() {
-        //TODO text accent bug
         //TODO german translation
         //TODO show quintiles, quartiles, etc.
         //TODO extract rect function and make 'small multiples' visualisation
