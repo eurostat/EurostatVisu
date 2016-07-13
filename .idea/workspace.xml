@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/join.js" afterPath="$PROJECT_DIR$/js/join.js" />
-    </list>
+    <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="" />
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
