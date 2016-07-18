@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/income-distr.js" afterPath="$PROJECT_DIR$/js/income-distr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="" />
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -195,7 +192,7 @@
     <option name="totallyTimeSpent" value="534000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1366" height="741" extended-state="6" />
+    <frame x="0" y="27" width="1366" height="741" extended-state="7" />
     <editor active="false" />
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24832714" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
