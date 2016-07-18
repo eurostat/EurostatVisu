@@ -12,6 +12,7 @@
 
         //get language
         var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
+        lg = lg.substring(0, 2); //TODO better handle that
 
         //build translation dictionnary
         var dict = {
