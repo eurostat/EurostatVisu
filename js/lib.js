@@ -669,5 +669,16 @@
 		}
 	};
 
-
+	/**
+	 * Returns max size
+	 * @return {object}
+	 */
+	PrVis.getMaxSize = function(){
+		var w = window,
+	    e = document.documentElement,
+	    g = document.getElementsByTagName("body")[0];
+		return {
+			width: w.innerWidth || e.clientWidth || g.clientWidth,
+			height: w.innerHeight|| e.clientHeight|| g.clientHeight };
+	};
 }(jQuery, window.PrVis = window.PrVis || {} ));

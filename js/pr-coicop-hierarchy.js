@@ -5,39 +5,39 @@
  */
 (function($) {
 	$(function() {
-		//http://bl.ocks.org/mbostock/4063550
-
-		//TODO pan & zoom
-		//http://bl.ocks.org/mbostock/3680999
-		//https://bl.ocks.org/mbostock/6123708
+		//based on http://bl.ocks.org/mbostock/4063550
 
 		//TODO adapt label depending on level
 		//TODO sunburst
 		//https://bl.ocks.org/mbostock/4348373
 		//https://bl.ocks.org/kerryrodden/477c1bfb081b783f80ad
 
-		var diameter = 2200;
-		var svgPadding = 300;
+		var dim = PrVis.getMaxSize(),
+		width = dim.width,
+		height = dim.height;
+
+		var radius = 1100;
 
 		//SVG element
 		var svg = d3.select("#chart").append("svg")
-			//.attr("width", 800).attr("height", 400)
-			.attr("width", diameter+2*svgPadding).attr("height", diameter+2*svgPadding)
-			//.append("g")
-			//.call(d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", zoom))
-			.append("g")
-			.attr("transform", "translate(" + (diameter/2+svgPadding) + "," + (diameter/2+svgPadding) + ")");
+		.attr("width", width).attr("height", height)
+		.append("g")
+		.attr("transform", "translate(" + (width*0.5) + "," + (height*0.5) + ")");
+		var g = svg.append("g");
 
-		/*/for zoom/pan
-		 svg.append("rect").attr("class", "overlay").attr("width", 800).attr("height", 400);
-		 function zoom() {
-		 svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-		 }*/
+
+		//add zoom/pan behaviour
+		svg.append("rect")
+		.attr("x", -(width*0.5)).attr("y", -(height*0.5)).attr("width", width).attr("height", height)
+		.style("fill", "none").style("pointer-events", "all")
+		.call(d3.behavior.zoom().scaleExtent([0.25,4])
+		.on("zoom", function() { g.attr("transform", "translate(" + (d3.event.translate) + ")scale(" + (d3.event.scale) + ")"); }));
+
 
 		//TODO see options https://github.com/d3/d3-hierarchy/blob/master/README.md#tree
 		var tree = d3.layout.tree()
-			.size([360, diameter/2])
-			.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+		.size([360, radius])
+		.separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
 		//return the coicop level, from 1 to 5
 		var getLevel = function(coicop){
@@ -92,23 +92,23 @@
 
 			//TODO see options
 			var nodes = tree.nodes(data),
-				links = tree.links(nodes);
+			links = tree.links(nodes);
 
 			//draw links
-			var link = svg.selectAll(".link")
-				.data(links)
-				.enter().append("path")
-				.attr("class", "link")
-				.attr("d", d3.svg.diagonal.radial()
+			var link = g.selectAll(".link")
+			.data(links)
+			.enter().append("path")
+			.attr("class", "link")
+			.attr("d", d3.svg.diagonal.radial()
 					.projection(function(d) { return [d.y, d.x / 180 * Math.PI]; })
 			);
 
 			//draw nodes
-			var node = svg.selectAll(".node")
-				.data(nodes)
-				.enter().append("g")
-				.attr("class", "node")
-				.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
+			var node = g.selectAll(".node")
+			.data(nodes)
+			.enter().append("g")
+			.attr("class", "node")
+			.attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
 
 			var circleSize = [0,20,13,7,5,3];
 			var fontSize = [0,18,16,12,10,9];
@@ -116,41 +116,41 @@
 
 			//draw circles
 			node.append("circle")
-				.attr("r", function(d) {
-					return circleSize[getLevel(d.code)];
-				})
-				.attr("fill",function(d) {
-					return coicopToColor(d.code);
-				});
+			.attr("r", function(d) {
+				return circleSize[getLevel(d.code)];
+			})
+			.attr("fill",function(d) {
+				return coicopToColor(d.code);
+			});
 
 			//TODO adapt text position
 			//TODO on mouse over on nodes: show text?
 			//draw labels - code
 			node.append("text")
-				.attr("dy", ".31em")
-				.attr("font-size", getFontSize)
-				.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-				.attr("transform", function(d) {
-					var level = getLevel(d.code);
-					switch(level){
-						case 1: return "rotate("+ (90-d.x) +")translate(80,-30)";
-						//case 2: return "rotate("+ (90-d.x) +")";
-						case 2: return d.x < 180 ? "translate(18,0)" : "rotate(180)translate(-18,0)";
-						case 3: return d.x < 180 ? "translate(11,0)" : "rotate(180)translate(-11,0)";
-						case 4: return d.x < 180 ? "translate(8,0)" : "rotate(180)translate(-8,0)";
-						case 5: return d.x < 180 ? "translate(8,0)" : "rotate(180)translate(-8,0)";
-					}
-				})
-				.text(function(d) {
-					var level = getLevel(d.code);
-					switch(level){
-						case 1: return d.desc + " ("+d.code+")";
-						case 2: return d.desc + " ("+d.code+")";
-						case 3: return d.desc + " ("+d.code+")";
-						case 4: return d.desc + " ("+d.code+")";
-						case 5: return d.desc + " ("+d.code+")";
-					}
-				});
+			.attr("dy", ".31em")
+			.attr("font-size", getFontSize)
+			.attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+			.attr("transform", function(d) {
+				var level = getLevel(d.code);
+				switch(level){
+				case 1: return "rotate("+ (90-d.x) +")translate(80,-30)";
+				//case 2: return "rotate("+ (90-d.x) +")";
+				case 2: return d.x < 180 ? "translate(18,0)" : "rotate(180)translate(-18,0)";
+				case 3: return d.x < 180 ? "translate(11,0)" : "rotate(180)translate(-11,0)";
+				case 4: return d.x < 180 ? "translate(8,0)" : "rotate(180)translate(-8,0)";
+				case 5: return d.x < 180 ? "translate(8,0)" : "rotate(180)translate(-8,0)";
+				}
+			})
+			.text(function(d) {
+				var level = getLevel(d.code);
+				switch(level){
+				case 1: return d.desc + " ("+d.code+")";
+				case 2: return d.desc + " ("+d.code+")";
+				case 3: return d.desc + " ("+d.code+")";
+				case 4: return d.desc + " ("+d.code+")";
+				case 5: return d.desc + " ("+d.code+")";
+				}
+			});
 		});
 
 	});

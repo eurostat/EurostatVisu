@@ -5,7 +5,9 @@
  */
 (function($) {
     $(function() {
-        //TODO german translation
+		//TODO restructure like: http://bl.ocks.org/mbostock/4e3925cdc804db257a86fdef3a032a45 Check webstr behaviour.
+
+    	//TODO german translation
         //TODO show quintiles, quartiles, etc.
         //TODO extract rect function and make 'small multiples' visualisation
         //TODO slider refresh

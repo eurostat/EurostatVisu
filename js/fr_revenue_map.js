@@ -3,3 +3,4 @@
  */
 
 //TODO see https://bost.ocks.org/mike/map/
+//TODO use spatial indexing?
