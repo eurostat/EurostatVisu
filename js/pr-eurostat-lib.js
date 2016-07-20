@@ -102,7 +102,7 @@
 		if(f == 1 ) return;
 
 		//scale the values
-		for(var i=0; i<ds.value.length; i++) {
+		for(i=0; i<ds.value.length; i++) {
 			if(ds.value[i]==null) continue;
 			ds.value[i] /= f;
 		}
@@ -121,8 +121,8 @@
 			$("<div>").attr("id","lgdElt"+coi).append(svgLg).appendTo(lgd); //attach id to that instead
 		}
 		lgd.html(function(){return this.innerHTML;}); //TODO check that - or move to d3
-		for(var i=0; i<coicops.length; i++){
-			var coi = coicops[i];
+		for(i=0; i<coicops.length; i++){
+			coi = coicops[i];
 			if(coi==="CP00" || coi.length>4 || coi.substring(0,2)!=="CP") continue;
 			$("#lgdElt"+coi).mouseover(mouseoverFun);
 			$("#lgdElt"+coi).mouseout(mouseoutFun);
