@@ -232,7 +232,7 @@
             $.when(
                     //get income distribution data
                     $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
-                                quantile:["PERCENTILE100","PERCENTILE99","PERCENTILE98","PERCENTILE97","PERCENTILE96","PERCENTILE95","DECILE10","DECILE9","DECILE8","DECILE7","DECILE6","DECILE5","DECILE4","DECILE3","DECILE2","DECILE1","PERCENTILE5","PERCENTILE4","PERCENTILE3","PERCENTILE2","PERCENTILE1"]
+                                quantile:["P100","P99","P98","P97","P96","P95","D10","D9","D8","D7","D6","D5","D4","D3","D2","D1","P5","P4","P3","P2","P1"]
                             }, lg
                     )})
             ).then(function(data) {
@@ -281,14 +281,14 @@
 
                         //compute second twentile as first decile value minus five first percentiles values
                         var get2TwentileValue = function(){
-                            var v = getValue("DECILE1");
-                            for(i=1;i<=5;i++) v -= getValue("PERCENTILE"+i);
+                            var v = getValue("D1");
+                            for(i=1;i<=5;i++) v -= getValue("P"+i);
                             return Math.round(v*10)/10;
                         };
                         //compute 19th twentile value as last decile value, minus five last percentiles values
                         var getTwentyFifthValue = function(){
-                            var v = getValue("DECILE10");
-                            for(i=95;i<=100;i++) v -= getValue("PERCENTILE"+i);
+                            var v = getValue("D10");
+                            for(i=95;i<=100;i++) v -= getValue("P"+i);
                             return Math.round(v*10)/10;
                         };
 
@@ -297,9 +297,9 @@
                             var nbs = first? [1,2,3,4,5] : [95,96,97,98,99];
                             //check presence of 5 percentiles
                             for(var i=0;i<=4;i++){
-                                var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"PERCENTILE"+nbs[i]});
+                                var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"P"+nbs[i]});
                                 if(!d || !d.value){
-                                    //console.log("No percentile data for PERCENTILE"+nbs[i]);
+                                    //console.log("No percentile data for percentile "+nbs[i]);
                                     return false;
                                 }
                             }
@@ -309,7 +309,7 @@
                         //check if all decile data is available
                         var decileDataPresent = function(){
                             for(var i=1;i<=10;i++){
-                                var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"DECILE"+i});
+                                var d = data.Data({currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:"D"+i});
                                 if(!d || !d.value){
                                     return false;
                                 }
@@ -393,25 +393,25 @@
 
                                 if(percentileDataPresent(true)){
                                     //first 5 percentiles
-                                    for(i=0;i<=4;i++) addRect("P",i+1,10,getValue("PERCENTILE"+(i+1)),i,1);
+                                    for(i=0;i<=4;i++) addRect("P",i+1,10,getValue("P"+(i+1)),i,1);
                                     //second twentile
                                     addRect("T",2,2,get2TwentileValue(),5,5);
                                 } else {
                                     //first decile
-                                    addRect("D",1,1,getValue("DECILE1"),0,10);
+                                    addRect("D",1,1,getValue("D1"),0,10);
                                 }
 
                                 //8 deciles in the middle
-                                for(i=2;i<=9;i++) addRect("D",i,1,getValue("DECILE"+i),10*(i-1),10);
+                                for(i=2;i<=9;i++) addRect("D",i,1,getValue("D"+i),10*(i-1),10);
 
                                 if(percentileDataPresent(false)){
                                     //19th twentyfifth
                                     addRect("TF",24,2.5,getTwentyFifthValue(),90,4);
                                     //last 5 percentiles
-                                    for(i=95;i<=100;i++) addRect("P",i,10,getValue("PERCENTILE"+i),i-1,1);
+                                    for(i=95;i<=100;i++) addRect("P",i,10,getValue("P"+i),i-1,1);
                                 } else {
                                     //last decile
-                                    addRect("D",10,1,getValue("DECILE10"),90,10);
+                                    addRect("D",10,1,getValue("D10"),90,10);
                                 }
                             }
 
