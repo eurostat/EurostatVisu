@@ -108,8 +108,7 @@
             //TODO slider refresh
 
             //get language
-            var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
-            lg = lg.substring(0, 2);
+            var lg = PrVis.getLang2Chars();
 
             //build translation dictionnary
             var dict = {

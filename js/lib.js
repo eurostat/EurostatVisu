@@ -657,6 +657,14 @@
 		return navigator.language || navigator.languages[0] || navigator.browserLanguage;
 	};
 
+	/**
+	 * Returns 2 chars language code
+	 * @return {string}
+	 */
+	PrVis.getLang2Chars = function(){
+	    var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
+	    return lg.substring(0, 2);
+	};
 
 	/**
 	 * Try to fill page elements with dictionnary terms
@@ -681,4 +689,5 @@
 			width: w.innerWidth || e.clientWidth || g.clientWidth,
 			height: w.innerHeight|| e.clientHeight|| g.clientHeight };
 	};
+
 }(jQuery, window.PrVis = window.PrVis || {} ));
