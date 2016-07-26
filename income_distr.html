@@ -293,8 +293,8 @@ p {
                             dataArray[22] = dataArray[9]; for(i=15;i<=20;i++) dataArray[22] -= dataArray[i];
                             dataArray[22] = Math.round(dataArray[22]*10)/10;
                             //remove decile data when corresponding percentiles are available
-                            if(percentileDataPresent(dataArray, true)) dataArray[0] = 0;
-                            if(percentileDataPresent(dataArray, false)) dataArray[9] = 0;
+                            if(percentileDataPresent(dataArray, true))  dataArray[0]=0; else { for(i=10;i<=14;i++) dataArray[i]=0; dataArray[21]=0; }
+                            if(percentileDataPresent(dataArray, false)) dataArray[9]=0; else { for(i=15;i<=20;i++) dataArray[i]=0; dataArray[22]=0; }
                             return dataArray;
                         };
 
@@ -306,8 +306,15 @@ p {
                             return false;
                         };
 
+                        //check presence of data (if at least one is defined and non null)
+                        var dataPresence = function(dataArray){
+                            for(i=0;i<dataArray.length;i++) if(dataArray[i] != null && dataArray[i] != 0) return true;
+                            return false;
+                        };
+
                         //update the chart
                         var update = function(dataArray){
+                        	//console.log(dataArray);
 
                         	//clear previous
                             chart.selectAll("*").remove();
@@ -376,7 +383,7 @@ p {
                         	//D1-D10,P1-P5,P95-P100,T2,T19
                         	// 0-9   10-14  15-20   21  22
 
-                            if(!percentileDataPresent(dataArray, true) && !percentileDataPresent(dataArray, false)) {
+                            if(!dataPresence(dataArray)) {
                                 //if no data, write message and hide labels
                                 chart.append("text").attr({x:width*0.5-30,y:height*0.5,"font-size":"18px"}).text("No data");
                                 labelsG.style("opacity", 0);
