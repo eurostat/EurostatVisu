@@ -106,8 +106,6 @@ p {
      */
     (function($) {
         $(function() {
-            //TODO? http://stackoverflow.com/a/12924432/413912
-
             //TODO german translation
             //TODO show quintiles, quartiles, etc.
             //TODO extract rect function and make 'small multiples' visualisation
@@ -185,6 +183,9 @@ p {
             //write page title
             document.title = dict.title;
 
+            //some quantile data
+            var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},F:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
+
             //build svg element
             var margin = {top: 0, right: 0, bottom: 40, left: 30};
             var width = 600 - margin.left - margin.right, height = 350 - margin.top - margin.bottom;
@@ -201,6 +202,23 @@ p {
             var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
             var yMax = 75; //TODO adapt max? min?
             var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
+
+            //init chart
+            var addRect = function(quantileType,quantileNb,pos){
+                rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
+                .attr("width",xScale(quantileDict[quantileType].percentage)).attr("height",yScale(0))
+                .attr("fill","peru");
+            };
+            //deciles
+            for(i=1;i<=10;i++) addRect("D",i,10*(i-1));
+            //first 5 percentiles
+            for(i=0;i<=4;i++) addRect("P",i+1,i);
+            //last 5 percentiles
+            for(i=95;i<=100;i++) addRect("P",i,i-1);
+            //second twentile
+            addRect("T",2,5);
+            //19th twentyfifth
+            addRect("F",24,90);
 
             //define arrow marker
             svg.append("defs").append("marker")
@@ -236,9 +254,6 @@ p {
             var geoSel = PrVis.getParameterByName("geo") || "EU28";
             var timeSel = PrVis.getParameterByName("time") || "2013";
 
-            //some quantile data
-            var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},TF:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
-
             //build data array
             var getDataObj = function(data){
             	var dataObj = {}, i, obj = {currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:""};
@@ -252,11 +267,11 @@ p {
                 dataObj.T2 = dataObj.D1; for(i=1;i<=5;i++) dataObj.T2 -= dataObj["P"+i];
                 dataObj.T2 = Math.round(dataObj.T2*10)/10;
                 //compute 19th twentile value as last decile value, minus five last percentiles values
-                dataObj.TF19 = dataObj.D10; for(i=95;i<=100;i++) dataObj.TF19 -= dataObj["P"+i];
-                dataObj.TF19 = Math.round(dataObj.TF19*10)/10;
+                dataObj.F19 = dataObj.D10; for(i=95;i<=100;i++) dataObj.F19 -= dataObj["P"+i];
+                dataObj.F19 = Math.round(dataObj.F19*10)/10;
                 //remove decile data when corresponding percentiles are available
                 if(percentileDataPresent(dataObj, true))  dataObj.D1=0; else { for(i=1;i<=5;i++) dataObj["P"+i]=0; dataObj.T2=0; }
-                if(percentileDataPresent(dataObj, false)) dataObj.D10=0; else { for(i=95;i<=100;i++) dataObj["P"+i]=0; dataObj.TF19=0; }
+                if(percentileDataPresent(dataObj, false)) dataObj.D10=0; else { for(i=95;i<=100;i++) dataObj["P"+i]=0; dataObj.F19=0; }
                 return dataObj;
             };
 
@@ -322,11 +337,12 @@ p {
                         	//console.log(dataObj);
 
                         	//clear previous
-                            rects.selectAll("*").remove();
+                            //rects.selectAll("*").remove();
 
                             //draw distribution rectangle
-                            var addRect = function(quantileType,quantileNb,factor,value,pos,size){
-                                rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(value<0?yMax:yMax-factor*value))
+                            /*var addRect = function(quantileType,quantileNb,factor,value,pos,size){
+                                rects.append("rect")
+                                        .attr("x",xScale(pos)).attr("y",yScale(value<0?yMax:yMax-factor*value))
                                         .attr("width",xScale(size)).attr("height",yScale(factor*Math.abs(value)))
                                         .attr("fill","peru")
                                         .on("mouseover", function() {
@@ -377,39 +393,76 @@ p {
                                             d3.select(this).attr("fill","peru");
                                         })
                                 ;
-                            };
+                            };*/
 
                             if(!dataPresence(dataObj)) {
                                 noData.style("opacity", 1);
+                                rects.style("opacity", 0);
                                 labelsG.style("opacity", 0);
                             } else {
                                 //show
                                 noData.style("opacity", 0);
+                                rects.style("opacity", 1);
                                 labelsG.style("opacity", 1);
 
-                            	/*var rects_ = rects.selectAll("rect").data(dataArray);
-                            	//.data(d3.keys(userdata))
-
-                            	rects_.enter().append("rect")
-                            	.attr("x",function(d,i){ console.log(d,i); })
-                            	.attr("x",xScale(pos))
-                            	.attr("y",yScale(value<0?yMax:yMax-factor*value))
-                            	.attr("width",xScale(size))
-                            	.attr("height",yScale(factor*Math.abs(value)))
-                            	.attr("fill","peru")*/
-                            	;
-
-
-                                //deciles
-                                for(i=1;i<=10;i++) addRect("D",i,1,dataObj["D"+i],10*(i-1),10);
-                                //first 5 percentiles
-                                for(i=0;i<=4;i++) addRect("P",i+1,10,dataObj["P"+(i+1)],i,1);
-                                //last 5 percentiles
-                                for(i=95;i<=100;i++) addRect("P",i,10,dataObj["P"+i],i-1,1);
-                                //second twentile
-                                addRect("T",2,2,dataObj["T2"],5,5);
-                                //19th twentyfifth
-                                addRect("TF",24,2.5,dataObj["TF19"],90,4);
+                            	//TODO add transition here
+                            	rects.selectAll("rect").data(d3.keys(dataObj))
+                                        .attr("y", function(d,i){
+                                        	var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                        	return yScale(value<0?yMax:yMax-factor*value);
+                                        	})
+                                        .attr("height", function(d,i){
+                                        	var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                        	return yScale(factor*Math.abs(value));
+                                        	})
+                                        .on("mouseover", function(d) {
+                                            var html = [];
+                                            var q = quantileDict[quantileType];
+                                            var lowestIncome = 100/(quantileNb*q.percentage) >= 2;
+                                            var coeff = value/q.percentage;
+                                            if(value<0)
+                                                html.push(
+                                                        "The income of the <b>",
+                                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
+                                                        " ",
+                                                        q.text,
+                                                        "</b> of the population with the ",
+                                                        lowestIncome?"lowest":"highest",
+                                                        " income is <span style='color: crimson'>negative</span>: <b>",
+                                                        value,
+                                                        "%</b> of the total country income."
+                                                );
+                                            else
+                                                html.push(
+                                                        dict.incomeof, " <b>",
+                                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
+                                                        " ",
+                                                        dict[q.text],
+                                                        "</b> ",dict.ofpopwith," ",
+                                                        lowestIncome?dict.lowest:dict.highest,
+                                                        " ",dict.incomeis," <b>",
+                                                        value,
+                                                        "%</b> ",dict.oftotal,".<br>",
+                                                        dict.ifincomewas," <b>",
+                                                        q.percentage,
+                                                        "%</b>. ",dict.thisincis," ",
+                                                        coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
+                                                        "<b>",
+                                                        Math.round(10*(coeff>1?coeff:1/coeff))/10,
+                                                        " ",dict.times," ",
+                                                        coeff>1?dict.higher:dict.lower,
+                                                        "</b>",
+                                                        coeff>2||coeff<0.5?"</span>":"",
+                                                        " ",dict.thanav,"."
+                                                );
+                                            infoDiv.html(html.join(""));
+                                            d3.select(this).attr("fill","darkred ");
+                                        })
+                                        .on("mouseout", function() {
+                                            infoDiv.text("");
+                                            d3.select(this).attr("fill","peru");
+                                        })
+                                        ;
                             }
 
                             //select geoSel in list
