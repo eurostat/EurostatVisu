@@ -24,10 +24,9 @@
             font-size: 22px;
         }
 
-        #disrect rect {
+        .disrect rect {
             /*fill: peru;*/
-            stroke-width: 0.5;
-            stroke: lightgray;
+            stroke-width:0;
         }
 
         #timeslider label {
@@ -75,22 +74,14 @@
 
 <body>
 <h1>
-    <span id="title1"></span> - <span id="geoTitle">-</span> <span
+    <span id="title1"></span> <span
         id="title2"></span> <span id="timeTitle">-</span>
 </h1>
-<div
-        style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
-    <span id="countryText"></span>
-    <div id="geoListDiv">
-        <select name="geoN" id="geoList"></select>
-    </div>
-    <div style="margin-top: 5px;">
-        <span id="yearText"></span>
-        <div id="timeslider"></div>
-    </div>
-    <div id="info" style="width: 240px; margin-top: 25px;"></div>
+<div style="margin-bottom: 20px; margin-left: 10px;">
+    <span id="yearText"></span>
+    <div id="timeslider"></div>
 </div>
-<div id="chart"></div>
+<div id="charts"></div>
 <div>
     <p>
         <span id="sourceTxt"></span>
@@ -108,9 +99,13 @@
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO german translation
-            //TODO extract rect function and make 'small multiples' visualisation
-            //TODO slider refresh
+            //TODO change order - start with EU and EA, with other color ?
+            //TODO link both visualisations
+            //TODO handle country name translation in EstLib.overrideCountryNames
+            //TODO translate "no data"
+            //TODO flags. display country names?
+            //TODO mouse over event
+            //TODO change icon shape on mouse over
 
             //get language
             var lg = PrVis.getLang2Chars();
@@ -187,77 +182,26 @@
             //some quantile data
             var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},F:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
 
-            //build svg element
-            var margin = {top: 0, right: 0, bottom: 40, left: 30};
-            var width = 600 - margin.left - margin.right, height = 350 - margin.top - margin.bottom;
-            var svg = d3.select("#chart").append("svg")
-                    .attr("width", width + margin.left + margin.right)
-                    .attr("height", height + margin.top + margin.bottom);
-            var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
-            //background rectangle
-            chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"});
-            var noData = chart.append("g").attr("id","nodata").append("text").attr({x:width*0.5-30,y:height*0.5,"font-size":"18px"}).text("No data");
-            var rects = chart.append("g").attr("id","disrect");
+            //dimensions
+            var margin = {top: 2, right: 2, bottom: 2, left: 2};
+            var width = 150 - margin.left - margin.right, height = 100 - margin.top - margin.bottom;
 
             //chart axis scales
             var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
             var yMax = 75; //TODO adapt max? min?
             var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
 
-            //init chart
-            var addRect = function(quantileType,quantileNb,pos){
-                rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
-                        .attr("width",xScale(quantileDict[quantileType].percentage)).attr("height",yScale(0))
-                        .attr("fill","peru");
-            };
-            //deciles
-            for(i=1;i<=10;i++) addRect("D",i,10*(i-1));
-            //first 5 percentiles
-            for(i=0;i<=4;i++) addRect("P",i+1,i);
-            //last 5 percentiles
-            for(i=95;i<=100;i++) addRect("P",i,i-1);
-            //second twentile
-            addRect("T",2,5);
-            //19th twentyfifth
-            addRect("F",24,90);
 
-            //define arrow marker
-            svg.append("defs").append("marker")
-                    .attr({"id":"arrow", "viewBox":"0 -5 10 10", "refX":5, "refY":0, "markerWidth":3, "markerHeight":3, "orient":"auto"})
-                    .append("path").attr("d", "M0,-5L10,0L0,5");
-
-
-            //draw axis labels
-            var labelsG = svg.append("g").attr("id","labels").attr("transform", "translate("+margin.left+","+margin.top+ ")");
-            labelsG.append("text").attr("class","chartLabels").attr("x",47).attr("y",height+17).text(dict.lowincome);
-            labelsG.append('line').attr({class:"arrow", "x1":150, "y1":height+25, "x2":40, "y2":height+25});
-            labelsG.append("text").attr("class","chartLabels").attr("x",width-150).attr("y",height+17).text(dict.higincome);
-            labelsG.append('line').attr({class:"arrow", "x1":width-150, "y1":height+25, "x2":width-45, "y2":height+25});
-            labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(17,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text(dict.incomelev);
-            labelsG.append('line').attr({class:"arrow", "x1":25, "y1":height*0.5+5, "x2":25, "y2":height*0.5-90});
-
-            //draw y graticule
-            for(var y=20; y<yMax; y+=10)
-                labelsG.append('line').attr({class:"graticuleYline", x1:0, y1:height-yScale(y), x2:width, y2:height-yScale(y)});
-            //draw average line
-            labelsG.append('line').attr({id:"averageLine", x1:0, y1:height-yScale(10), x2:width, y2:height-yScale(10)});
-            labelsG.append("text").attr({x:5,y:height-yScale(10)-3,"font-size":"11px"}).text(dict.avincome);
-
-            //geo list and time slider
-            var geoList = $("#geoList");
+            //time slider
             var sli = $("#timeslider");
             sli.css("width",200);
 
-            //info div
-            var infoDiv = d3.select("#info");
-
             //the selection
-            var geoSel = PrVis.getParameterByName("geo") || "EU28";
             var timeSel = PrVis.getParameterByName("time") || "2014";
 
             //build data array
-            var getDataObj = function(data){
-                var dataObj = {}, i, obj = {currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:""};
+            var getDataObj = function(data, geo){
+                var dataObj = {}, i, obj = {currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geo,quantile:""};
                 //deciles
                 for(i=1;i<=10;i++) { obj.quantile="D"+i; dataObj[obj.quantile] = data.Data(obj)?data.Data(obj).value : 0; }
                 //first percentiles
@@ -310,22 +254,11 @@
                             }, lg
                     )})
             ).then(function(data) {
-                        var i;
-
                         //simplify geo label texts
                         EstLib.overrideCountryNames(data.dimension.geo.category.label);
 
                         //decode data
                         data = JSONstat(data).Dataset(0);
-
-                        //build geolist
-                        var geos = data.Dimension("geo").id;
-                        EstLib.fillGeoList(geoList, geos, function(geo){return data.Dimension("geo").Category(geo).label;});
-                        $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
-                        geoList.selectmenu({
-                            change:function(){ geoSel=geoList.find(":selected").attr("value"); update(getDataObj(data)); }
-                        })
-                                .selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
 
                         //build time slider
                         var times = data.Dimension("time").id;
@@ -334,8 +267,8 @@
                             max: +times[times.length-1],
                             step: 1,
                             value: timeSel,
-                            change: function() { timeSel= ""+sli.slider("value"); update(getDataObj(data)); }
-                            //slide: function() { timeSel= ""+sli.slider("value"); update(getDataObj(data)); }
+                            change: function() { timeSel= ""+sli.slider("value"); update(); }
+                            //slide: function() { timeSel= ""+sli.slider("value"); update(); }
                         }).each(function() {
                             var opt = $(this).data().uiSlider.options;
                             var www = opt.max - opt.min;
@@ -343,67 +276,94 @@
                                 sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
                         });
 
+                        //get geos
+                        var geos = data.Dimension("geo").id;
+                        geos.splice(geos.indexOf("EA12"),1);
+                        geos.splice(geos.indexOf("EA17"),1);
+                        geos.splice(geos.indexOf("EA18"),1);
+                        geos.splice(geos.indexOf("EU15"),1);
+                        geos.splice(geos.indexOf("EU27"),1);
+                        geos.splice(geos.indexOf("NMS12"),1);
+
+
+                        //build initial charts
+                        for(var j=0; j<geos.length; j++) {
+                            var geo = geos[j];
+
+                            //build svg element
+                            var svg = d3.select("#charts")
+                                    .append("svg")
+                                    .attr("id", "svg"+geo)
+                                    .attr("width", width + margin.left + margin.right)
+                                    .attr("height", height + margin.top + margin.bottom);
+                            var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
+
+                            //background rectangle
+                            chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"})
+                                    .on("click", function() { window.open("income_distr.html?geo="+geo+"&time="+timeSel, "_blank"); });
+
+                            var noData = chart.append("g").attr("id","nodata"+geo).append("text").attr({x:width*0.5-30,y:height*0.5,"font-size":"14px"}).text("No data");
+
+                            //rectangles
+                            var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
+                            var addRect = function(quantileType,quantileNb,pos){
+                                rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
+                                        .attr("width",xScale(quantileDict[quantileType].percentage)).attr("height",yScale(0))
+                                        .attr("fill","peru");
+                            };
+                            //deciles
+                            var i;
+                            for(i=1;i<=10;i++) addRect("D",i,10*(i-1));
+                            //first 5 percentiles
+                            for(i=0;i<=4;i++) addRect("P",i+1,i);
+                            //last 5 percentiles
+                            for(i=95;i<=100;i++) addRect("P",i,i-1);
+                            //second twentile
+                            addRect("T",2,5);
+                            //19th twentyfifth
+                            addRect("F",24,90);
+
+                            svg.append("text").attr({x:5,y:17,"font-size":"12px"}).text(
+                                    data.Dimension("geo").Category(geo).label
+                                    //geo
+                            );
+                        }
+
+
                         //update the chart
-                        var update = function(dataObj){
+                        var update = function(){
+                            for(var i=0; i<geos.length; i++){
+                                var geo = geos[i];
+                                var dataObj = getDataObj(data, geo);
+                                var rects = d3.select("#disrect"+geo);
+                                var noData = d3.select("#nodata"+geo);
 
-                            if(!dataPresence(dataObj)) {
-                                noData.style("opacity", 1);
-                                rects.style("opacity", 0);
-                                labelsG.style("opacity", 0);
-                            } else {
-                                //show
-                                noData.style("opacity", 0);
-                                rects.style("opacity", 1);
-                                labelsG.style("opacity", 1);
+                                if(!dataPresence(dataObj)) {
+                                    noData.style("opacity", 1);
+                                    rects.style("opacity", 0);
+                                } else {
+                                    //show
+                                    noData.style("opacity", 0);
+                                    rects.style("opacity", 1);
 
-                                rects.selectAll("rect").data(d3.keys(dataObj))
-                                        .on("mouseover", function(d) {
-                                            var html = [], value = dataObj[d], quantileNb = +d.substring(1,d.length), q = quantileDict[d.charAt(0)],
-                                                    lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage;
-                                            if(value<0)
-                                                html.push(
-                                                        "The income of the <b>", PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
-                                                        " ", q.text, "</b> of the population with the ",
-                                                        lowestIncome?"lowest":"highest", " income is <span style='color: crimson'>negative</span>: <b>",
-                                                        value, "%</b> of the total country income."
-                                                );
-                                            else
-                                                html.push(
-                                                        dict.incomeof, " <b>",
-                                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
-                                                        " ", dict[q.text], "</b> ",dict.ofpopwith," ", lowestIncome?dict.lowest:dict.highest,
-                                                        " ",dict.incomeis," <b>", value, "%</b> ",dict.oftotal,".<br>",
-                                                        dict.ifincomewas," <b>", q.percentage, "%</b>. ",dict.thisincis," ",
-                                                        coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
-                                                        "<b>", Math.round(10*(coeff>1?coeff:1/coeff))/10, " ",dict.times," ",
-                                                        coeff>1?dict.higher:dict.lower, "</b>", coeff>2||coeff<0.5?"</span>":"", " ",dict.thanav,"."
-                                                );
-                                            infoDiv.html(html.join(""));
-                                            d3.select(this).attr("fill","darkred ");
-                                        })
-                                        .on("mouseout", function() {
-                                            infoDiv.text("");
-                                            d3.select(this).attr("fill","peru");
-                                        })
-                                        .transition().attr("y", function(d,i){
-                                            var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
-                                            return yScale(value<0?yMax:yMax-factor*value);
-                                        })
-                                        .attr("height", function(d){
-                                            var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
-                                            return yScale(factor*Math.abs(value));
-                                        })
-                                ;
+                                    rects.selectAll("rect").data(d3.keys(dataObj))
+                                            .transition().attr("y", function(d){
+                                                var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                                return yScale(value<0?yMax:yMax-factor*value);
+                                            })
+                                            .attr("height", function(d){
+                                                var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                                return yScale(factor*Math.abs(value));
+                                            })
+                                    ;
+                                }
                             }
 
-                            //select geoSel in list
-                            $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
                             //update title
-                            d3.select("#geoTitle").text(data.Dimension("geo").Category(geoSel).label);
                             d3.select("#timeTitle").text(timeSel);
                         };
 
-                        update(getDataObj(data));
+                        update();
 
                     }, function() {
                         console.log("Could not load data");
