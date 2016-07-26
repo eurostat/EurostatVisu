@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf8" />
-<title>Income disparities in Europe</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+    <title>Income disparities in Europe</title>
 
-<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
 
-<script src="js/jquery-1.11.3.min.js"></script>
-<script src="js/jquery-ui.min.js"></script>
-<script src="js/d3.min.js"></script>
-<script src="js/colorbrewer.min.js"></script>
-<script src="js/moment.min.js"></script>
-<script src="js/json-stat.js"></script>
-<script src="js/lib.js"></script>
-<script src="js/eurostat-lib.js"></script>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/d3.min.js"></script>
+    <script src="js/colorbrewer.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/json-stat.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/eurostat-lib.js"></script>
 
-<style>
-body {
-	font-family: sans-serif;
-}
+    <style>
+        body {
+            font-family: sans-serif;
+        }
 
-h1 {
-	font-size: 22px;
-}
+        h1 {
+            font-size: 22px;
+        }
 
-#disrect rect {
-	/*fill: peru;*/
-	stroke-width: 0.5;
-	stroke: lightgray;
-}
+        #disrect rect {
+            /*fill: peru;*/
+            stroke-width: 0.5;
+            stroke: lightgray;
+        }
 
-#timeslider label {
-	position: absolute;
-	width: 20px;
-	margin-top: 12px;
-	margin-left: -10px;
-	text-align: center;
-	font-size: 10px;
-}
+        #timeslider label {
+            position: absolute;
+            width: 20px;
+            margin-top: 12px;
+            margin-left: -10px;
+            text-align: center;
+            font-size: 10px;
+        }
 
-.chartLabels {
-	font-size: 14px;
-	/*fill: gray;*/
-}
+        .chartLabels {
+            font-size: 14px;
+            /*fill: gray;*/
+        }
 
-.arrow {
-	marker-end: url(#arrow);
-	stroke: gray;
-	stroke-width: 2.5px;
-}
+        .arrow {
+            marker-end: url(#arrow);
+            stroke: gray;
+            stroke-width: 2.5px;
+        }
 
-#averageLine {
-	stroke: black;
-	stroke-width: 2px;
-	opacity: 0.5;
-}
+        #averageLine {
+            stroke: black;
+            stroke-width: 2px;
+            opacity: 0.5;
+        }
 
-.graticuleYline {
-	stroke: black;
-	stroke-width: 2px;
-	opacity: 0.15;
-}
+        .graticuleYline {
+            stroke: black;
+            stroke-width: 2px;
+            opacity: 0.15;
+        }
 
-.ui-widget {
-	font-size: 12px !important;
-}
+        .ui-widget {
+            font-size: 12px !important;
+        }
 
-p {
-	font-size: 10px;
-}
-</style>
+        p {
+            font-size: 10px;
+        }
+    </style>
 
 </head>
 
 <body>
-	<h1>
-		<span id="title1"></span> - <span id="geoTitle">-</span> <span
-			id="title2"></span> <span id="timeTitle">-</span>
-	</h1>
-	<div
-		style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
-		<span id="countryText"></span>
-		<div id="geoListDiv">
-			<select name="geoN" id="geoList"></select>
-		</div>
-		<div style="margin-top: 5px;">
-			<span id="yearText"></span>
-			<div id="timeslider"></div>
-		</div>
-		<div id="info" style="width: 240px; margin-top: 25px;"></div>
-	</div>
-	<div id="chart"></div>
-	<div>
-		<p>
-			<span id="sourceTxt"></span>
-		</p>
-	</div>
+<h1>
+    <span id="title1"></span> - <span id="geoTitle">-</span> <span
+        id="title2"></span> <span id="timeTitle">-</span>
+</h1>
+<div
+        style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
+    <span id="countryText"></span>
+    <div id="geoListDiv">
+        <select name="geoN" id="geoList"></select>
+    </div>
+    <div style="margin-top: 5px;">
+        <span id="yearText"></span>
+        <div id="timeslider"></div>
+    </div>
+    <div id="info" style="width: 240px; margin-top: 25px;"></div>
+</div>
+<div id="chart"></div>
+<div>
+    <p>
+        <span id="sourceTxt"></span>
+    </p>
+</div>
 
-	<script>
+<script>
 
     /**
      *
@@ -106,9 +106,9 @@ p {
      */
     (function($) {
         $(function() {
-        	//http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
+            //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-        			//TODO german translation
+            //TODO german translation
             //TODO extract rect function and make 'small multiples' visualisation
             //TODO slider refresh
 
@@ -207,8 +207,8 @@ p {
             //init chart
             var addRect = function(quantileType,quantileNb,pos){
                 rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
-                .attr("width",xScale(quantileDict[quantileType].percentage)).attr("height",yScale(0))
-                .attr("fill","peru");
+                        .attr("width",xScale(quantileDict[quantileType].percentage)).attr("height",yScale(0))
+                        .attr("fill","peru");
             };
             //deciles
             for(i=1;i<=10;i++) addRect("D",i,10*(i-1));
@@ -257,12 +257,12 @@ p {
 
             //build data array
             var getDataObj = function(data){
-            	var dataObj = {}, i, obj = {currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:""};
-            	//deciles
+                var dataObj = {}, i, obj = {currency:"EUR",indic_il:"SHARE",time:timeSel,geo:geoSel,quantile:""};
+                //deciles
                 for(i=1;i<=10;i++) { obj.quantile="D"+i; dataObj[obj.quantile] = data.Data(obj)?data.Data(obj).value : 0; }
-            	//first percentiles
+                //first percentiles
                 for(i=1;i<=5;i++) { obj.quantile="P"+i; dataObj[obj.quantile] = data.Data(obj)?data.Data(obj).value : 0; }
-            	//last percentiles
+                //last percentiles
                 for(i=95;i<=100;i++) { obj.quantile="P"+i; dataObj[obj.quantile] = data.Data(obj)?data.Data(obj).value : 0; }
                 //compute second twentile as first decile value minus five first percentiles values
                 dataObj.T2 = dataObj.D1; for(i=1;i<=5;i++) dataObj.T2 -= dataObj["P"+i];
@@ -272,16 +272,16 @@ p {
                 dataObj.F19 = Math.round(dataObj.F19*10)/10;
                 //remove decile data when corresponding percentiles are available
                 if(percentileDataPresent(dataObj, true)) {
-                	dataObj.D1=0;
+                    dataObj.D1=0;
                 } else {
-               		for(i=1;i<=5;i++) dataObj["P"+i] = 0;
-               		dataObj.T2=0;
-               	}
+                    for(i=1;i<=5;i++) dataObj["P"+i] = 0;
+                    dataObj.T2=0;
+                }
                 if(percentileDataPresent(dataObj, false)) {
-                	dataObj.D10=0;
+                    dataObj.D10=0;
                 } else {
-                	for(i=95;i<=100;i++) dataObj["P"+i] = 0;
-                	dataObj.F19=0;
+                    for(i=95;i<=100;i++) dataObj["P"+i] = 0;
+                    dataObj.F19=0;
                 }
                 return dataObj;
             };
@@ -296,10 +296,10 @@ p {
 
             //check presence of data (if at least one is defined and non null)
             var dataPresence = function(dataObj){
-            	for(var k in dataObj) {
-            	    var v = dataObj[k];
-            	    if(v != null && v != 0) return true;
-            	}
+                for(var k in dataObj) {
+                    var v = dataObj[k];
+                    if(v != null && v != 0) return true;
+                }
                 return false;
             };
 
@@ -310,8 +310,6 @@ p {
                             }, lg
                     )})
             ).then(function(data) {
-                        var i;
-
                         //simplify geo label texts
                         EstLib.overrideCountryNames(data.dimension.geo.category.label);
 
@@ -356,10 +354,10 @@ p {
                                 rects.style("opacity", 1);
                                 labelsG.style("opacity", 1);
 
-                            	rects.selectAll("rect").data(d3.keys(dataObj))
+                                rects.selectAll("rect").data(d3.keys(dataObj))
                                         .on("mouseover", function(d) {
                                             var html = [], value = dataObj[d], quantileNb = +d.substring(1,d.length), q = quantileDict[d.charAt(0)],
-                                            lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage;
+                                                    lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage;
                                             if(value<0)
                                                 html.push(
                                                         "The income of the <b>", PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
@@ -385,15 +383,15 @@ p {
                                             infoDiv.text("");
                                             d3.select(this).attr("fill","peru");
                                         })
-                                        .transition().attr("y", function(d,i){
-                                        	var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
-                                        	return yScale(value<0?yMax:yMax-factor*value);
-                                        	})
+                                        .transition().attr("y", function(d){
+                                            var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                            return yScale(value<0?yMax:yMax-factor*value);
+                                        })
                                         .attr("height", function(d){
-                                        	var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
-                                        	return yScale(factor*Math.abs(value));
-                                        	})
-                                        ;
+                                            var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                            return yScale(factor*Math.abs(value));
+                                        })
+                                ;
                             }
 
                             //select geoSel in list
