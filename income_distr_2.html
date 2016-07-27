@@ -67,10 +67,6 @@
             font-size: 12px !important;
         }
 
-        p {
-            font-size: 10px;
-        }
-
 #info {	
     opacity:0;
     position: absolute;
@@ -317,7 +313,8 @@
                             //background rectangle
                             chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#eee"});
 
-                            var noData = chart.append("g").attr("id","nodata"+geo).append("text").attr({x:width*0.5-35,y:height*0.5+7,"font-size":"12px","font-weight":"bold"}).text(dict.nodata);
+                            //no data
+                            var noData = chart.append("g").attr("id","nodata"+geo).append("text").attr({x:width*0.5-35,y:height*0.5+7,"font-size":"16px","font-weight":"bold"}).text(dict.nodata);
 
                             //rectangles
                             var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
@@ -339,14 +336,14 @@
                             addRect("F",24,90);
 
                             //country name title
-                            svg.append("text").attr({x:24,y:18,"font-size":"11px"}).text(
+                            svg.append("text").attr({x:35,y:26,"font-size":"14px"}).text(
                                     data.Dimension("geo").Category(geo).label
                                     //geo
                             );
 
                             //flag
                             svg.append("svg:image")
-                            .attr("x",5).attr("y",5).attr('width', 15).attr('height', 15)
+                            .attr("x",10).attr("y",10).attr('width', 20).attr('height', 20)
                             .attr("xlink:href","img/flags/1/"+(geo.substring(0,2))+".png")
                         }
 
