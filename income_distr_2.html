@@ -26,8 +26,11 @@
         }
 
         .disrect rect {
-            /*fill: peru;*/
+            fill: peru;
             stroke-width: 0;
+        }
+        .disrect rect:hover {
+            fill: darkred;
         }
 
         #timeslider label {
@@ -93,6 +96,9 @@
             font-weight:bold;
             text-anchor:middle
         }
+        .cntrLbl {
+            font-size: 14px;
+        }
 
     </style>
 
@@ -127,7 +133,6 @@
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
             //TODO show line with average income
-            //TODO clean styles
             //TODO change order - start with EU and EA, with other color ? See p35
             //TODO handle country name translation in EstLib.overrideCountryNames
 
@@ -150,7 +155,7 @@
 
             //chart axis scales
             var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
-            var yMax = 75; //TODO adapt max? min?
+            var yMax = 75;
             var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
 
             //the selection
@@ -214,7 +219,6 @@
                             var addRect = function(quantileType,quantileNb,pos){
                                 rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
                                         .attr("width",xScale(EstLib.quantileDict[quantileType].percentage)).attr("height",yScale(0))
-                                        .attr("fill","peru");
                             };
                             //deciles
                             var i;
@@ -229,7 +233,7 @@
                             addRect("F",24,90);
 
                             //country name title
-                            svg.append("text").attr({x:35,y:26,"font-size":"14px"}).text( data.Dimension("geo").Category(geo).label );
+                            svg.append("text").attr({x:35,y:26,"class":"cntrLbl"}).text( data.Dimension("geo").Category(geo).label );
 
                             //flag
                             svg.append("svg:image")
@@ -246,21 +250,18 @@
                                 var rects = d3.select("#disrect"+geo);
                                 var noData = d3.select("#nodata"+geo);
 
-                                if(!EstLib.dataPresence(dataObj)) {
+                                if(!EstLib.dataPresence(dataObj))
                                     noData.transition().style("opacity", 1);
-                                } else {
+                                else
                                     noData.transition().style("opacity", 0);
-                                }
 
                                 rects.selectAll("rect").data(d3.keys(dataObj))
                                         .on("mouseover", function(d) {
-                                            d3.select(this).attr("fill","darkred ");
                                             infoDiv.html(EstLib.getRectText(d, dataObj[d], lg))
                                                     .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-50) + "px")
                                                     .transition().duration(200).style("opacity",1);
                                         })
                                         .on("mouseout", function() {
-                                            d3.select(this).attr("fill","peru");
                                             infoDiv.transition().duration(200).style("opacity",0);
                                         })
                                         .transition()

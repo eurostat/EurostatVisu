@@ -26,9 +26,12 @@
         }
 
         #disrect rect {
-            /*fill: peru;*/
+            fill: peru;
             stroke-width: 0.5;
             stroke: lightgray;
+        }
+        #disrect rect:hover {
+            fill: darkred;
         }
 
         #timeslider label {
@@ -115,7 +118,6 @@
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO clean styles
             //TODO slider refresh
 
             //get language
@@ -153,8 +155,7 @@
             //init chart
             var addRect = function(quantileType,quantileNb,pos){
                 rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
-                        .attr("width",xScale(EstLib.quantileDict[quantileType].percentage)).attr("height",yScale(0))
-                        .attr("fill","peru");
+                        .attr("width",xScale(EstLib.quantileDict[quantileType].percentage)).attr("height",yScale(0));
             };
             //deciles
             for(i=1;i<=10;i++) addRect("D",i,10*(i-1));
@@ -246,11 +247,9 @@
                             rects.selectAll("rect").data(d3.keys(dataObj))
                                     .on("mouseover", function(d) {
                                         infoDiv.html( EstLib.getRectText(d, dataObj[d], lg) );
-                                        d3.select(this).attr("fill","darkred ");
                                     })
                                     .on("mouseout", function() {
                                         infoDiv.text("");
-                                        d3.select(this).attr("fill","peru");
                                     })
                                     .transition().attr("y", function(d,i){
                                         var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
