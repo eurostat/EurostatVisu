@@ -254,7 +254,7 @@ h1 {
                                         .on("mouseover", function(d) {
                                 			d3.select(this).attr("fill","darkred ");
                                 			infoDiv.html(EstLib.getRectText(d, dataObj[d], lg))
-                                			.style("left", (d3.event.clientX+30) + "px").style("top", (d3.event.clientY-50) + "px")
+                                			.style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-50) + "px")
                                 			.transition().duration(200).style("opacity",1);
                                 		})
                                         .on("mouseout", function() {
