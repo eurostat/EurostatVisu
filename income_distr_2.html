@@ -80,6 +80,11 @@ h1 {
 	font: 12px sans-serif;
 	pointer-events: none;
 }
+
+#timeslider {
+	width: 200px;
+}
+
 </style>
 
 </head>
@@ -157,11 +162,12 @@ h1 {
 
                         //decode data
                         data = JSONstat(data).Dataset(0);
-                        
+
                         //build time slider
-                        var sli = $("#timeslider");
-                        sli.css("width",200); //TODO move to css
-                        EstLib.buildTimeSlider(sli, data.Dimension("time").id, timeSel, 5, function() { timeSel= ""+sli.slider("value"); update(); });
+                        EstLib.buildTimeSlider($("#timeslider"), data.Dimension("time").id, timeSel, 5, function() {
+                        	timeSel= ""+$("#timeslider").slider("value");
+                        	update();
+                        });
 
                         //get geos
                         var geos = data.Dimension("geo").id;

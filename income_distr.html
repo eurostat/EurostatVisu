@@ -67,6 +67,10 @@ h1 {
 	font-size: 12px !important;
 }
 
+#timeslider {
+	width: 200px;
+}
+
 </style>
 
 </head>
@@ -213,9 +217,10 @@ h1 {
                                 .selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
 
                         //build time slider
-                        var sli = $("#timeslider");
-                        sli.css("width",200); //TODO move to css
-                        EstLib.buildTimeSlider(sli, data.Dimension("time").id, timeSel, 5, function() { timeSel= ""+sli.slider("value"); update(EstLib.getDataObj(data, geoSel, timeSel)); });
+                        EstLib.buildTimeSlider($("#timeslider"), data.Dimension("time").id, timeSel, 5, function() {
+                        	timeSel= ""+$("#timeslider").slider("value");
+                        	update(EstLib.getDataObj(data, geoSel, timeSel));
+                        });
 
                         //update the chart
                         var update = function(dataObj){
