@@ -252,8 +252,7 @@
                             chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#eee"});
 
                             //no data
-                            var noData = chart.append("g").attr("id","nodata"+geo).append("text").attr({x:width*0.5-35,y:height*0.5+7,"font-size":"16px","font-weight":"bold"}).text(dict.nodata);
-
+                            chart.append("g").attr("id","nodata"+geo).attr("opacity",0).append("text").attr({x:width*0.5,y:height*0.5+7,"font-size":"14px","font-weight":"bold","text-anchor":"middle"}).text(dict.nodata);
                             //rectangles
                             var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
                             var addRect = function(quantileType,quantileNb,pos){

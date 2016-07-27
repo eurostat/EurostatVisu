@@ -133,7 +133,8 @@ h1 {
             var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
             //background rectangle
             chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"});
-            var noData = chart.append("g").attr("id","nodata").append("text").attr({x:width*0.5-35,y:height*0.5,"font-size":"18px"}).text(dict.nodata);
+            var noData = chart.append("g").attr("id","nodata").attr("opacity",0);
+            noData.append("text").attr({x:width*0.5,y:height*0.5+9,"font-size":"18px","font-weight":"bold","text-anchor":"middle"}).text(dict.nodata);
             var rects = chart.append("g").attr("id","disrect");
 
             //chart axis scales
