@@ -17,21 +17,14 @@
     <script src="js/income_distr.js"></script>
 
     <style>
-        body {
-            font-family: sans-serif;
-        }
-
-        h1 {
-            font-size: 22px;
-        }
+        body { font-family: sans-serif; }
+        h1 { font-size: 22px; }
 
         .disrect rect {
             fill: peru;
             stroke-width: 0;
         }
-        .disrect rect:hover {
-            fill: darkred;
-        }
+        .disrect rect:hover { fill: darkred; }
 
         #timeslider label {
             position: absolute;
@@ -42,14 +35,7 @@
             font-size: 10px;
         }
 
-        .chartLabels {
-            font-size: 14px;
-            /*fill: gray;*/
-        }
-
-        .svgCntr {
-            cursor: pointer;
-        }
+        .svgCntr { cursor: pointer; }
 
         .arrow {
             marker-end: url(#arrow);
@@ -69,9 +55,7 @@
             opacity: 0.15;
         }
 
-        .ui-widget {
-            font-size: 12px !important;
-        }
+        .ui-widget { font-size: 12px !important; }
 
         #info {
             opacity: 0;
@@ -86,9 +70,7 @@
             box-shadow: 10px 10px 5px grey;
         }
 
-        #timeslider {
-            width: 200px;
-        }
+        #timeslider { width: 200px; }
 
         .nodataTxt {
             opacity:0;
@@ -96,9 +78,8 @@
             font-weight:bold;
             text-anchor:middle
         }
-        .cntrLbl {
-            font-size: 14px;
-        }
+        .cntrLbl { font-size: 14px; }
+        .bckRect { fill: #eee; }
 
     </style>
 
@@ -132,9 +113,9 @@
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO show line with average income
             //TODO change order - start with EU and EA, with other color ? See p35
             //TODO handle country name translation in EstLib.overrideCountryNames
+            //TODO show line with average income
 
             //get language
             var lg = PrVis.getLang2Chars();
@@ -150,8 +131,10 @@
             document.title = dict.title;
 
             //dimensions
-            var margin = {top: 4, right: 4, bottom: 4, left: 4};
-            var width = 200 - margin.left - margin.right, height = 130 - margin.top - margin.bottom;
+            var rnd = 8;
+            var margin = {top: 3+rnd, right: 3+rnd, bottom: 3+rnd, left: 3+rnd},
+                    width = 200 - margin.left - margin.right,
+                    height = 130 - margin.top - margin.bottom;
 
             //chart axis scales
             var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
@@ -205,10 +188,10 @@
                                     .attr("height", height + margin.top + margin.bottom)
                                     .attr("geo", geo).on("click", function() { window.open("income_distr.html?geo="+d3.select(this).attr("geo")+"&time="+timeSel+"&lang="+lg, "_blank"); });
 
-                            var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
+                            var chart = svg.append("g").attr("transform", "translate("+(margin.left)+","+(margin.top)+ ")");
 
                             //background rectangle
-                            chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#eee"});
+                            chart.append("rect").attr({x:-rnd,y:-rnd,rx:rnd,ry:rnd,width:width+2*rnd,height:height+2*rnd,"class":"bckRect"});
 
                             //no data
                             chart.append("g").attr("id","nodata"+geo).attr("class","nodataTxt")
@@ -233,11 +216,11 @@
                             addRect("F",24,90);
 
                             //country name title
-                            svg.append("text").attr({x:35,y:26,"class":"cntrLbl"}).text( data.Dimension("geo").Category(geo).label );
+                            chart.append("text").attr({x:22,y:16,"class":"cntrLbl"}).text( data.Dimension("geo").Category(geo).label );
 
                             //flag
-                            svg.append("svg:image")
-                                    .attr("x",10).attr("y",10).attr('width', 20).attr('height', 20)
+                            chart.append("svg:image")
+                                    .attr("x",0).attr("y",0).attr('width', 20).attr('height', 20)
                                     .attr("xlink:href","img/flags/1/"+(geo.substring(0,2))+".png")
                         }
 
