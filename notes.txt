@@ -1,3 +1,10 @@
+<iframe width="100%" height="750px" src="http://www.neighbourhood.statistics.gov.uk/HTMLDocs/dvc221/longevity.html" scrolling="no" frameborder="0"/>
+<iframe src="http://ec.europa.eu/eurostat/cache/infographs/youth/index_en.html" height="768" width="1024"></iframe>
+<iframe width="700" height="730" src="http://ec.europa.eu/eurostat/cache/infographs/price-levels/index.html"></iframe>
+
+Flags: http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
+
+use colors from http://ec.europa.eu/eurostat/en/web/products-eurostat-news/-/STYLE-GUIDE_2016
 show COCIOP hierarchy sunburst
 generic map for Eurostat
 flow map: transport, trade, migration (migr)
