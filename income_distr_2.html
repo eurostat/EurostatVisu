@@ -85,6 +85,13 @@ h1 {
 	width: 200px;
 }
 
+.nodataTxt {
+	opacity:0;
+    font-size: 14px;
+    font-weight:bold;
+    text-anchor:middle
+}
+
 </style>
 
 </head>
@@ -197,7 +204,9 @@ h1 {
                             chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#eee"});
 
                             //no data
-                            chart.append("g").attr("id","nodata"+geo).style("opacity",0).append("text").attr({x:width*0.5,y:height*0.5+7,"font-size":"14px","font-weight":"bold","text-anchor":"middle"}).text(dict.nodata);
+                            chart.append("g").attr("id","nodata"+geo).attr("class","nodataTxt")
+                            .append("text").attr({x:width*0.5,y:height*0.5+7}).text(dict.nodata);
+
                             //rectangles
                             var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
                             var addRect = function(quantileType,quantileNb,pos){
