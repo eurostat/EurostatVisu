@@ -1,101 +1,107 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
-    <title>Income disparities in Europe</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+<title>Income disparities in Europe</title>
 
-    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
 
-    <script src="js/jquery-1.11.3.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/colorbrewer.min.js"></script>
-    <script src="js/moment.min.js"></script>
-    <script src="js/json-stat.js"></script>
-    <script src="js/lib.js"></script>
-    <script src="js/eurostat-lib.js"></script>
-    <script src="js/income_distr.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/d3.min.js"></script>
+<script src="js/colorbrewer.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/json-stat.js"></script>
+<script src="js/lib.js"></script>
+<script src="js/eurostat-lib.js"></script>
+<script src="js/income_distr.js"></script>
 
-    <style>
-        body {
-            font-family: sans-serif;
-        }
-
-        h1 {
-            font-size: 22px;
-        }
-
-        .disrect rect {
-            /*fill: peru;*/
-            stroke-width:0;
-        }
-
-        #timeslider label {
-            position: absolute;
-            width: 20px;
-            margin-top: 12px;
-            margin-left: -10px;
-            text-align: center;
-            font-size: 10px;
-        }
-
-        .chartLabels {
-            font-size: 14px;
-            /*fill: gray;*/
-        }
-
-        .svgCntr { cursor: pointer; }
-
-        .arrow {
-            marker-end: url(#arrow);
-            stroke: gray;
-            stroke-width: 2.5px;
-        }
-
-        #averageLine {
-            stroke: black;
-            stroke-width: 2px;
-            opacity: 0.5;
-        }
-
-        .graticuleYline {
-            stroke: black;
-            stroke-width: 2px;
-            opacity: 0.15;
-        }
-
-        .ui-widget {
-            font-size: 12px !important;
-        }
-
-#info {	
-    opacity:0;
-    position: absolute;
-    padding: 10px;
-    background: white;
-    border: 0px;
-    border-radius: 10px;
-    font: 12px sans-serif;
-    pointer-events: none;
+<style>
+body {
+	font-family: sans-serif;
 }
-    </style>
+
+h1 {
+	font-size: 22px;
+}
+
+.disrect rect {
+	/*fill: peru;*/
+	stroke-width: 0;
+}
+
+#timeslider label {
+	position: absolute;
+	width: 20px;
+	margin-top: 12px;
+	margin-left: -10px;
+	text-align: center;
+	font-size: 10px;
+}
+
+.chartLabels {
+	font-size: 14px;
+	/*fill: gray;*/
+}
+
+.svgCntr {
+	cursor: pointer;
+}
+
+.arrow {
+	marker-end: url(#arrow);
+	stroke: gray;
+	stroke-width: 2.5px;
+}
+
+#averageLine {
+	stroke: black;
+	stroke-width: 2px;
+	opacity: 0.5;
+}
+
+.graticuleYline {
+	stroke: black;
+	stroke-width: 2px;
+	opacity: 0.15;
+}
+
+.ui-widget {
+	font-size: 12px !important;
+}
+
+#info {
+	opacity: 0;
+	position: absolute;
+	padding: 10px;
+	background: white;
+	border: 0px;
+	border-radius: 10px;
+	font: 12px sans-serif;
+	pointer-events: none;
+}
+</style>
 
 </head>
 
 <body>
-<h1>
-    <span id="title1"></span> <span
-        id="title2"></span> <span id="timeTitle">-</span>
-</h1>
-<div style="padding-bottom: 20px; padding-left: 10px;">
-    <span id="yearText"></span>
-    <div id="timeslider"></div>
-</div>
-<div id="charts"></div>
-<div><p><span id="sourceTxt"></span></p></div>
-<div id="info">Test</div>
+	<h1>
+		<span id="title1"></span> <span id="title2"></span> <span
+			id="timeTitle">-</span>
+	</h1>
+	<div style="padding-bottom: 25px; padding-left: 10px;">
+		<span id="yearText"></span>
+		<div id="timeslider"></div>
+	</div>
+	<div id="charts"></div>
+	<div>
+		<p>
+			<span id="sourceTxt"></span>
+		</p>
+	</div>
+	<div id="info">Test</div>
 
-<script>
+	<script>
 
     /**
      *
@@ -133,11 +139,6 @@
             var yMax = 75; //TODO adapt max? min?
             var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
 
-
-            //time slider
-            var sli = $("#timeslider");
-            sli.css("width",200);
-
             //the selection
             var timeSel = PrVis.getParameterByName("time") || "2014";
 
@@ -156,22 +157,11 @@
 
                         //decode data
                         data = JSONstat(data).Dataset(0);
-
+                        
                         //build time slider
-                        var times = data.Dimension("time").id;
-                        sli.slider({
-                            min: +times[0],
-                            max: +times[times.length-1],
-                            step: 1,
-                            value: timeSel,
-                            change: function() { timeSel= ""+sli.slider("value"); update(); }
-                            //slide: function() { timeSel= ""+sli.slider("value"); update(); }
-                        }).each(function() {
-                            var opt = $(this).data().uiSlider.options;
-                            var www = opt.max - opt.min;
-                            for (var i = opt.min; i <= opt.max; i+=5)
-                                sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
-                        });
+                        var sli = $("#timeslider");
+                        sli.css("width",200); //TODO move to css
+                        EstLib.buildTimeSlider(sli, data.Dimension("time").id, timeSel, 5, function() { timeSel= ""+sli.slider("value"); update(); });
 
                         //get geos
                         var geos = data.Dimension("geo").id;
@@ -201,7 +191,7 @@
                             chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#eee"});
 
                             //no data
-                            chart.append("g").attr("id","nodata"+geo).attr("opacity",0).append("text").attr({x:width*0.5,y:height*0.5+7,"font-size":"14px","font-weight":"bold","text-anchor":"middle"}).text(dict.nodata);
+                            chart.append("g").attr("id","nodata"+geo).style("opacity",0).append("text").attr({x:width*0.5,y:height*0.5+7,"font-size":"14px","font-weight":"bold","text-anchor":"middle"}).text(dict.nodata);
                             //rectangles
                             var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
                             var addRect = function(quantileType,quantileNb,pos){

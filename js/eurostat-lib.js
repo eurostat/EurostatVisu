@@ -123,4 +123,21 @@
 		USA : "US"
 	};
 
+	EstLib.buildTimeSlider = function(sli, times, timeValue, labelInterval, changeFun){
+        sli.slider({
+            min: +times[0],
+            max: +times[times.length-1],
+            step: 1,
+            value: timeValue,
+            change: changeFun
+            //slide: function() { timeSel= ""+sli.slider("value"); update(); }
+        }).each(function() {
+            var opt = $(this).data().uiSlider.options;
+            var www = opt.max - opt.min;
+            for (var i = opt.min; i <= opt.max; i+=labelInterval)
+                sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
+        });
+    };
+
+
 }(jQuery, window.EstLib = window.EstLib || {} ));
