@@ -101,11 +101,10 @@
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
+            //TODO mouse over event
             //TODO "no data" anchor center
             //TODO change order - start with EU and EA, with other color ? See p35
             //TODO handle country name translation in EstLib.overrideCountryNames
-            //TODO mouse over event
-            //links with language + time, etc.
 
             //get language
             var lg = PrVis.getLang2Chars();
@@ -300,7 +299,7 @@
                                     .attr("class", "svgCntr")
                                     .attr("width", width + margin.left + margin.right)
                                     .attr("height", height + margin.top + margin.bottom)
-                                    .attr("geo", geo).on("click", function() { window.open("income_distr.html?geo="+d3.select(this).attr("geo")+"&time="+timeSel, "_blank"); });
+                                    .attr("geo", geo).on("click", function() { window.open("income_distr.html?geo="+d3.select(this).attr("geo")+"&time="+timeSel+"&lang="+lg, "_blank"); });
 
                             var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
 
