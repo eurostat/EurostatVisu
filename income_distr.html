@@ -1,103 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
-    <title>Income disparities in Europe</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+<title>Income disparities in Europe</title>
 
-    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
 
-    <script src="js/jquery-1.11.3.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/colorbrewer.min.js"></script>
-    <script src="js/moment.min.js"></script>
-    <script src="js/json-stat.js"></script>
-    <script src="js/lib.js"></script>
-    <script src="js/eurostat-lib.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/d3.min.js"></script>
+<script src="js/colorbrewer.min.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/json-stat.js"></script>
+<script src="js/lib.js"></script>
+<script src="js/eurostat-lib.js"></script>
 
-    <style>
-        body {
-            font-family: sans-serif;
-        }
+<style>
+body {
+	font-family: sans-serif;
+}
 
-        h1 {
-            font-size: 22px;
-        }
+h1 {
+	font-size: 22px;
+}
 
-        #disrect rect {
-            /*fill: peru;*/
-            stroke-width: 0.5;
-            stroke: lightgray;
-        }
+#disrect rect {
+	/*fill: peru;*/
+	stroke-width: 0.5;
+	stroke: lightgray;
+}
 
-        #timeslider label {
-            position: absolute;
-            width: 20px;
-            margin-top: 12px;
-            margin-left: -10px;
-            text-align: center;
-            font-size: 10px;
-        }
+#timeslider label {
+	position: absolute;
+	width: 20px;
+	margin-top: 12px;
+	margin-left: -10px;
+	text-align: center;
+	font-size: 10px;
+}
 
-        .chartLabels {
-            font-size: 14px;
-            /*fill: gray;*/
-        }
+.chartLabels {
+	font-size: 14px;
+	/*fill: gray;*/
+}
 
-        .arrow {
-            marker-end: url(#arrow);
-            stroke: gray;
-            stroke-width: 2.5px;
-        }
+.arrow {
+	marker-end: url(#arrow);
+	stroke: gray;
+	stroke-width: 2.5px;
+}
 
-        #averageLine {
-            stroke: black;
-            stroke-width: 2px;
-            opacity: 0.5;
-        }
+#averageLine {
+	stroke: black;
+	stroke-width: 2px;
+	opacity: 0.5;
+}
 
-        .graticuleYline {
-            stroke: black;
-            stroke-width: 2px;
-            opacity: 0.15;
-        }
+.graticuleYline {
+	stroke: black;
+	stroke-width: 2px;
+	opacity: 0.15;
+}
 
-        .ui-widget {
-            font-size: 12px !important;
-        }
+.ui-widget {
+	font-size: 12px !important;
+}
 
-        p {
-            font-size: 10px;
-        }
-    </style>
+p {
+	font-size: 10px;
+}
+</style>
 
 </head>
 
 <body>
-<h1>
-    <span id="title1"></span> - <span id="geoTitle">-</span> <span
-        id="title2"></span> <span id="timeTitle">-</span>
-</h1>
-<div
-        style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
-    <span id="countryText"></span>
-    <div id="geoListDiv">
-        <select name="geoN" id="geoList"></select>
-    </div>
-    <div style="margin-top: 5px;">
-        <span id="yearText"></span>
-        <div id="timeslider"></div>
-    </div>
-    <div id="info" style="width: 240px; margin-top: 25px;"></div>
-</div>
-<div id="chart"></div>
-<div>
-    <p>
-        <span id="sourceTxt"></span>
-    </p>
-</div>
+	<h1>
+		<span id="title1"></span> - <span id="geoTitle">-</span> <span
+			id="title2"></span> <span id="timeTitle">-</span>
+	</h1>
+	<div
+		style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
+		<span id="countryText"></span>
+		<div id="geoListDiv">
+			<select name="geoN" id="geoList"></select>
+		</div>
+		<div style="margin-top: 5px;">
+			<span id="yearText"></span>
+			<div id="timeslider"></div>
+		</div>
+		<div id="info" style="width: 240px; margin-top: 25px;"></div>
+	</div>
+	<div id="chart"></div>
+	<div>
+		<p>
+			<a href="income_distr_2.html"><span id="focusCntr"></span></a>
+		</p>
+		<p>
+			<span id="sourceTxt"></span>
+		</p>
+	</div>
 
-<script>
+	<script>
 
     /**
      *
@@ -143,7 +146,9 @@
                     twentieth:"twentieth",
                     twentyfifth:"twentyfifth",
                     tenth:"tenth",
-                    sourceTxt:"Sources: <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> databases on income distribution (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). More information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>here</a>."
+                    sourceTxt:"Sources: <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> databases on income distribution (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). More information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>here</a>.",
+                    focusCntr:"Focus on country comparison.",
+                    nodata:"No data"
                 },
                 fr:{
                     title:"Disparités de revenus en Europe",
@@ -171,7 +176,9 @@
                     twentieth:"vingtième",
                     twentyfifth:"vingtcinquième",
                     tenth:"dixième",
-                    sourceTxt:"Sources: Bases de données <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> sur la répartition des revenus (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). Plus d'information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>ici</a>."
+                    sourceTxt:"Sources: Bases de données <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> sur la répartition des revenus (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). Plus d'information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>ici</a>.",
+                    focusCntr:"Comparaison par pays.",
+                    nodata:"Pas de données"
                 }
             };
 
@@ -196,7 +203,7 @@
             var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
             //background rectangle
             chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"});
-            var noData = chart.append("g").attr("id","nodata").append("text").attr({x:width*0.5-30,y:height*0.5,"font-size":"18px"}).text("No data");
+            var noData = chart.append("g").attr("id","nodata").append("text").attr({x:width*0.5-35,y:height*0.5,"font-size":"18px"}).text(dict.nodata);
             var rects = chart.append("g").attr("id","disrect");
 
             //chart axis scales

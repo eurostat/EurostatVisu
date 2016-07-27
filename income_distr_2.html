@@ -43,6 +43,8 @@
             /*fill: gray;*/
         }
 
+        .svgCntr { cursor: pointer; }
+
         .arrow {
             marker-end: url(#arrow);
             stroke: gray;
@@ -99,14 +101,10 @@
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO darker backgrounds
+            //TODO "no data" anchor center
             //TODO change order - start with EU and EA, with other color ? See p35
-            //TODO link both visualisations
             //TODO handle country name translation in EstLib.overrideCountryNames
-            //TODO translate "no data"
-            //TODO flags. display country names?
             //TODO mouse over event
-            //TODO change icon shape on mouse over
 
             //get language
             var lg = PrVis.getLang2Chars();
@@ -139,7 +137,9 @@
                     twentieth:"twentieth",
                     twentyfifth:"twentyfifth",
                     tenth:"tenth",
-                    sourceTxt:"Sources: <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> databases on income distribution (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). More information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>here</a>."
+                    sourceTxt:"Sources: <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> databases on income distribution (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). More information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>here</a>.",
+                    focusCntr:"Focus on country comparison.",
+                    nodata:"No data"
                 },
                 fr:{
                     title:"Disparités de revenus en Europe",
@@ -167,7 +167,9 @@
                     twentieth:"vingtième",
                     twentyfifth:"vingtcinquième",
                     tenth:"dixième",
-                    sourceTxt:"Sources: Bases de données <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> sur la répartition des revenus (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). Plus d'information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>ici</a>."
+                    sourceTxt:"Sources: Bases de données <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> sur la répartition des revenus (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). Plus d'information <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>ici</a>.",
+                    focusCntr:"Comparaison par pays.",
+                    nodata:"Pas de donnée"
                 }
             };
 
@@ -184,8 +186,8 @@
             var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},F:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
 
             //dimensions
-            var margin = {top: 2, right: 2, bottom: 2, left: 2};
-            var width = 150 - margin.left - margin.right, height = 100 - margin.top - margin.bottom;
+            var margin = {top: 4, right: 4, bottom: 4, left: 4};
+            var width = 200 - margin.left - margin.right, height = 130 - margin.top - margin.bottom;
 
             //chart axis scales
             var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
@@ -286,7 +288,6 @@
                         geos.splice(geos.indexOf("EU27"),1);
                         geos.splice(geos.indexOf("NMS12"),1);
 
-
                         //build initial charts
                         for(var j=0; j<geos.length; j++) {
                             var geo = geos[j];
@@ -295,15 +296,17 @@
                             var svg = d3.select("#charts")
                                     .append("svg")
                                     .attr("id", "svg"+geo)
+                                    .attr("class", "svgCntr")
                                     .attr("width", width + margin.left + margin.right)
-                                    .attr("height", height + margin.top + margin.bottom);
+                                    .attr("height", height + margin.top + margin.bottom)
+                                    .attr("geo", geo).on("click", function() { window.open("income_distr.html?geo="+d3.select(this).attr("geo")+"&time="+timeSel, "_blank"); });
+
                             var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
 
                             //background rectangle
-                            chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#f5f5f5"})
-                                    .on("click", function() { window.open("income_distr.html?geo="+geo+"&time="+timeSel, "_blank"); });
+                            chart.append("rect").attr({y:0,x:0,width:width,height:height,fill:"#eee"});
 
-                            var noData = chart.append("g").attr("id","nodata"+geo).append("text").attr({x:width*0.5-30,y:height*0.5,"font-size":"14px"}).text("No data");
+                            var noData = chart.append("g").attr("id","nodata"+geo).append("text").attr({x:width*0.5-35,y:height*0.5+7,"font-size":"12px","font-weight":"bold"}).text(dict.nodata);
 
                             //rectangles
                             var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
@@ -324,10 +327,16 @@
                             //19th twentyfifth
                             addRect("F",24,90);
 
-                            svg.append("text").attr({x:5,y:17,"font-size":"12px"}).text(
+                            //country name title
+                            svg.append("text").attr({x:24,y:18,"font-size":"11px"}).text(
                                     data.Dimension("geo").Category(geo).label
                                     //geo
                             );
+
+                            //flag
+                            svg.append("svg:image")
+                            .attr("x",5).attr("y",5).attr('width', 15).attr('height', 15)
+                            .attr("xlink:href","img/flags/1/"+(geo.substring(0,2))+".png")
                         }
 
 
@@ -348,7 +357,14 @@
                                     rects.style("opacity", 1);
 
                                     rects.selectAll("rect").data(d3.keys(dataObj))
-                                            .transition().attr("y", function(d){
+                                        .on("mouseover", function() {
+                                            d3.select(this).attr("fill","darkred ");
+                                        })
+                                        .on("mouseout", function() {
+                                            d3.select(this).attr("fill","peru");
+                                        })
+                                    .transition()
+                                    .attr("y", function(d){
                                                 var value = dataObj[d], factor = 10.0/quantileDict[d.charAt(0)].percentage;
                                                 return yScale(value<0?yMax:yMax-factor*value);
                                             })
