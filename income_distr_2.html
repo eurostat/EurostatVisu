@@ -70,6 +70,17 @@
         p {
             font-size: 10px;
         }
+
+#info {	
+    opacity:0;
+    position: absolute;
+    padding: 10px;
+    background: white;
+    border: 0px;
+    border-radius: 10px;
+    font: 12px sans-serif;
+    pointer-events: none;
+}
     </style>
 
 </head>
@@ -79,16 +90,13 @@
     <span id="title1"></span> <span
         id="title2"></span> <span id="timeTitle">-</span>
 </h1>
-<div style="margin-bottom: 20px; margin-left: 10px;">
+<div style="padding-bottom: 20px; padding-left: 10px;">
     <span id="yearText"></span>
     <div id="timeslider"></div>
 </div>
 <div id="charts"></div>
-<div>
-    <p>
-        <span id="sourceTxt"></span>
-    </p>
-</div>
+<div><p><span id="sourceTxt"></span></p></div>
+<div id="info">Test</div>
 
 <script>
 
@@ -101,7 +109,6 @@
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO mouse over event
             //TODO "no data" anchor center
             //TODO change order - start with EU and EA, with other color ? See p35
             //TODO handle country name translation in EstLib.overrideCountryNames
@@ -250,6 +257,9 @@
                 return false;
             };
 
+            //info
+            var infoDiv = d3.select("#info");
+
             $.when(
                     //get income distribution data
                     $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
@@ -357,11 +367,37 @@
                                     rects.style("opacity", 1);
 
                                     rects.selectAll("rect").data(d3.keys(dataObj))
-                                        .on("mouseover", function() {
+                                        .on("mouseover", function(d) {
                                             d3.select(this).attr("fill","darkred ");
+
+                                            var html = [], value = dataObj[d], quantileNb = +d.substring(1,d.length), q = quantileDict[d.charAt(0)],
+                                            lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage;
+                                    if(value<0)
+                                        html.push(
+                                                "The income of the <b>", PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
+                                                " ", q.text, "</b> of the population with the ",
+                                                lowestIncome?"lowest":"highest", " income is <span style='color: crimson'>negative</span>: <b>",
+                                                value, "%</b> of the total country income."
+                                        );
+                                    else
+                                        html.push(
+                                                dict.incomeof, " <b>",
+                                                PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
+                                                " ", dict[q.text], "</b> ",dict.ofpopwith," ", lowestIncome?dict.lowest:dict.highest,
+                                                " ",dict.incomeis," <b>", value, "%</b> ",dict.oftotal,".<br>",
+                                                dict.ifincomewas," <b>", q.percentage, "%</b>. ",dict.thisincis," ",
+                                                coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
+                                                "<b>", Math.round(10*(coeff>1?coeff:1/coeff))/10, " ",dict.times," ",
+                                                coeff>1?dict.higher:dict.lower, "</b>", coeff>2||coeff<0.5?"</span>":"", " ",dict.thanav,"."
+                                        );
+
+                                            infoDiv.html(html.join(""))
+                                                .style("left", (d3.event.clientX+30) + "px").style("top", (d3.event.clientY-50) + "px")
+                                                .transition().duration(200).style("opacity",1);
                                         })
                                         .on("mouseout", function() {
                                             d3.select(this).attr("fill","peru");
+                                            infoDiv.text("").transition().duration(200).style("opacity",0);
                                         })
                                     .transition()
                                     .attr("y", function(d){
