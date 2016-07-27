@@ -11,7 +11,7 @@
 	EstLib.quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},F:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
 
 	//translation dictionnary
-    //TODO add german translation
+	//TODO add german translation
 	EstLib.dictIncomeDistr = {
 			en:{
 				title:"Income disparities in Europe",
@@ -75,6 +75,59 @@
 			}
 	};
 
+
+
+	//check presence of percentile data (if they are all equal to 0 and none is equal to null)
+	var percentileDataPresent = function(dataObj, first){
+		var nbs = first? [1,2,3,4,5] : [95,96,97,98,99,100], i;
+		for(i=0;i<nbs.length;i++) if(dataObj["P"+nbs[i]] == null) return false;
+		for(i=0;i<nbs.length;i++) if(dataObj["P"+nbs[i]] != 0) return true;
+		return false;
+	};
+
+	//build data array
+	EstLib.getDataObj = function(data, geo, time){
+		var dataObj = {}, i, obj = {currency:"EUR",indic_il:"SHARE",time:time,geo:geo,quantile:""};
+		//deciles
+		for(i=1;i<=10;i++) { obj.quantile="D"+i; dataObj[obj.quantile] = data.Data(obj)?data.Data(obj).value : 0; }
+		//first percentiles
+		for(i=1;i<=5;i++) { obj.quantile="P"+i; dataObj[obj.quantile] = data.Data(obj)?data.Data(obj).value : 0; }
+		//last percentiles
+		for(i=95;i<=100;i++) { obj.quantile="P"+i; dataObj[obj.quantile] = data.Data(obj)?data.Data(obj).value : 0; }
+		//compute second twentile as first decile value minus five first percentiles values
+		dataObj.T2 = dataObj.D1; for(i=1;i<=5;i++) dataObj.T2 -= dataObj["P"+i];
+		dataObj.T2 = Math.round(dataObj.T2*10)/10;
+		//compute 19th twentile value as last decile value, minus five last percentiles values
+		dataObj.F19 = dataObj.D10; for(i=95;i<=100;i++) dataObj.F19 -= dataObj["P"+i];
+		dataObj.F19 = Math.round(dataObj.F19*10)/10;
+		//remove decile data when corresponding percentiles are available
+		if(percentileDataPresent(dataObj, true)) {
+			dataObj.D1=0;
+		} else {
+			for(i=1;i<=5;i++) dataObj["P"+i] = 0;
+			dataObj.T2=0;
+		}
+		if(percentileDataPresent(dataObj, false)) {
+			dataObj.D10=0;
+		} else {
+			for(i=95;i<=100;i++) dataObj["P"+i] = 0;
+			dataObj.F19=0;
+		}
+		return dataObj;
+	};
+
+	//check presence of data (if at least one is defined and non null)
+	EstLib.dataPresence = function(dataObj){
+		for(var k in dataObj) {
+			var v = dataObj[k];
+			if(v != null && v != 0) return true;
+		}
+		return false;
+	};
+
+
+
+	//build the text to explain a chart rectangle corresponding to a quantile
 	EstLib.getRectText = function(d, value, lg){
 		var html = [], quantileNb = +d.substring(1,d.length), q = EstLib.quantileDict[d.charAt(0)],
 		lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage
