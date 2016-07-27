@@ -219,12 +219,12 @@
                         //build geolist
                         var geoList = $("#geoList");
                         var geos = data.Dimension("geo").id;
-                        EstLib.fillGeoList(geoList, geos, function(geo){return data.Dimension("geo").Category(geo).label;});
-                        $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
-                        geoList.selectmenu({
-                            change:function(){ geoSel=geoList.find(":selected").attr("value"); update(EstLib.getDataObj(data, geoSel, timeSel)); }
-                        })
-                                .selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
+
+                        EstLib.buildGeoList(geoList, geos, function(geo){
+                            return data.Dimension("geo").Category(geo).label;
+                        }, geoSel, function(){
+                            geoSel=geoList.find(":selected").attr("value"); update(EstLib.getDataObj(data, geoSel, timeSel));
+                        });
 
                         //build time slider
                         EstLib.buildTimeSlider($("#timeslider"), data.Dimension("time").id, timeSel, 5, function() {

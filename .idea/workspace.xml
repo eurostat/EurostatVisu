@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cfcae45b-7e92-42be-97b7-52340e352e3d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/eurostat-lib.js" afterPath="$PROJECT_DIR$/js/eurostat-lib.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/income_distr.html" afterPath="$PROJECT_DIR$/income_distr.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/income_distr_2.html" afterPath="$PROJECT_DIR$/income_distr_2.html" />
     </list>
     <ignored path="EurostatVisu.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,23 +24,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="income_distr.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/income_distr.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
-              <folding>
-                <marker date="1469652438208" expanded="true" signature="6420:6434" placeholder="..." />
-                <marker date="1469652438208" expanded="true" signature="6654:6668" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="income_distr_2.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="income_distr_2.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/income_distr_2.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2757353">
+            <state vertical-scroll-proportion="-6.25">
               <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -49,11 +36,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="income_distr.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="income_distr.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/income_distr.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.375">
-              <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.5514706">
+              <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="eurostat-lib.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/eurostat-lib.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="85" column="4" selection-start-line="85" selection-start-column="4" selection-end-line="85" selection-end-column="23" />
               <folding />
             </state>
           </provider>
@@ -105,11 +102,11 @@
         <option value="$PROJECT_DIR$/fr_income_map.html" />
         <option value="$PROJECT_DIR$/js/pr-eurostat-lib.js" />
         <option value="$PROJECT_DIR$/crisis_route.html" />
-        <option value="$PROJECT_DIR$/js/eurostat-lib.js" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/js/income_distr.js" />
-        <option value="$PROJECT_DIR$/income_distr.html" />
         <option value="$PROJECT_DIR$/income_distr_2.html" />
+        <option value="$PROJECT_DIR$/js/eurostat-lib.js" />
+        <option value="$PROJECT_DIR$/income_distr.html" />
       </list>
     </option>
   </component>
@@ -164,6 +161,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="EurostatVisu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EurostatVisu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="EurostatVisu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -517,14 +528,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/eurostat-lib.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18485916">
-          <caret line="34" column="4" selection-start-line="34" selection-start-column="4" selection-end-line="34" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider editor-type-id="MarkdownPreviewEditor">
         <state />
@@ -541,27 +544,35 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
           <folding>
-            <marker date="1469652438208" expanded="true" signature="6420:6434" placeholder="..." />
-            <marker date="1469652438208" expanded="true" signature="6654:6668" placeholder="..." />
+            <marker date="1469652438208" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1469652438208" expanded="true" signature="-1:-1" placeholder="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/income_distr.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.375">
-          <caret line="119" column="0" selection-start-line="119" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/income_distr_2.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2757353">
+        <state vertical-scroll-proportion="-6.25">
           <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/eurostat-lib.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="85" column="4" selection-start-line="85" selection-start-column="4" selection-end-line="85" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/income_distr.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5514706">
+          <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
