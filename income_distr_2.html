@@ -106,8 +106,8 @@
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO "no data" anchor center
             //TODO translate case negative data
+            //TODO clean styles
             //TODO change order - start with EU and EA, with other color ? See p35
             //TODO handle country name translation in EstLib.overrideCountryNames
 
@@ -123,9 +123,6 @@
 
             //write page title
             document.title = dict.title;
-
-            //some quantile data
-            var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},F:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
 
             //dimensions
             var margin = {top: 4, right: 4, bottom: 4, left: 4};
@@ -257,7 +254,7 @@
                             var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
                             var addRect = function(quantileType,quantileNb,pos){
                                 rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
-                                        .attr("width",xScale(quantileDict[quantileType].percentage)).attr("height",yScale(0))
+                                        .attr("width",xScale(EstLib.quantileDict[quantileType].percentage)).attr("height",yScale(0))
                                         .attr("fill","peru");
                             };
                             //deciles
@@ -273,10 +270,7 @@
                             addRect("F",24,90);
 
                             //country name title
-                            svg.append("text").attr({x:35,y:26,"font-size":"14px"}).text(
-                                    data.Dimension("geo").Category(geo).label
-                                    //geo
-                            );
+                            svg.append("text").attr({x:35,y:26,"font-size":"14px"}).text( data.Dimension("geo").Category(geo).label );
 
                             //flag
                             svg.append("svg:image")
@@ -301,44 +295,22 @@
 
                                 rects.selectAll("rect").data(d3.keys(dataObj))
                                         .on("mouseover", function(d) {
-                                            d3.select(this).attr("fill","darkred ");
-
-                                            var html = [], value = dataObj[d], quantileNb = +d.substring(1,d.length), q = quantileDict[d.charAt(0)],
-                                            lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage;
-                                    if(value<0)
-                                        html.push(
-                                                "The income of the <b>", PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
-                                                " ", q.text, "</b> of the population with the ",
-                                                lowestIncome?"lowest":"highest", " income is <span style='color: crimson'>negative</span>: <b>",
-                                                value, "%</b> of the total country income."
-                                        );
-                                    else
-                                        html.push(
-                                                dict.incomeof, " <b>",
-                                                PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
-                                                " ", dict[q.text], "</b> ",dict.ofpopwith," ", lowestIncome?dict.lowest:dict.highest,
-                                                " ",dict.incomeis," <b>", value, "%</b> ",dict.oftotal,".<br>",
-                                                dict.ifincomewas," <b>", q.percentage, "%</b>. ",dict.thisincis," ",
-                                                coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
-                                                "<b>", Math.round(10*(coeff>1?coeff:1/coeff))/10, " ",dict.times," ",
-                                                coeff>1?dict.higher:dict.lower, "</b>", coeff>2||coeff<0.5?"</span>":"", " ",dict.thanav,"."
-                                        );
-
-                                            infoDiv.html(html.join(""))
-                                                .style("left", (d3.event.clientX+30) + "px").style("top", (d3.event.clientY-50) + "px")
-                                                .transition().duration(200).style("opacity",1);
-                                        })
+                                			d3.select(this).attr("fill","darkred ");
+                                			infoDiv.html(EstLib.getRectText(d, dataObj[d], lg))
+                                			.style("left", (d3.event.clientX+30) + "px").style("top", (d3.event.clientY-50) + "px")
+                                			.transition().duration(200).style("opacity",1);
+                                		})
                                         .on("mouseout", function() {
                                             d3.select(this).attr("fill","peru");
                                             infoDiv.text("").transition().duration(200).style("opacity",0);
                                         })
                                     .transition()
                                     .attr("y", function(d){
-                                                var value = dataObj[d] || 0, factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                                var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
                                                 return yScale(value<0?yMax:yMax-factor*value);
                                             })
                                             .attr("height", function(d){
-                                                var value = dataObj[d] || 0, factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                                var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
                                                 return yScale(factor*Math.abs(value));
                                             });
                             }

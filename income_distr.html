@@ -104,7 +104,7 @@ h1 {
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO german translation
+            //TODO clean styles
             //TODO extract rect function and make 'small multiples' visualisation
             //TODO slider refresh
 
@@ -117,12 +117,8 @@ h1 {
             //try to fill page with translated terms
             PrVis.writeText(dict);
 
-
             //write page title
             document.title = dict.title;
-
-            //some quantile data
-            var quantileDict = {P:{percentage:1,text:"percent"},T:{percentage:5,text:"twentieth"},F:{percentage:4,text:"twentyfifth"},D:{percentage:10,text:"tenth"}};
 
             //build svg element
             var margin = {top: 0, right: 0, bottom: 40, left: 30};
@@ -145,7 +141,7 @@ h1 {
             //init chart
             var addRect = function(quantileType,quantileNb,pos){
                 rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
-                        .attr("width",xScale(quantileDict[quantileType].percentage)).attr("height",yScale(0))
+                        .attr("width",xScale(EstLib.quantileDict[quantileType].percentage)).attr("height",yScale(0))
                         .attr("fill","peru");
             };
             //deciles
@@ -299,27 +295,7 @@ h1 {
 
                             rects.selectAll("rect").data(d3.keys(dataObj))
                                         .on("mouseover", function(d) {
-                                            var html = [], value = dataObj[d], quantileNb = +d.substring(1,d.length), q = quantileDict[d.charAt(0)],
-                                                    lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage;
-                                            if(value<0)
-                                                html.push(
-                                                        "The income of the <b>", PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1),
-                                                        " ", q.text, "</b> of the population with the ",
-                                                        lowestIncome?"lowest":"highest", " income is <span style='color: crimson'>negative</span>: <b>",
-                                                        value, "%</b> of the total country income."
-                                                );
-                                            else
-                                                html.push(
-                                                        dict.incomeof, " <b>",
-                                                        PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
-                                                        " ", dict[q.text], "</b> ",dict.ofpopwith," ", lowestIncome?dict.lowest:dict.highest,
-                                                        " ",dict.incomeis," <b>", value, "%</b> ",dict.oftotal,".<br>",
-                                                        dict.ifincomewas," <b>", q.percentage, "%</b>. ",dict.thisincis," ",
-                                                        coeff>2||coeff<0.5?"<span style='color: crimson'>":"",
-                                                        "<b>", Math.round(10*(coeff>1?coeff:1/coeff))/10, " ",dict.times," ",
-                                                        coeff>1?dict.higher:dict.lower, "</b>", coeff>2||coeff<0.5?"</span>":"", " ",dict.thanav,"."
-                                                );
-                                            infoDiv.html(html.join(""));
+                                            infoDiv.html( EstLib.getRectText(d, dataObj[d], lg) );
                                             d3.select(this).attr("fill","darkred ");
                                         })
                                         .on("mouseout", function() {
@@ -327,11 +303,11 @@ h1 {
                                             d3.select(this).attr("fill","peru");
                                         })
                                         .transition().attr("y", function(d,i){
-                                            var value = dataObj[d] || 0, factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                            var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
                                             return yScale(value<0?yMax:yMax-factor*value);
                                         })
                                         .attr("height", function(d){
-                                            var value = dataObj[d] || 0, factor = 10.0/quantileDict[d.charAt(0)].percentage;
+                                            var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
                                             return yScale(factor*Math.abs(value));
                                         });
 
