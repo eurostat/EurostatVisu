@@ -1,117 +1,117 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf8" />
-<title>Income disparities in Europe</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+    <title>Income disparities in Europe</title>
 
-<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
 
-<script src="js/jquery-1.11.3.min.js"></script>
-<script src="js/jquery-ui.min.js"></script>
-<script src="js/d3.min.js"></script>
-<script src="js/colorbrewer.min.js"></script>
-<script src="js/moment.min.js"></script>
-<script src="js/json-stat.js"></script>
-<script src="js/lib.js"></script>
-<script src="js/eurostat-lib.js"></script>
-<script src="js/income_distr.js"></script>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/d3.min.js"></script>
+    <script src="js/colorbrewer.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/json-stat.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/eurostat-lib.js"></script>
+    <script src="js/income_distr.js"></script>
 
-<style>
-body {
-	font-family: sans-serif;
-}
+    <style>
+        body {
+            font-family: sans-serif;
+        }
 
-h1 {
-	font-size: 22px;
-}
+        h1 {
+            font-size: 22px;
+        }
 
-#disrect rect {
-	/*fill: peru;*/
-	stroke-width: 0.5;
-	stroke: lightgray;
-}
+        #disrect rect {
+            /*fill: peru;*/
+            stroke-width: 0.5;
+            stroke: lightgray;
+        }
 
-#timeslider label {
-	position: absolute;
-	width: 20px;
-	margin-top: 12px;
-	margin-left: -10px;
-	text-align: center;
-	font-size: 10px;
-}
+        #timeslider label {
+            position: absolute;
+            width: 20px;
+            margin-top: 12px;
+            margin-left: -10px;
+            text-align: center;
+            font-size: 10px;
+        }
 
-.chartLabels {
-	font-size: 14px;
-	/*fill: gray;*/
-}
+        .chartLabels {
+            font-size: 14px;
+            /*fill: gray;*/
+        }
 
-.arrow {
-	marker-end: url(#arrow);
-	stroke: gray;
-	stroke-width: 2.5px;
-}
+        .arrow {
+            marker-end: url(#arrow);
+            stroke: gray;
+            stroke-width: 2.5px;
+        }
 
-#averageLine {
-	stroke: black;
-	stroke-width: 2px;
-	opacity: 0.5;
-}
+        #averageLine {
+            stroke: black;
+            stroke-width: 2px;
+            opacity: 0.5;
+        }
 
-.graticuleYline {
-	stroke: black;
-	stroke-width: 2px;
-	opacity: 0.15;
-}
+        .graticuleYline {
+            stroke: black;
+            stroke-width: 2px;
+            opacity: 0.15;
+        }
 
-.ui-widget {
-	font-size: 12px !important;
-}
+        .ui-widget {
+            font-size: 12px !important;
+        }
 
-#timeslider {
-	width: 200px;
-}
+        #timeslider {
+            width: 200px;
+        }
 
-.nodataTxt {
-	opacity:0;
-    font-size: 18px;
-    font-weight:bold;
-    text-anchor:middle
-}
+        .nodataTxt {
+            opacity:0;
+            font-size: 18px;
+            font-weight:bold;
+            text-anchor:middle
+        }
 
-</style>
+    </style>
 
 </head>
 
 <body>
-	<h1>
-		<span id="title1"></span> - <span id="geoTitle">-</span> <span
-			id="title2"></span> <span id="timeTitle">-</span>
-	</h1>
-	<div style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
-		<span id="countryText"></span>
-		<div id="geoListDiv">
-			<select name="geoN" id="geoList"></select>
-		</div>
-		<div style="margin-top: 5px;">
-			<span id="yearText"></span>
-			<div id="timeslider"></div>
-		</div>
-		<div id="info" style="width: 240px; margin-top: 25px;"></div>
-	</div>
-	<div id="chart"></div>
-	<div>
-		<p><a id="linkdist2" href="income_distr_2.html"><span id="focusCntr"></span></a></p>
-		<p><span id="sourceTxt"></span></p>
-	</div>
+<h1>
+    <span id="title1"></span> - <span id="geoTitle">-</span> <span
+        id="title2"></span> <span id="timeTitle">-</span>
+</h1>
+<div style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
+    <span id="countryText"></span>
+    <div id="geoListDiv">
+        <select name="geoN" id="geoList"></select>
+    </div>
+    <div style="margin-top: 5px;">
+        <span id="yearText"></span>
+        <div id="timeslider"></div>
+    </div>
+    <div id="info" style="width: 240px; margin-top: 25px;"></div>
+</div>
+<div id="chart"></div>
+<div>
+    <p><a id="linkdist2" href="income_distr_2.html"><span id="focusCntr"></span></a></p>
+    <p><span id="sourceTxt"></span></p>
+</div>
 
-	<script>
+<script>
 
     /**
      *
      * @author julien Gaffuri
      *
      */
-     (function($, EstLib) {
+    (function($, EstLib) {
         $(function() {
             //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
@@ -198,7 +198,7 @@ h1 {
 
             //link to other visualisation
             d3.select("#linkdist2")
-            .on("click", function() { window.open("income_distr_2.html?"+"time="+timeSel+"&lang="+lg, "_blank"); });
+                    .on("click", function() { window.open("income_distr_2.html?"+"time="+timeSel+"&lang="+lg, "_blank"); });
 
             $.when(
                     //get income distribution data
@@ -227,8 +227,8 @@ h1 {
 
                         //build time slider
                         EstLib.buildTimeSlider($("#timeslider"), data.Dimension("time").id, timeSel, 5, function() {
-                        	timeSel= ""+$("#timeslider").slider("value");
-                        	update(EstLib.getDataObj(data, geoSel, timeSel));
+                            timeSel= ""+$("#timeslider").slider("value");
+                            update(EstLib.getDataObj(data, geoSel, timeSel));
                         });
 
                         //update the chart
@@ -244,22 +244,22 @@ h1 {
                             }
 
                             rects.selectAll("rect").data(d3.keys(dataObj))
-                                        .on("mouseover", function(d) {
-                                            infoDiv.html( EstLib.getRectText(d, dataObj[d], lg) );
-                                            d3.select(this).attr("fill","darkred ");
-                                        })
-                                        .on("mouseout", function() {
-                                            infoDiv.text("");
-                                            d3.select(this).attr("fill","peru");
-                                        })
-                                        .transition().attr("y", function(d,i){
-                                            var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
-                                            return yScale(value<0?yMax:yMax-factor*value);
-                                        })
-                                        .attr("height", function(d){
-                                            var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
-                                            return yScale(factor*Math.abs(value));
-                                        });
+                                    .on("mouseover", function(d) {
+                                        infoDiv.html( EstLib.getRectText(d, dataObj[d], lg) );
+                                        d3.select(this).attr("fill","darkred ");
+                                    })
+                                    .on("mouseout", function() {
+                                        infoDiv.text("");
+                                        d3.select(this).attr("fill","peru");
+                                    })
+                                    .transition().attr("y", function(d,i){
+                                        var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
+                                        return yScale(value<0?yMax:yMax-factor*value);
+                                    })
+                                    .attr("height", function(d){
+                                        var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
+                                        return yScale(factor*Math.abs(value));
+                                    });
 
                             //select geoSel in list
                             $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
@@ -275,7 +275,7 @@ h1 {
                     }
             );
         });
-     }(jQuery, window.EstLib = window.EstLib || {} ));
+    }(jQuery, window.EstLib = window.EstLib || {} ));
 
 </script>
 
