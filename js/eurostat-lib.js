@@ -7,6 +7,12 @@
  */
 (function($, EstLib) {
 
+	//colors library of Eurostat
+	EstLib.color = {
+			logo:{gray:"#787878",blue:"#004494",yellow:"#FFF100"},
+			theme:{genreg:"#466eb4",ecofin:"#af4b91",popsoc:"#e6a532",indtradserv:"#00a0e1",agrifish:"#7daf4b",trade:"#b93c46",transp:"#961e2d",envener:"#41afaa",scitech:"#d7642d"}
+	}
+
 	EstLib.getEstatRestDataURLBase = "http://ec.europa.eu/eurostat/wdds/rest/data/";
 	EstLib.getEstatDataURL = function(table, params, language, format, version){
 		language = language || "en";
@@ -91,8 +97,10 @@
 			.selectmenu("menuWidget").css("height",(height||200)+"px");
 	};
 
+	//conversion from country codes 3 to 2
 	EstLib.countryCodes3To2 = {AUT:"AT",BEL:"BE",CHE:"CH",CYP:"CY",CZE:"CZ",DEU:"DE",EST:"EE",GRC:"EL",HRV:"HR",FRA:"FR",HUN:"HU",IRL:"IE",ISL:"IS",LTU:"LT",LUX:"LU",LVA:"LV",MKD:"MK",MLT:"MT",NLD:"NL",NOR:"NO",SVN:"SI",BGR:"BG",DNK:"DK",ESP:"ES",POL:"PL",ITA:"IT",PRT:"PT",ROU:"RO",ROM:"RO",SVK:"SK",FIN:"FI",SWE:"SE",GBR:"UK",TUR:"TR",MNE:"ME",SRB:"RS",USA:"US"};
 
+	//build a time slider element
 	EstLib.buildTimeSlider = function(sli, times, timeValue, labelInterval, changeFun){
 		sli.slider({
 			min: +times[0],
@@ -108,6 +116,5 @@
 				sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
 		});
 	};
-
 
 }(jQuery, window.EstLib = window.EstLib || {} ));
