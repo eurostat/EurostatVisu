@@ -4,15 +4,17 @@
 	<meta charset="ISO-8859-1">
 	<title>COICOP</title>
 
-	<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
-	<link rel="stylesheet" type="text/css" href="css/prvis.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
 
-	<script src="js/jquery-1.11.3.min.js"></script>
-	<script src="js/jquery-ui.min.js"></script>
-	<script src="js/d3.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
 	<script src="js/colorbrewer.min.js"></script>
-	<script src="js/moment.min.js"></script>
-	<script src="js/json-stat.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+    <script src="js/json-stat.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/prvis.css">
 	<script src="js/lib.js"></script>
 	<script src="js/eurostat-lib.js"></script>
 	<script src="js/pr-eurostat-lib.js"></script>
@@ -31,18 +33,14 @@
 
 <div style="margin-top: 10px;">
 	<div>
-		<div id="ctype" style="float: left; margin-right: 20px;">
+		<div id="ctype" style="float: left; margin-right: 20px; margin-top: 10px;">
 			<input type="radio" name="ctype" id="CP00" value="CP00" checked>
-			<label for="CP00">COICOP classification</label> <input type="radio"
-																   name="ctype" id="SA" value="SA"> <label for="SA">ECB
-			classification</label>
+			<label for="CP00">COICOP classification</label> <input type="radio" name="ctype" id="SA" value="SA"> <label for="SA">ECB classification</label>
 		</div>
 
 		<div id="modeR" style="margin-top: 10px;">
 			<input type="radio" name="modeR" id="size" value="size" checked>
-			<label for="size">Product weights</label> <input type="radio"
-															 name="modeR" id="count" value="count"> <label for="count">Equalised
-			hierarchy</label>
+			<label for="size">Product weights</label> <input type="radio" name="modeR" id="count" value="count"> <label for="count">Equalised hierarchy</label>
 		</div>
 	</div>
 
@@ -68,6 +66,7 @@
 	(function($) {
 		$(function() {
 
+			//TODO remove radio circles
 			//TODO show flags
 			//TODO do something when no data
 			//TODO fill empty spaces ?
