@@ -515,11 +515,11 @@
 						geoDict = geos.dimension.geo.category.label;
 						EstLib.overrideCountryNames(geoDict);
 						geos = JSONstat(geos).Dataset(0);
-						EstLib.fillGeoList(geoList, geos.Dimension("geo").id, function(geo){return geoDict[geo];});
-						geoList.selectmenu({
-							change : function(){ updateAddRemButtonText(); },
-							width:800
-						}).selectmenu("menuWidget").css("height","200px");
+
+						//build geo list
+						EstLib.buildGeoList(geoList, geos.Dimension("geo").id, function(geo){return geoDict[geo];}, null, function(){
+							updateAddRemButtonText();
+						}, 800, 200);
 
 						//get time info
 						months = months[0];

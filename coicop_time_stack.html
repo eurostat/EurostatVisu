@@ -131,16 +131,13 @@
 						cType.buttonset();
 
 						//build geolist
-						EstLib.fillGeoList(geoList, geoDim.id, function(geo){return geoDim.Category(geo).label;});
 						var geoURL = PrVis.getParameterByName("geo") || "EA";
-						$('#geoList option[value="'+geoURL+'"]').attr('selected', 'selected');
-						geoList.selectmenu({
-							change:function(){
-								$("#geoTXT").text( geoDim.Category(geoList.find(":selected").attr("value")).label );
-								updateChart();
-							}
-						})
-								.selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
+						EstLib.buildGeoList(geoList, geoDim.id, function(geo){return geoDim.Category(geo).label;}, geoURL, function(){
+							$("#geoTXT").text( geoDim.Category(geoList.find(":selected").attr("value")).label );
+							updateChart();
+						});
+
+						//title geo text
 						$("#geoTXT").text( geoDim.Category(geoList.find(":selected").attr("value")).label );
 
 						var updateChart = function(){

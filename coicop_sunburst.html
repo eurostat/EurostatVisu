@@ -189,40 +189,20 @@
 						$("#modeR").buttonset();
 
 						//build geolist
-						EstLib.fillGeoList(geoList, geos, function(geo){return ds.Dimension("geo").Category(geo).label;});
-						$('#geoList option[value="EA"]').attr('selected', 'selected');
-						geoList.selectmenu({
-							change:function(){
-								$("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
-								updateChart();
-							}
-						})
-								.selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
-						$("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
+						EstLib.buildGeoList(geoList, geos, function(geo){return ds.Dimension("geo").Category(geo).label;}, "EA", function(){
+							$("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
+							updateChart();
+						}, 300);
 
 						//build years slider
-						sli.slider({
-							min: +years[0],
-							max: +years[years.length-1],
-							step: 1,
-							value: years[years.length-1],
-							change: function( event, ui ) {
-								$("#yearTXT").text(sli.slider("value"));
-								updateChart();
-							},
-							slide: function( event, ui ) { //TODO work well???
-								$("#yearTXT").text(sli.slider("value"));
-								updateChart();
-							}
-						}).each(function() {
-							//add labels
-							var opt = $(this).data().uiSlider.options;
-							var www = opt.max - opt.min;
-							for (var i = 1996; i <= opt.max; i+=opt.step)
-								sli.append( $('<label>' + i + '</label>').css('left', ((i-opt.min)/www*100) + '%') );
+						EstLib.buildTimeSlider(sli, years, years[years.length-1], 1, function( event, ui ) {
+							$("#yearTXT").text(sli.slider("value"));
+							updateChart();
 						});
-						$("#yearTXT").text(sli.slider("value"));
 
+						//fill text
+						$("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
+						$("#yearTXT").text(sli.slider("value"));
 
 						var updateChart_ = function(data,year,geo){
 							//build data structure

@@ -510,13 +510,11 @@
 						geoDict = geos.dimension.geo.category.label;
 						EstLib.overrideCountryNames(geoDict);
 						geos = JSONstat(geos).Dataset(0);
-						EstLib.fillGeoList(geoList, geos.Dimension("geo").id, function(geo){return geoDict[geo];});
-						geoList.val("AT");
-						geoList.selectmenu({
-							change : function(){ updateAddRemButtonText(); },
-							width:800,
-							value : "AT"
-						}).selectmenu("menuWidget").css("height","200px");
+
+						//build geo list
+						EstLib.buildGeoList(geoList, geos.Dimension("geo").id, function(geo){return geoDict[geo];}, "AT", function(){
+							updateAddRemButtonText();
+						}, 800, 200);
 
 						//get time info
 						months = months[0];

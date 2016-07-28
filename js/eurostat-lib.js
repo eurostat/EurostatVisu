@@ -56,9 +56,8 @@
 	};
 
 
-	//fill a selection list with geo + aggregates
-	//DEPRECATED - use next one?
-	EstLib.fillGeoList = function(geoList, geos, geoToNameFun){
+	//build geolist
+	EstLib.buildGeoList = function(geoList, geos, geoToNameFun, geoValue, changeFun, width, height){
 		geoToNameFun = geoToNameFun || function(a){return a;};
 
 		//sort by name
@@ -81,14 +80,11 @@
 		var optgroupC = $("<optgroup>").attr("label", "Countries").appendTo(geoList);
 		for(i=0; i<geosC.length; i++)
 			$("<option>").attr("value",geosC[i]).text( geoToNameFun(geosC[i]) ).appendTo(optgroupC);
-	};
 
-	EstLib.buildGeoList = function(geoList, geos, geoToNameFun, geoValue, changeFun){
-		EstLib.fillGeoList(geoList, geos, geoToNameFun);
 		$('#geoList option[value='+geoValue+']').attr('selected', 'selected');
 		geoList
-			.selectmenu({change:changeFun})
-			.selectmenu("menuWidget").css("height","200px")/*.css("font-size","70%")*/;
+			.selectmenu({change:changeFun,width:width||"auto"})
+			.selectmenu("menuWidget").css("height",(height||200)+"px");
 	};
 
 
