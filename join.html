@@ -7,7 +7,7 @@
     <title>Join test</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
 
     <style>
         body {
@@ -25,12 +25,10 @@
 
     (function($) {
         $(function() {
-            //https://bl.ocks.org/mbostock/3808218
             //https://bost.ocks.org/mike/join/
+            //https://bl.ocks.org/mbostock/3808218
 
-            var svg = d3.select("#join").append("svg").attr("width", 100).attr("height", 100)
-            //.append("g").attr("transform", "translate(0,0)")
-                    ;
+            var svg = d3.select("#join").append("svg").attr("width", 500).attr("height", 500);
 
             function update(data) {
 
@@ -41,14 +39,13 @@
                 //circle. ...
 
                 // ENTER: Create new elements as needed.
-                circle.enter().append("circle")
+                circle.enter()
+                        .append("circle")
                         .attr("cx", 0)
                         .attr("cy", 0)
                         .attr("r", 0)
-                ;
-
-                // ENTER + UPDATE
-                circle
+                        // ENTER + UPDATE: After merging the entered elements with the update selection, apply operations to both.
+                        .merge(circle)
                         .transition()
                         .attr("cx", function(d) { return d.x; })
                         .attr("cy", function(d) { return d.y; })
@@ -57,19 +54,27 @@
 
                 // EXIT: Remove old elements as needed.
                 circle.exit().transition().attr("r", 0).remove();
+
             }
 
-            var data = [{x:10,y:15},{x:43,y:22},{x:97,y:7},{x:13,y:67},{x:45,y:38}];
+            var data = [{x:50,y:15},{x:43,y:22},{x:97,y:7},{x:13,y:67},{x:475,y:226},{x:150,y:440},{x:50,y:220}];
             update(data);
 
 
             setTimeout(function() {
                 //add new, change existing, remove one
-                data.push({x:30,y:45});
-                data[2].x = 7; data[2].y = 37;
+                data.push({x:300,y:450});
+                data[2].x = 70; data[2].y = 317;
                 data.splice(3,1); data.splice(0,1);
                 update(data);
-            }, (1*1000));
+ 
+                setTimeout(function() {
+                    //add new, change existing, remove one
+                    data.splice(3,1); data.splice(0,1);
+                    update(data);
+                }, (2000));
+
+            }, (2000));
 
         });
     }(jQuery));
