@@ -7,7 +7,7 @@
 	<title>Zoom + Pan</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="js/lib.js"></script>
 
 	<script>
@@ -42,13 +42,12 @@
 		      .attr("cy", function(d) { return d[1]; })
 		      .attr("r", 2.5);
 
-
 			//add zoom/pan behaviour
 			svg.append("rect")
-					.attr("width", width).attr("height", height)
-					.style("fill", "none").style("pointer-events", "all")
-					.call(d3.behavior.zoom().scaleExtent([0.25,4])
-							.on("zoom", function() { g.attr("transform", "translate(" + (d3.event.translate) + ")scale(" + (d3.event.scale) + ")"); }));
+			    .attr("width", width).attr("height", height)
+			    .style("fill", "none").style("pointer-events", "all")
+			    .call(d3.zoom().scaleExtent([0.25,4])
+			    		.on("zoom", function() { g.attr("transform", d3.event.transform); }));
 
 		});
 
