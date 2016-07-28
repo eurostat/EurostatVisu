@@ -8,7 +8,7 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script src="js/colorbrewer.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
   <script src="js/lib.js"></script>
 
   <style>
@@ -88,11 +88,10 @@
       };
 
       //returns the color of coicop family
-      var color = colorbrewer.Set3[12];
       var coicopToColor = function(coicop){
         var fam = coicop.substring(0,2);
         if(fam==="00") return "gray";
-        return color[+(fam)-1];
+        return d3.schemeSet3[+(fam)-1];
       };
 
       var project = function(x, y) {

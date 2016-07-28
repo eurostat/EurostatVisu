@@ -32,12 +32,14 @@
 	};
 
 	//override country names, to shoter ones
-	EstLib.overrideCountryNames = function(dict){
-		if(dict.EA) dict.EA = "Euro area";
-		if(dict.EU) dict.EU = "European Union";
-		if(dict.EEA) dict.EEA = "European Economic Area";
-		if(dict.DE) dict.DE = "Germany";
-		if(dict.MK) dict.MK = "Macedonia (FYRM)";
+	EstLib.overrideCountryNames = function(dict, lg){
+		lg = lg || "en";
+		var data;
+		if(dict.EA) dict.EA = {en:dict.EA,fr:dict.EA,de:dict.EA}[lg];
+		if(dict.EU) dict.EU = {en:"European Union", fr:"Union européenne", de:"Europäische Union"}[lg];
+		if(dict.EEA) dict.EEA = {en:"European Economic Area", fr:"Espace économique européen", de:"Europäischer Wirtschaftsraum"}[lg];
+		if(dict.DE) dict.DE = {en:"Germany", fr:"Allemagne", de:"Deutschland"}[lg];
+		if(dict.MK) dict.MK = {en:"Macedonia (FYRM)", fr:"Macédoine", de:"Mazedonien"}[lg];//"Macedonia (FYRM)";
 	};
 
 	EstLib.isGeoAggregate = function(geo){
