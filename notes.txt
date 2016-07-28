@@ -1,4 +1,5 @@
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
+zoom with d3.v4
 adopt d3.v4
 use cdn
 favicon
