@@ -12,4 +12,6 @@ show COCIOP hierarchy sunburst
 generic map for Eurostat
 flow map: transport, trade, migration (migr)
 
-sunburst for NACE code ?
+sunburst for NACE codelist?
+
+Try http://bl.ocks.org/jgaffuri
