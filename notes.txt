@@ -3,7 +3,6 @@ delete css
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
 join and zoom with d3.v4
 adopt d3.v4 everywhere
-favicon
 
 force page reload
 
