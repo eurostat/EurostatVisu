@@ -41,7 +41,7 @@
 	EstLib.overrideCountryNames = function(dict, lg){
 		lg = lg || "en";
 		var data;
-		if(dict.EA) dict.EA = {en:dict.EA,fr:dict.EA,de:dict.EA}[lg];
+		if(dict.EA) dict.EA = {en:"Euro area",fr:"Zone euro",de:"Euroraum"}[lg];
 		if(dict.EU) dict.EU = {en:"European Union", fr:"Union européenne", de:"Europäische Union"}[lg];
 		if(dict.EEA) dict.EEA = {en:"European Economic Area", fr:"Espace économique européen", de:"Europäischer Wirtschaftsraum"}[lg];
 		if(dict.DE) dict.DE = {en:"Germany", fr:"Allemagne", de:"Deutschland"}[lg];
