@@ -55,6 +55,8 @@
 		}
 	};
 
+	EstLib.geoOrderedList = ["EU","EU28","EU27","EU15","EA","EA19","EA18","NMS12","EA17","EA12","BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO","SI","SK","FI","SE","UK","IS","LI","NO","CH","ME","MK","AL","RS","TR","US","JP","MX"];
+	EstLib.geoComparisonEstatPublications = function(g1, g2) { return EstLib.geoOrderedList.indexOf(g1) - EstLib.geoOrderedList.indexOf(g2); };
 
 	//build geolist
 	EstLib.buildGeoList = function(geoList, geos, geoToNameFun, geoValue, changeFun, width, height){
@@ -87,46 +89,7 @@
 			.selectmenu("menuWidget").css("height",(height||200)+"px");
 	};
 
-
-	EstLib.countryCodes3To2 = {
-		AUT : "AT",
-		BEL : "BE",
-		CHE : "CH",
-		CYP : "CY",
-		CZE : "CZ",
-		DEU : "DE",
-		EST : "EE",
-		GRC : "EL",
-		HRV : "HR",
-		FRA : "FR",
-		HUN : "HU",
-		IRL : "IE",
-		ISL : "IS",
-		LTU : "LT",
-		LUX : "LU",
-		LVA : "LV",
-		MKD : "MK",
-		MLT : "MT",
-		NLD : "NL",
-		NOR : "NO",
-		SVN : "SI",
-		BGR : "BG",
-		DNK : "DK",
-		ESP : "ES",
-		POL : "PL",
-		ITA : "IT",
-		PRT : "PT",
-		ROU : "RO",
-		ROM : "RO",
-		SVK : "SK",
-		FIN : "FI",
-		SWE : "SE",
-		GBR : "UK",
-		TUR : "TR",
-		MNE : "ME",
-		SRB : "RS",
-		USA : "US"
-	};
+	EstLib.countryCodes3To2 = {AUT:"AT",BEL:"BE",CHE:"CH",CYP:"CY",CZE:"CZ",DEU:"DE",EST:"EE",GRC:"EL",HRV:"HR",FRA:"FR",HUN:"HU",IRL:"IE",ISL:"IS",LTU:"LT",LUX:"LU",LVA:"LV",MKD:"MK",MLT:"MT",NLD:"NL",NOR:"NO",SVN:"SI",BGR:"BG",DNK:"DK",ESP:"ES",POL:"PL",ITA:"IT",PRT:"PT",ROU:"RO",ROM:"RO",SVK:"SK",FIN:"FI",SWE:"SE",GBR:"UK",TUR:"TR",MNE:"ME",SRB:"RS",USA:"US"};
 
 	EstLib.buildTimeSlider = function(sli, times, timeValue, labelInterval, changeFun){
 		sli.slider({
