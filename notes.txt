@@ -9,4 +9,6 @@ Try http://bl.ocks.org/jgaffuri
 
 http://ec.europa.eu/eurostat/help/first-visit/tools
 prom
-better use estat colors?
+
+use more estat colors
+use more translation pattern

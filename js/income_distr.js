@@ -135,7 +135,7 @@
     EstLib.getRectText = function(d, value, lg){
         var html = [], quantileNb = +d.substring(1,d.length), q = EstLib.quantileDict[d.charAt(0)],
             lowestIncome = 100/(quantileNb*q.percentage) >= 2, coeff = value/q.percentage
-        dict = EstLib.dictIncomeDistr[lg];
+        dict = EstLib.dictIncomeDistr[lg] || EstLib.dictIncomeDistr.en;
         html.push(
             dict.incomeof, " <b>",
             EstLib.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
