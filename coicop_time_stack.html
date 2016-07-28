@@ -7,21 +7,44 @@
 	<title>COICOP</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script   src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
 	<script src="js/colorbrewer.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script src="js/json-stat.js"></script>
 
 	<script src="js/lib.js"></script>
 	<script src="js/eurostat-lib.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="css/prvis.css">
 	<script src="js/pr-eurostat-lib.js"></script>
 	<script src="js/pr-coicop-dict.js"></script>
+
+    <style>
+body {
+	font-family: Arial;
+	font-size: 80%;
+}
+
+table,th,td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+#timeslider label {
+	position: absolute;
+	width: 20px;
+	margin-top: 20px;
+	margin-left: -10px;
+	text-align: center;
+}
+
+.ui-widget {
+	font-size: 90% !important;
+}
+    </style>
+
 </head>
 
 <body>

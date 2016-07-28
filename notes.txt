@@ -1,10 +1,7 @@
-use cdn everywhere and clean
-delete css
+force page reload
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
 join and zoom with d3.v4
 adopt d3.v4 everywhere
-
-force page reload
 
 <iframe width="100%" height="750px" src="http://www.neighbourhood.statistics.gov.uk/HTMLDocs/dvc221/longevity.html" scrolling="no" frameborder="0"/>
 <iframe src="http://ec.europa.eu/eurostat/cache/infographs/youth/index_en.html" height="768" width="1024"></iframe>
