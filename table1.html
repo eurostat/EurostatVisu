@@ -4,9 +4,9 @@
 	<meta charset="ISO-8859-1">
 	<title>HICP tables</title>
 	<link rel="stylesheet" type="text/css" href="css/prvis.css">
-	<script src="js/jquery-1.11.3.min.js"></script>
-	<script src="js/d3.min.js"></script>
-	<script src="js/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+
 	<script src="js/json-stat.js"></script>
 	<script src="js/html2canvas.js"></script>
 	<script src="js/lib.js"></script>
@@ -109,7 +109,7 @@
 							//get weight data
 							var coicop = coicops[i];
 							var d = weightData.Data({coicop:coicop});
-							var value = d? d3.round(d.value, 1) + (d.status||"") : ":";
+							var value = d? (+d.value).toFixed(2) + (d.status||"") : ":";
 
 							//fill table cell
 							$("#w"+coicop).text(value).removeAttr("id");
@@ -141,7 +141,7 @@
 
 								//get ROC data
 								d = rocData.Data({coicop:coicop,time:month});
-								value = d? d3.round(d.value, 1).toFixed(1) + (d.status||"") : ":";
+								value = d? (+d.value).toFixed(1) + (d.status||"") : ":";
 
 								//last month in bold
 								if(j==(months.length-1)) value = "<b>"+value+"</b>";
