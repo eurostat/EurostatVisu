@@ -4,14 +4,16 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
     <title>Income disparities in Europe</title>
 
-    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-    <script src="js/jquery-1.11.3.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/colorbrewer.min.js"></script>
-    <script src="js/moment.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!-- <script src="js/colorbrewer.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script src="js/json-stat.js"></script>
+
     <script src="js/lib.js"></script>
     <script src="js/eurostat-lib.js"></script>
     <script src="js/income_distr.js"></script>
@@ -137,9 +139,9 @@
                     height = 130 - margin.top - margin.bottom;
 
             //chart axis scales
-            var xScale = d3.scale.linear().domain([0,100]).range([0, width]);
+            var xScale = d3.scaleLinear().domain([0,100]).range([0, width]);
             var yMax = 75;
-            var yScale = d3.scale.linear().domain([0,yMax]).range([0, height]);
+            var yScale = d3.scaleLinear().domain([0,yMax]).range([0, height]);
 
             //the selection
             var timeSel = PrVis.getParameterByName("time") || "2014";
@@ -191,11 +193,15 @@
                             var chart = svg.append("g").attr("transform", "translate("+(margin.left)+","+(margin.top)+ ")");
 
                             //background rectangle
-                            chart.append("rect").attr({x:-rnd,y:-rnd,rx:rnd,ry:rnd,width:width+2*rnd,height:height+2*rnd,"class":"bckRect"});
+                            chart.append("rect")
+                                .attr("width",width+2*rnd).attr("height",height+2*rnd)
+                                .attr("x",-rnd).attr("y",-rnd)
+                                .attr("rx",rnd).attr("ry",rnd)
+                                .attr("class","bckRect");
 
                             //no data
                             chart.append("g").attr("id","nodata"+geo).attr("class","nodataTxt")
-                                    .append("text").attr({x:width*0.5,y:height*0.5+7}).text(dict.nodata);
+                                .append("text").attr("x",width*0.5).attr("y",height*0.5+7).text(dict.nodata);
 
                             //rectangles
                             var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
@@ -216,7 +222,7 @@
                             addRect("F",24,90);
 
                             //country name title
-                            chart.append("text").attr({x:22,y:16,"class":"cntrLbl"}).text( data.Dimension("geo").Category(geo).label );
+                            chart.append("text").attr("x",22).attr("y",16).attr("class","cntrLbl").text( data.Dimension("geo").Category(geo).label );
 
                             //flag
                             chart.append("svg:image")
