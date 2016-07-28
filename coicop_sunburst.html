@@ -88,7 +88,7 @@ table,th,td {
 	 * @author julien Gaffuri
 	 *
 	 */
-	(function($) {
+	(function($, EstLib) {
 		$(function() {
 
 			//TODO remove radio circles
@@ -98,7 +98,7 @@ table,th,td {
 			//TODO coicop 5
 
 			//
-			PrVis.modifyCoicopHierarchy();
+			EstLib.modifyCoicopHierarchy();
 
 			//size
 			var r = 350;
@@ -119,8 +119,8 @@ table,th,td {
 				}
 			};
 			var getFamCode = function(coicop){
-				if( $.inArray(coicop, PrVis.coicopsDict["SA"].children)>=0 ) return coicop;
-				var parents = PrVis.coicopsDict[coicop].parents;
+				if( $.inArray(coicop, EstLib.coicopsDict["SA"].children)>=0 ) return coicop;
+				var parents = EstLib.coicopsDict[coicop].parents;
 				if(parents.length == 0) return;
 				for(var i=0; i<parents.length; i++){
 					var out = getFamCode(parents[i]);
@@ -152,7 +152,7 @@ table,th,td {
 				if($("input:radio[name=ctype]:checked").val() === "CP00"){
 					var mouseoverFun = function() { highlightCoicop($(this).attr("id").replace("lgdElt","")); };
 					var mouseoutFun = function() { unHighlightCoicop($(this).attr("id").replace("lgdElt","")); };
-					PrVis.buildCOICOPLegend(lgd, coicopToColor, mouseoverFun, mouseoutFun);
+					EstLib.buildCOICOPLegend(lgd, coicopToColor, mouseoverFun, mouseoutFun);
 				} else {}
 				//info
 				infoDiv = $("<div>").appendTo(lgd).css("font-size","1.5em").css("margin-top","10px")/*.css("border","solid 1px").css("width","auto")*/;
@@ -163,7 +163,7 @@ table,th,td {
 				$("#arc"+coicop).attr("fill","red");
 				if($("input:radio[name=ctype]:checked").val() === "CP00") $("#lgdEltRect"+coicop.substring(0,4)).css("fill","red");
 				var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][coicop];
-				var html = PrVis.coicopsDict[coicop].desc + " (" + coicop + ")";
+				var html = EstLib.coicopsDict[coicop].desc + " (" + coicop + ")";
 				if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#8240;";
 				infoDiv.html(html);
 			};
@@ -233,7 +233,7 @@ table,th,td {
 							var root = {};
 							var buildDatasetRec = function(code, obj){
 								obj.name = code;
-								var children = PrVis.coicopsDict[code].children.sort();
+								var children = EstLib.coicopsDict[code].children.sort();
 								if(children.length>0){
 									obj.children = [];
 									for(var i=0; i<children.length; i++){
@@ -275,7 +275,7 @@ table,th,td {
 									.enter().append("text")
 									.attr("transform", function(d) {
 										var angle = 0;
-										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, PrVis.coicopsDict["SA"].children)<0;
+										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)<0;
 										if(lev){
 											var v = data? data[d.name] : 0;
 											angle = (d.x + d.dx*0.5) * 180/Math.PI;
@@ -288,26 +288,26 @@ table,th,td {
 									.attr("dy", ".35em")
 									.style("text-anchor", "middle")
 									.style("font-weight", function(d) {
-										var lev = rootLabelC? Math.min(d.name.length-4,2) == 0 : $.inArray(d.name, PrVis.coicopsDict["SA"].children)>=0;
+										var lev = rootLabelC? Math.min(d.name.length-4,2) == 0 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)>=0;
 										if(lev) return "bold";
 									})
 									.style("fill", function(d) {
-										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, PrVis.coicopsDict["SA"].children)<0;
+										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)<0;
 										if(lev) return "#555";
 									})
 									.style("font-size", function(d) {
-										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, PrVis.coicopsDict["SA"].children)<0;
+										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)<0;
 										if(lev) return "10";
 									})
 									.html(function(d) {
 										if(d.name==="CP00" || d.name==="SA") return;
-										var lev = rootLabelC? Math.min(d.name.length-4,2) == 0 : $.inArray(d.name, PrVis.coicopsDict["SA"].children)>=0;
+										var lev = rootLabelC? Math.min(d.name.length-4,2) == 0 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)>=0;
 										if(lev && !data) return d.name;
 										if(!data) {
 											return d.name;
 										}
 										var v = data[d.name];
-										if(lev) return (rootLabelC? d.name : PrVis.coicopsDict[d.name].desc) + "<tspan x=\"0\" dy=\"1.2em\">" + d3.round(v,1).toFixed(1) + " &#8240;</tspan>";
+										if(lev) return (rootLabelC? d.name : EstLib.coicopsDict[d.name].desc) + "<tspan x=\"0\" dy=\"1.2em\">" + d3.round(v,1).toFixed(1) + " &#8240;</tspan>";
 										if(v>5) return d.name;
 									})
 									.on("mouseover", function(d) { highlightCoicop(d.name); })
@@ -324,7 +324,7 @@ table,th,td {
 							var yearSel = sli.slider("value");
 
 							//get data and update chart
-							PrVis.getProductWeightData(geoSel, yearSel, dataIndex, function(){ updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel); });
+							EstLib.getProductWeightData(geoSel, yearSel, dataIndex, function(){ updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel); });
 						};
 
 						//
@@ -334,7 +334,7 @@ table,th,td {
 						console.log("Could not load initialisation data");
 					});
 		});
-	}(jQuery));
+    }(jQuery, window.EstLib = window.EstLib || {} ));
 
 </script>
 

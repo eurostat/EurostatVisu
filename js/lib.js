@@ -5,7 +5,7 @@
  * @author julien Gaffuri
  *
  */
-(function($, PrVis) {
+(function($, EstLib) {
 
 	/**
 	 * @template T
@@ -13,7 +13,7 @@
 	 * @param {string} indexAtt
 	 * @returns {Object.<string, T>}
 	 */
-	PrVis.index = function(arr, indexAtt){
+	EstLib.index = function(arr, indexAtt){
 		var out={};
 		for(var i=0, nb=arr.length; i<nb; i++){
 			var obj = arr[i];
@@ -28,7 +28,7 @@
 	 * @param {string} indexColumn
 	 * @returns {Object.<string, Array.<T>>}
 	 */
-	PrVis.indexMultiple = function(js, indexColumn){
+	EstLib.indexMultiple = function(js, indexColumn){
 		var out={};
 		for(var i=0, nb=js.length; i<nb; i++){
 			var obj = js[i];
@@ -48,7 +48,7 @@
 	 * @param {string} val
 	 * @returns {Object}
 	 */
-	PrVis.index1 = function(array, id, val){
+	EstLib.index1 = function(array, id, val){
 		var out={};
 		for(var i=0, nb=array.length; i<nb; i++){
 			var o = array[i];
@@ -64,7 +64,7 @@
 	 * @param {Object.<string, string>} index
 	 * @returns {Array.<{id:string,label:string}>}
 	 */
-	PrVis.index1ToIdLabel = function(index){
+	EstLib.index1ToIdLabel = function(index){
 		var out = [];
 		var keys = Object.keys(index);
 		for(var i=0, nb=keys.length; i<nb; i++){
@@ -81,7 +81,7 @@
 	 * @param matrix
 	 * @return {*}
 	 */
-	PrVis.getFromCache = function(cache, key, quArgs, matrix){
+	EstLib.getFromCache = function(cache, key, quArgs, matrix){
 		var obj = cache[key];
 		if(!obj){
 			if(!quArgs){
@@ -90,7 +90,7 @@
 				cache[key]={};
 				return cache[key];
 			}
-			var objs = JSON.parse(PrVis.syncRequest(quArgs));
+			var objs = JSON.parse(EstLib.syncRequest(quArgs));
 			if(matrix)
 				if(objs.length === 0){
 					console.warn("Could not retrieve object from:");
@@ -105,7 +105,7 @@
 		return obj;
 	};
 
-	PrVis.loadIntoCache = function(data, cache, keyField){
+	EstLib.loadIntoCache = function(data, cache, keyField){
 		for(var i=0; i<data.length; i++){
 			var obj = data[i];
 			cache[obj[keyField]]=obj;
@@ -116,7 +116,7 @@
 	 * @param {string} name
 	 * @returns {string}
 	 */
-	PrVis.getParameterByName = function(name) {
+	EstLib.getParameterByName = function(name) {
 		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 			results = regex.exec(location.search);
@@ -140,7 +140,7 @@
 	 return -1;
 	 };*/
 
-	PrVis.serializeXmlNode = function(xmlNode) {
+	EstLib.serializeXmlNode = function(xmlNode) {
 		if (typeof window.XMLSerializer != "undefined") {
 			return (new window.XMLSerializer()).serializeToString(xmlNode);
 		} else if (typeof xmlNode.xml != "undefined") {
@@ -156,7 +156,7 @@
 	 * @param{number} aDeg
 	 * @return {{x:number, y:number}}
 	 */
-	PrVis.polarToCartesian = function(cX, cY, radius, aDeg) {
+	EstLib.polarToCartesian = function(cX, cY, radius, aDeg) {
 		var aRad = aDeg * Math.PI / 180.0;
 		return {
 			x: cX + radius * Math.cos(aRad),
@@ -172,12 +172,12 @@
 	 * @param{number} endAngle
 	 * @return {string}
 	 */
-	PrVis.svgArc = function(x, y, radius, startAngle, endAngle){
+	EstLib.svgArc = function(x, y, radius, startAngle, endAngle){
 		x = d3.round(x,3); y = d3.round(y,3);
-		var start = PrVis.polarToCartesian(x, y, radius, endAngle);
+		var start = EstLib.polarToCartesian(x, y, radius, endAngle);
 		start.x = d3.round(start.x,3);
 		start.y = d3.round(start.y,3);
-		var end = PrVis.polarToCartesian(x, y, radius, startAngle);
+		var end = EstLib.polarToCartesian(x, y, radius, startAngle);
 		end.x = d3.round(end.x,3);
 		end.y = d3.round(end.y,3);
 		var arcSweep = endAngle - startAngle <= 180 ? "0" : "1";
@@ -191,7 +191,7 @@
 
 
 
-	/*PrVis.setURLParameter = function(paramName, paramValue){
+	/*EstLib.setURLParameter = function(paramName, paramValue){
 	 var url = window.location.href;
 	 if (url.indexOf(paramName + "=") >= 0){
 	 var prefix = url.substring(0, url.indexOf(paramName));
@@ -218,7 +218,7 @@
 	 * @param{Object.<string,string>=} forceValues
 	 * @return{Object.<string,string>}
 	 */
-	PrVis.getRandomColorsLegend = function(index, forceValues){
+	EstLib.getRandomColorsLegend = function(index, forceValues){
 		forceValues = forceValues || {};
 		var values = Object.keys(index);
 		var colI = {};
@@ -235,7 +235,7 @@
 	};
 
 	//{key1="value1",key1="value1"} to {value1="key1",value2="key2"}
-	PrVis.swap = function(obj) {
+	EstLib.swap = function(obj) {
 		var out = {};
 		for(var prop in obj)
 			if(obj.hasOwnProperty(prop))
@@ -244,17 +244,17 @@
 	};
 
 	//"a,b,c,d" to ["a","b","c","d"]
-	PrVis.split = function(val) {
+	EstLib.split = function(val) {
 		return val.split( /,\s*/ );
 	};
 
 	//"a,b,c,d" to "d"
-	PrVis.extractLast = function(term) {
-		return PrVis.split( term ).pop();
+	EstLib.extractLast = function(term) {
+		return EstLib.split( term ).pop();
 	};
 
 
-	PrVis.loadAutoComplete = function(id, data, minLength){
+	EstLib.loadAutoComplete = function(id, data, minLength){
 		$( "#"+id )
 			// don't navigate away from the field on tab when selecting an item
 			.bind( "keydown", function( event ) {
@@ -268,11 +268,11 @@
 				source: function( request, response ) {
 					// delegate back to autocomplete, but extract the last term
 					response( $.ui.autocomplete.filter(
-						data, PrVis.extractLast( request.term ) ) );
+						data, EstLib.extractLast( request.term ) ) );
 				},
 				focus: function() { return false; },
 				select: function( event, ui ) {
-					var terms = PrVis.split( this.value );
+					var terms = EstLib.split( this.value );
 					// remove the current input
 					terms.pop();
 					// add the selected item
@@ -295,7 +295,7 @@
 	};
 
 
-	PrVis.loadAutoCompleteRemote = function(id, data, minLength, cacheLoadFunction){
+	EstLib.loadAutoCompleteRemote = function(id, data, minLength, cacheLoadFunction){
 		$( "#"+id )
 			// don't navigate away from the field on tab when selecting an item
 			.bind( "keydown", function( event ) {
@@ -307,19 +307,19 @@
 			.autocomplete({
 				minLength: minLength,
 				source: function(request, response) {
-					var term = PrVis.extractLast(request.term);
+					var term = EstLib.extractLast(request.term);
 					if(!term || term.length<minLength) return;
 					$.when(
-						PrVis.ajax({data:data+term + "%25"} )
+						EstLib.ajax({data:data+term + "%25"} )
 					).then(function(data) {
-							//for(var i=0; i<data.length; i++) data[i].VALUE = PrVis.replaceAll(data[i].VALUE, ",", " -");
-							response( PrVis.arrayKeysToLowerCase(data) );
+							//for(var i=0; i<data.length; i++) data[i].VALUE = EstLib.replaceAll(data[i].VALUE, ",", " -");
+							response( EstLib.arrayKeysToLowerCase(data) );
 						}, function(XMLHttpRequest, textStatus) { console.warn(textStatus); }
 					);
 				},
 				focus: function() { return false; },
 				select: function( event, ui ) {
-					var terms = PrVis.split( this.value );
+					var terms = EstLib.split( this.value );
 					// remove the current input
 					terms.pop();
 					// add the selected item
@@ -343,7 +343,7 @@
 	 * @param{object} obj
 	 * @return {object}
 	 */
-	PrVis.objectKeysToLowerCase = function(obj){
+	EstLib.objectKeysToLowerCase = function(obj){
 		var key, keys = Object.keys(obj);
 		var n = keys.length;
 		var newobj={};
@@ -358,10 +358,10 @@
 	 * @param {Array.<string>} array
 	 * @return {Array.<string>}
 	 */
-	PrVis.arrayKeysToLowerCase = function(array){
+	EstLib.arrayKeysToLowerCase = function(array){
 		var out = [];
 		for(var i=0, nb=array.length; i<nb; i++){
-			out.push(PrVis.objectKeysToLowerCase( array[i] ));
+			out.push(EstLib.objectKeysToLowerCase( array[i] ));
 		}
 		return out;
 	};
@@ -370,20 +370,20 @@
 	 * @param{string} str
 	 * @return{string}
 	 */
-	/*PrVis.capitaliseStr = function(str){
+	/*EstLib.capitaliseStr = function(str){
 	 return str.replace(/^[a-z]/, function(m){ return m.toUpperCase(); });
 	 };*/
 
 //	the color input has to be EXACTLY 7 characters, like #08a35c
 //	percent parameter is between -1.0 and 1.0
-	/*PrVis.shadeColor = function(color, percent) {
+	/*EstLib.shadeColor = function(color, percent) {
 	 var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
 	 return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
 	 };*/
 
 //	the color input has to be EXACTLY 7 characters, like #08a35c
 //	p parameter is between 0 and 1.0
-	/*PrVis.blendColors = function(c0, c1, p) {
+	/*EstLib.blendColors = function(c0, c1, p) {
 	 var f=parseInt(c0.slice(1),16),t=parseInt(c1.slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF,R2=t>>16,G2=t>>8&0x00FF,B2=t&0x0000FF;
 	 return "#"+(0x1000000+(Math.round((R2-R1)*p)+R1)*0x10000+(Math.round((G2-G1)*p)+G1)*0x100+(Math.round((B2-B1)*p)+B1)).toString(16).slice(1);
 	 };*/
@@ -396,7 +396,7 @@
 	 * @param{string} string
 	 * @return{string}
 	 */
-	PrVis.escapeRegExp = function(string) {
+	EstLib.escapeRegExp = function(string) {
 		return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 	};
 
@@ -406,8 +406,8 @@
 	 * @param {string} replace
 	 * @return {string}
 	 */
-	PrVis.replaceAll = function(string, find, replace) {
-		return string.replace(new RegExp(PrVis.escapeRegExp(find), 'g'), replace);
+	EstLib.replaceAll = function(string, find, replace) {
+		return string.replace(new RegExp(EstLib.escapeRegExp(find), 'g'), replace);
 	};
 
 	/**
@@ -415,7 +415,7 @@
 	 * @param {Array} y
 	 * @return {Array}
 	 */
-	PrVis.unionArrays = function(x, y) {
+	EstLib.unionArrays = function(x, y) {
 		var obj={}, i,nb;
 		for(i=0, nb=x.length; i<nb; i++){
 			var xi=x[i];
@@ -432,7 +432,7 @@
 	};
 
 	//{1:"fff",df:15} to ["fff",15]
-	PrVis.objValuesToArrays = function(obj) {
+	EstLib.objValuesToArrays = function(obj) {
 		return Object.keys(obj).map(function(k){return obj[k];});
 	};
 
@@ -442,7 +442,7 @@
 	 * @param{string} ttp
 	 * @return{string}
 	 */
-	PrVis.getLegendItem = function(fillColor, text, ttp){
+	EstLib.getLegendItem = function(fillColor, text, ttp){
 		var d = $("<div>");
 
 		/*var svg = $("<svg>").attr("width",130).attr("height",15).attr("title",ttp);
@@ -462,7 +462,7 @@
 	 * @param mls
 	 * @return{Array.<Array.<number>>|null}
 	 */
-	PrVis.getEnvelope = function(mls){
+	EstLib.getEnvelope = function(mls){
 		if(!mls) return null;
 		//to be extended - supports only multiline strings
 		var latMin=99999, lonMin=99999, latMax=-99999, lonMax=-99999;
@@ -484,7 +484,7 @@
 	 * @param{number} num
 	 * @return {string}
 	 */
-	PrVis.numberWithSpaces = function(num) {
+	EstLib.numberWithSpaces = function(num) {
 		var str = num.toString().split('.');
 		if (str[0].length >= 5)
 			str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, "$1 ");
@@ -501,13 +501,13 @@
 		e.returnValue = false;
 	}
 
-	PrVis.disableScrolling = function() {
+	EstLib.disableScrolling = function() {
 		if (window.addEventListener)
 			window.addEventListener('DOMMouseScroll', preventDefault, false);
 		window.onmousewheel = document.onmousewheel = preventDefault;
 	};
 
-	PrVis.enableScrolling = function() {
+	EstLib.enableScrolling = function() {
 		if (window.removeEventListener)
 			window.removeEventListener('DOMMouseScroll', preventDefault, false);
 		window.onmousewheel = document.onmousewheel = null;
@@ -518,7 +518,7 @@
 
 
 	//From https://code.google.com/p/stringencoders/source/browse/trunk/javascript/base64.js
-	PrVis.encodeBase64 = function(s) {
+	EstLib.encodeBase64 = function(s) {
 		if (arguments.length !== 1) {
 			throw new SyntaxError("Not enough arguments");
 		}
@@ -568,17 +568,17 @@
 		return x.join('');
 	};
 
-	PrVis.getPropName = function(obj){
+	EstLib.getPropName = function(obj){
 		for (var name in obj) { return name; }
 	};
 
 
 	//get all file names in a folder and execute a function once found
-	PrVis.getFileNames = function(folder, callBack){
+	EstLib.getFileNames = function(folder, callBack){
 		$.when( $.ajax({ url: folder })
-		).then(function(data) { callBack(PrVis.getFileNamesFromData(data)); });
+		).then(function(data) { callBack(EstLib.getFileNamesFromData(data)); });
 	};
-	PrVis.getFileNamesFromData = function(data){
+	EstLib.getFileNamesFromData = function(data){
 		var fileNames = [];
 		var chunks = data.split("<script>addRow(\"");
 		for(var j=2; j<chunks.length; j++)
@@ -587,7 +587,7 @@
 	};
 
 	/*
-	 PrVis.fireEvent = function(element, event){
+	 EstLib.fireEvent = function(element, event){
 	 var e;
 	 if(document.createEventObject){
 	 // for IE
@@ -603,7 +603,7 @@
 	 }
 	 }
 	 */
-	/*PrVis.fireEvent = function(el, etype){
+	/*EstLib.fireEvent = function(el, etype){
 	 if (el.fireEvent) {
 	 el.fireEvent('on' + etype);
 	 } else {
@@ -612,7 +612,7 @@
 	 el.dispatchEvent(evObj);
 	 }
 	 };*/
-	/*PrVis.fireEvent = function(el, etype) {
+	/*EstLib.fireEvent = function(el, etype) {
 	 var event;
 	 if (document.createEvent) {
 	 event = document.createEvent("HTMLEvents");
@@ -630,7 +630,7 @@
 	 }*/
 
 	//transform 1 into 1st, 2 into 2nd, 3 into 3rd, etc...
-	PrVis.getNumbered = function(number,lg){
+	EstLib.getNumbered = function(number,lg){
 		lg=lg||"en";
 		switch(lg){
 			case "fr":
@@ -653,7 +653,7 @@
 	 * Returns browser language
 	 * @return {string}
 	 */
-	PrVis.getLang = function(){
+	EstLib.getLang = function(){
 		return navigator.language || navigator.languages[0] || navigator.browserLanguage;
 	};
 
@@ -661,8 +661,8 @@
 	 * Returns 2 chars language code
 	 * @return {string}
 	 */
-	PrVis.getLang2Chars = function(){
-	    var lg = PrVis.getParameterByName("lang") || PrVis.getLang() || "en";
+	EstLib.getLang2Chars = function(){
+	    var lg = EstLib.getParameterByName("lang") || EstLib.getLang() || "en";
 	    return lg.substring(0, 2);
 	};
 
@@ -670,7 +670,7 @@
 	 * Try to fill page elements with dictionnary terms
 	 * @param{object} dict
 	 */
-	PrVis.writeText = function(dict){
+	EstLib.writeText = function(dict){
 		for (var p in dict) {
 			var elt = $("#"+p);
 			if(elt) elt.html(dict[p]);
@@ -681,7 +681,7 @@
 	 * Returns max size
 	 * @return {object}
 	 */
-	PrVis.getMaxSize = function(){
+	EstLib.getMaxSize = function(){
 		var w = window,
 	    e = document.documentElement,
 	    g = document.getElementsByTagName("body")[0];
@@ -690,4 +690,4 @@
 			height: w.innerHeight|| e.clientHeight|| g.clientHeight };
 	};
 
-}(jQuery, window.PrVis = window.PrVis || {} ));
+}(jQuery, window.EstLib = window.EstLib || {} ));

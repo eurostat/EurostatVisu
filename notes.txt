@@ -1,5 +1,4 @@
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
-PrVis
 colorbrewer to https://github.com/d3/d3-scale-chromatic
 adopt d3.v4 everywhere
 

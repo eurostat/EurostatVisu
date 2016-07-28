@@ -113,8 +113,7 @@ table,th,td {
 
 <script>
 
-	(function($) {
-
+(function($, EstLib) {
 		$(function() {
 			//http://ec.europa.eu/eurostat/statistics-explained/index.php/Inflation_in_the_euro_area
 
@@ -193,7 +192,7 @@ table,th,td {
 					}
 			);
 		});
-	}(jQuery));
+    }(jQuery, window.EstLib = window.EstLib || {} ));
 
 </script>
 

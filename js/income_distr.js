@@ -138,7 +138,7 @@
         dict = EstLib.dictIncomeDistr[lg];
         html.push(
             dict.incomeof, " <b>",
-            PrVis.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
+            EstLib.getNumbered(lowestIncome?quantileNb:100/q.percentage-quantileNb+1, lg),
             " ", dict[q.text], "</b> ",dict.ofpopwith," ", lowestIncome?dict.lowest:dict.highest,
             " ",dict.incomeis," <b>", value, "%</b> ",dict.oftotal,".","<br>"
         );

@@ -1,4 +1,4 @@
-PrVis.coicopsDict = {
+EstLib.coicopsDict = {
 		"CP00" : {desc:"All-items HICP", parents:[], children:["CP01","CP02","CP03","CP04","CP05","CP06","CP07","CP08","CP09","CP10","CP11","CP12"]},
 		"CP01" : {desc:"Food and non-alcoholic beverages", parents:["CP00"], children:["CP011","CP012"]},
 		"CP011" : {desc:"Food", parents:["CP01","FROOPP"], children:["CP0111","CP0112","CP0113","CP0114","CP0115","CP0116","CP0117","CP0118","CP0119"]},

@@ -114,7 +114,7 @@ table,th,td {
 	 * @author julien Gaffuri
 	 *
 	 */
-	(function($, PrVis) {
+     (function($, EstLib) {
 		$(function() {
 
 			//the dataset - [indic][geo_coicop]
@@ -167,7 +167,7 @@ table,th,td {
 					if(!ds) continue;
 					serie = {};
 					serie.color = colors[j%8];
-					serie.name = ds.Dimension("geo").Category(sel_.geo).label + " - " + PrVis.coicopsDictFPMT[sel_.cp_food].desc + " - " + ds.Dimension("source").Category(sel_.source).label;
+					serie.name = ds.Dimension("geo").Category(sel_.geo).label + " - " + EstLib.coicopsDictFPMT[sel_.cp_food].desc + " - " + ds.Dimension("source").Category(sel_.source).label;
 					serie.data = [];
 					serie.ds = ds; //necessary to show the flags in tooltip
 					var months = ds.Dimension("time").Category();
@@ -175,7 +175,7 @@ table,th,td {
 						var month = months[i].label;
 						var d = ds.Data({time:month});
 						if(!d || d.length || (d.value!=0 && !d.value)) continue;
-						serie.data.push({x:PrVis.prMonthToRTime(month),y:d.value});
+						serie.data.push({x:EstLib.prMonthToRTime(month),y:d.value});
 					}
 					graph.series.push(serie);
 				}
@@ -266,14 +266,14 @@ table,th,td {
 
 									//if index and new index reference year, re-reference
 									if(indic==="I2010" && indRefYearSlid.slider("value")!=defaultIndexReferenceYear)
-										PrVis.rereference(data, indRefYearSlid.slider("value"), key);
+										EstLib.rereference(data, indRefYearSlid.slider("value"), key);
 
 									dsDict[indic][key] = data;
 								}
 								redrawGraph();
 							}, function() {
 								var sel__ = arguments[0].prSel;
-								dialog.html("No data available for:<br>Country: "+geoDict[sel__.geo]+"<br>COICOP: "+PrVis.coicopsDictFPMT[sel__.cp_food].desc+"<br>Link of the chain: "+PrVis.sourcesFPMTDict[sel__.source]);
+								dialog.html("No data available for:<br>Country: "+geoDict[sel__.geo]+"<br>COICOP: "+EstLib.coicopsDictFPMT[sel__.cp_food].desc+"<br>Link of the chain: "+EstLib.sourcesFPMTDict[sel__.source]);
 								dialog.dialog({title: "No data"});
 								sel.splice(sel.indexOf(sel__),1);
 								//redrawGraph();
@@ -350,7 +350,7 @@ table,th,td {
 				graph: graph,
 				formatter: function(series, x, y) {
 					var date = moment(new Date(x * 1000)).format("MMM YYYY");
-					var flag = series.ds.Data({time:PrVis.rTimeToPrMonth(x)}).status;
+					var flag = series.ds.Data({time:EstLib.rTimeToPrMonth(x)}).status;
 					if(flag === "e") flag = " (estimated)";
 					return series.name.replace(" - ","<br>") + "<br>" + date + "<br><b>" + y.toFixed(1) + "</b>" + (flag||"");
 				},
@@ -363,19 +363,19 @@ table,th,td {
 				graph: graph,
 				element: sliR.get(0)
 			} );
-			var dsl = PrVis.getParameterByName("dsl");
+			var dsl = EstLib.getParameterByName("dsl");
 			if(dsl){
 				dsl = dsl.split(",");
 				if(dsl.length==2){
-					var d0 = +PrVis.prMonthToRTime(dsl[0]);
-					var d1 = +PrVis.prMonthToRTime(dsl[1]);
+					var d0 = +EstLib.prMonthToRTime(dsl[0]);
+					var d1 = +EstLib.prMonthToRTime(dsl[1]);
 					if(!isNaN(d0)&&!isNaN(d1)&&d0<d1) sliR.initVals = [d0,d1];
 				}
 			}
 
 
 			//indicator option
-			var indic = PrVis.getParameterByName("indic");
+			var indic = EstLib.getParameterByName("indic");
 			if(indic) $('input:radio[name=indic][value='+indic+']').attr('checked',true);
 			$("input[name='indic']").change(function () {
 				if( $("input:radio[name=indic]:checked").val() === "I2010" ) indRefYearDiv.show(); else indRefYearDiv.hide();
@@ -388,7 +388,7 @@ table,th,td {
 			//index reference year slider
 			var indRefYearDiv = $("#refYearDiv");
 			var indRefYearSlid = $("#refYearSlider");
-			var iry = PrVis.getParameterByName("iry");
+			var iry = EstLib.getParameterByName("iry");
 			indRefYearSlid.slider({
 				value: (iry?iry:defaultIndexReferenceYear),
 				step: 1,
@@ -398,7 +398,7 @@ table,th,td {
 				$("#refYearTxt").text(refYearFin);
 
 				//compute re-referencing
-				for(var dsKey in dsDict.I2010) PrVis.rereference(dsDict.I2010[dsKey], refYearFin, dsKey);
+				for(var dsKey in dsDict.I2010) EstLib.rereference(dsDict.I2010[dsKey], refYearFin, dsKey);
 
 				//update graph
 				redrawGraph();
@@ -412,7 +412,7 @@ table,th,td {
 
 			//coicops list
 			var coicopList = $("#coicopList");
-			PrVis.addCoicopItemRec(coicopList, "CP011", "---", 0, false, false, PrVis.coicopsDictFPMT);
+			EstLib.addCoicopItemRec(coicopList, "CP011", "---", 0, false, false, EstLib.coicopsDictFPMT);
 
 			$('#coicopList option[value="CP00"]').attr('selected', 'selected');
 			coicopList.selectmenu({
@@ -422,7 +422,7 @@ table,th,td {
 
 			//sources option
 			var sourceOption = $("#sourceOption");
-			PrVis.fillSourceOption(sourceOption);
+			EstLib.fillSourceOption(sourceOption);
 			$('input:radio[name=sourceOption][value=ACP]').attr('checked',true);
 			$("input[name='sourceOption']").change(function () {
 				updateAddRemButtonText();
@@ -430,7 +430,7 @@ table,th,td {
 			sourceOption.buttonset();
 
 			//add/remove button
-			var sel = PrVis.getParameterByName("sel");
+			var sel = EstLib.getParameterByName("sel");
 			if(sel){
 				var sel_ = sel.split(",");
 				sel = [];
@@ -479,7 +479,7 @@ table,th,td {
 			addRemButton.button();
 
 			//interpolation option
-			var interp = PrVis.getParameterByName("interp");
+			var interp = EstLib.getParameterByName("interp");
 			if(interp) $('input:radio[name=interp][value='+interp+']').attr('checked',true);
 			$("input[name='interp']").change(function () {
 				graph.interpolation = $("input:radio[name=interp]:checked").val();
@@ -514,7 +514,7 @@ table,th,td {
 				if(!isNaN(sv[0]) && !isNaN(sv[1])){
 					var dom = graph.dataDomain();
 					if(dom[0]!=sv[0] || dom[1]!=sv[1]){
-						params.push({p:"dsl",v:PrVis.rTimeToPrMonth(+sv[0])+","+PrVis.rTimeToPrMonth(+sv[1])});
+						params.push({p:"dsl",v:EstLib.rTimeToPrMonth(+sv[0])+","+EstLib.rTimeToPrMonth(+sv[1])});
 					}
 				}
 
@@ -567,7 +567,7 @@ table,th,td {
 
 
 		});
-	}(jQuery, window.PrVis = window.PrVis || {} ));
+    }(jQuery, window.EstLib = window.EstLib || {} ));
 
 </script>
 

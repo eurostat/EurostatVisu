@@ -39,13 +39,13 @@
      * @author julien Gaffuri
      *
      */
-    (function($) {
+    (function($, EstLib) {
         $(function() {
 
             console.log("Hello");
 
         });
-    }(jQuery));
+    }(jQuery, window.EstLib = window.EstLib || {} ));
 
 </script>
 

@@ -119,13 +119,13 @@
             //TODO slider refresh
 
             //get language
-            var lg = PrVis.getLang2Chars();
+            var lg = EstLib.getLang2Chars();
 
             //select dictionnary
             var dict = EstLib.dictIncomeDistr;
             dict = dict[lg] || dict.en;
             //try to fill page with translated terms
-            PrVis.writeText(dict);
+            EstLib.writeText(dict);
 
             //write page title
             document.title = dict.title;
@@ -200,8 +200,8 @@
             var infoDiv = d3.select("#info");
 
             //the selection
-            var geoSel = PrVis.getParameterByName("geo") || "EU28";
-            var timeSel = PrVis.getParameterByName("time") || "2014";
+            var geoSel = EstLib.getParameterByName("geo") || "EU28";
+            var timeSel = EstLib.getParameterByName("time") || "2014";
 
             //link to other visualisation
             d3.select("#linkdist2")

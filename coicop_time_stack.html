@@ -76,13 +76,13 @@ table,th,td {
 	 * @author julien Gaffuri
 	 *
 	 */
-	(function($) {
+    (function($, EstLib) {
 		$(function() {
 			//http://bl.ocks.org/mbostock/4060954
 			//http://bl.ocks.org/mbostock/3943967
 
 			//
-			//PrVis.modifyCoicopHierarchy();
+			//EstLib.modifyCoicopHierarchy();
 			//TODO add more coicop levels?
 
 			//TODO add ECB
@@ -101,8 +101,8 @@ table,th,td {
 				}
 			};
 			/*var getFamCode = function(coicop){
-			 if( $.inArray(coicop, PrVis.coicopsDict["SA"].children)>=0 ) return coicop;
-			 var parents = PrVis.coicopsDict[coicop].parents;
+			 if( $.inArray(coicop, EstLib.coicopsDict["SA"].children)>=0 ) return coicop;
+			 var parents = EstLib.coicopsDict[coicop].parents;
 			 if(parents.length == 0) return;
 			 for(var i=0; i<parents.length; i++){
 			 var out = getFamCode(parents[i]);
@@ -128,7 +128,7 @@ table,th,td {
 				if($("input:radio[name=ctype]:checked").val() === "CP00"){
 					var mouseoverFun = function() { highlightCoicop($(this).attr("id").replace("lgdElt","")); };
 					var mouseoutFun = function() { unHighlightCoicop($(this).attr("id").replace("lgdElt","")); };
-					PrVis.buildCOICOPLegend(lgd, coicopToColor, mouseoverFun, mouseoutFun);
+					EstLib.buildCOICOPLegend(lgd, coicopToColor, mouseoverFun, mouseoutFun);
 				} else {}
 			};
 			refreshLegend();
@@ -159,7 +159,7 @@ table,th,td {
 						cType.buttonset();
 
 						//build geolist
-						var geoURL = PrVis.getParameterByName("geo") || "EA";
+						var geoURL = EstLib.getParameterByName("geo") || "EA";
 						EstLib.buildGeoList(geoList, geoDim.id, function(geo){return geoDim.Category(geo).label;}, geoURL, function(){
 							$("#geoTXT").text( geoDim.Category(geoList.find(":selected").attr("value")).label );
 							updateChart();
@@ -239,7 +239,7 @@ table,th,td {
 						console.log("Could not load initialisation data");
 					});
 		});
-	}(jQuery));
+    }(jQuery, window.EstLib = window.EstLib || {} ));
 
 </script>
 

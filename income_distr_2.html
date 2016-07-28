@@ -121,13 +121,13 @@
             //TODO show line with average income
 
             //get language
-            var lg = PrVis.getLang2Chars();
+            var lg = EstLib.getLang2Chars();
 
             //select dictionnary
             var dict = EstLib.dictIncomeDistr;
             dict = dict[lg] || dict.en;
             //try to fill page with translated terms
-            PrVis.writeText(dict);
+            EstLib.writeText(dict);
 
 
             //write page title
@@ -145,7 +145,7 @@
             var yScale = d3.scaleLinear().domain([0,yMax]).range([0, height]);
 
             //the selection
-            var timeSel = PrVis.getParameterByName("time") || "2014";
+            var timeSel = EstLib.getParameterByName("time") || "2014";
 
             //info
             var infoDiv = d3.select("#info");
