@@ -10,7 +10,6 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - [Price time series](http://jgaffuri.github.io/EurostatVisu/timeser.html)
 - [Food prices time series](http://jgaffuri.github.io/EurostatVisu/FPMT_timeser.html)
 - [Fishing quotas](http://jgaffuri.github.io/EurostatVisu/fq/quotas.html)
-- [Inflation table](http://jgaffuri.github.io/EurostatVisu/table1.html)
 
 # Technical details
 
