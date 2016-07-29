@@ -8,7 +8,7 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - [Fishing quotas](http://jgaffuri.github.io/EurostatVisu/fq/quotas.html)
 - [The COICOP classification](http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html)
 - Household expenditures composition, [detailled by product](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst.html) and [evolution accross time](http://jgaffuri.github.io/EurostatVisu/coicop_time_stack.html)
-- [Price time series](http://jgaffuri.github.io/EurostatVisu/timeser.html) - [Food prices time series](http://jgaffuri.github.io/EurostatVisu/FPMT_timeser.html)
+- [Price time series](http://jgaffuri.github.io/EurostatVisu/timeser.html). Focus on [food prices](http://jgaffuri.github.io/EurostatVisu/FPMT_timeser.html)
 
 # Technical details
 
