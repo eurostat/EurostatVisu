@@ -6,7 +6,7 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - [Income disparities in European countries](http://jgaffuri.github.io/EurostatVisu/income_distr.html). Focus on [country comparison](http://jgaffuri.github.io/EurostatVisu/income_distr_2.html)
 - [Economy's twists and turns](http://jgaffuri.github.io/EurostatVisu/crisis_route.html)
 - [The COICOP classification](http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html)
-- Household expenditures composition, [detailled by product](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst.html) and [evolution accross time(http://jgaffuri.github.io/EurostatVisu/coicop_time_stack.html)
+- Household expenditures composition, [detailled by product](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst.html) and [evolution accross time](http://jgaffuri.github.io/EurostatVisu/coicop_time_stack.html)
 - [Price time series](http://jgaffuri.github.io/EurostatVisu/timeser.html)
 - [Food prices time series](http://jgaffuri.github.io/EurostatVisu/FPMT_timeser.html)
 - [Fishing quotas](http://jgaffuri.github.io/EurostatVisu/fq/quotas.html)
