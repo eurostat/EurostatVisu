@@ -256,8 +256,8 @@
                             }
 
                             rects.selectAll("rect").data(d3.keys(dataObj))
-                                    .on("mouseover", function(d) {
-                                        infoDiv.html( EstLib.getRectText(d, dataObj[d], lg) );
+                                    .on("mouseover", function(qu) {
+                                        infoDiv.html( EstLib.getRectText(qu, dataObj[qu], dict, lg) );
                                     })
                                     .on("mouseout", function() {
                                         infoDiv.text("");

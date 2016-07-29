@@ -240,14 +240,15 @@
                                 var rects = d3.select("#disrect"+geo);
                                 var noData = d3.select("#nodata"+geo);
 
-                                if(!EstLib.dataPresence(dataObj))
-                                    noData.transition().style("opacity", 1);
-                                else
-                                    noData.transition().style("opacity", 0);
+                                //check if "no data" message should be shown
+                                if(!EstLib.dataPresence(dataObj)) noData.transition().style("opacity", 1);
+                                else noData.transition().style("opacity", 0);
 
-                                rects.selectAll("rect").data(d3.keys(dataObj))
-                                        .on("mouseover", function(d) {
-                                            infoDiv.html(EstLib.getRectText(d, dataObj[d], lg))
+                                //update rectangles with dataObj (within a closure to preserve dataObj value)
+                                (function(dataObj){
+                                    rects.selectAll("rect").data(d3.keys(dataObj))
+                                        .on("mouseover", function(qu) {
+                                            infoDiv.html(EstLib.getRectText(qu, dataObj[qu], dict, lg))
                                                     .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-50) + "px")
                                                     .transition().duration(200).style("opacity",1);
                                         })
@@ -255,14 +256,15 @@
                                             infoDiv.transition().duration(200).style("opacity",0);
                                         })
                                         .transition()
-                                        .attr("y", function(d){
-                                            var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
+                                        .attr("y", function(qu){
+                                            var value = dataObj[qu] || 0, factor = 10.0/EstLib.quantileDict[qu.charAt(0)].percentage;
                                             return yScale(value<0?yMax:yMax-factor*value);
                                         })
-                                        .attr("height", function(d){
-                                            var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
+                                        .attr("height", function(qu){
+                                            var value = dataObj[qu] || 0, factor = 10.0/EstLib.quantileDict[qu.charAt(0)].percentage;
                                             return yScale(factor*Math.abs(value));
                                         });
+                                })(dataObj);
                             }
 
                             //update title
