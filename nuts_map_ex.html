@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+
+    <title>Template</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+<!--     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+    <script src="js/json-stat.js"></script>
+
+    <script src="js/lib.js"></script>
+    <script src="js/eurostat-lib.js"></script>
+
+    <style>
+        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
+    </style>
+
+</head>
+
+<style>
+
+.nuts {
+  fill: #88f;
+  stroke: #ccc;
+  stroke-width: 0.3;
+}
+
+</style>
+
+<body>
+
+<div id="ex"></div>
+
+<script>
+
+    /**
+     *
+     * @author julien Gaffuri
+     *
+     */
+    (function($, EstLib) {
+        $(function() {
+        	//TODO nuts id in topojson
+        	//TODO BN
+        	//TODO change zoom behaviours (to semantic)
+        	//TODO join with stat file and render. Like in http://bl.ocks.org/teslabs/33e8803ae41fdaad245d
+
+        var width = 500, height = 500;
+        var svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
+		var g = svg.append("g");
+
+		//add zoom/pan behaviour
+		svg.append("rect")
+		    .attr("width", width).attr("height", height)
+		    .style("fill", "none").style("pointer-events", "all")
+		    .call(d3.zoom().scaleExtent([0.5,8])
+		    		.on("zoom", function() { g.attr("transform", d3.event.transform); }));
+
+		var projection = d3.geoMercator();
+        var path = d3.geoPath().projection(projection);
+
+        d3.json("data/nuts/10M_RG_topo.json", function(err, data) {
+          if (err) throw err;
+
+          var lev = topojson.feature(data, data.objects["10M_RG_LEV2"]);
+
+          //center
+          projection.scale(1).translate([0, 0]);
+          var b = path.bounds(lev),
+          s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
+          t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
+          projection.scale(s).translate(t);
+
+          g.append("path").datum(lev).attr("d", path)
+          .attr("class", "nuts")
+          ;
+        });
+
+
+        });
+    }(jQuery, window.EstLib = window.EstLib || {} ));
+
+</script>
+
+</body>
+</html>

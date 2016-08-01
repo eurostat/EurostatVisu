@@ -1,7 +1,5 @@
-https://bost.ocks.org/mike/make/
-http://teslabs.com/articles/topojson-catalonia/
-http://shancarter.github.io/distillery/
-
+NUTS json project
+geojson to topojson: http://shancarter.github.io/distillery/
 
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
 show COCIOP and NACE hierarchy as sunburst
@@ -11,7 +9,7 @@ flow map: transport, trade, migration (migr)
 Try http://bl.ocks.org/jgaffuri
 
 http://ec.europa.eu/eurostat/help/first-visit/tools
-prom
+prom - http://christopheviau.com/d3list/gallery.html#visualizationType=all
 
 use more estat colors
 use more translation pattern
@@ -22,6 +20,5 @@ http://prag.ma/code/d3-cartogram/#netmigrate/2011
 http://bl.ocks.org/mbostock/4150951
 https://github.com/mbostock/us-atlas
 
-See https://bost.ocks.org/mike/chart/
+Implement https://bost.ocks.org/mike/chart/ for distr chart
 
-http://christopheviau.com/d3list/gallery.html#visualizationType=all
