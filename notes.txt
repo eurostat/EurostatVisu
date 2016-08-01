@@ -1,3 +1,8 @@
+https://bost.ocks.org/mike/make/
+http://teslabs.com/articles/topojson-catalonia/
+http://shancarter.github.io/distillery/
+
+
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
 show COCIOP and NACE hierarchy as sunburst
 generic map for Eurostat
@@ -11,3 +16,12 @@ prom
 use more estat colors
 use more translation pattern
 force page reload - see http://stackoverflow.com/questions/26818091/force-browser-to-reload-index-htm
+
+cartogram
+http://prag.ma/code/d3-cartogram/#netmigrate/2011
+http://bl.ocks.org/mbostock/4150951
+https://github.com/mbostock/us-atlas
+
+See https://bost.ocks.org/mike/chart/
+
+http://christopheviau.com/d3list/gallery.html#visualizationType=all
