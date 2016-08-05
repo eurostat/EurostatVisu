@@ -1,4 +1,3 @@
-NUTS json project
 geojson to topojson: http://shancarter.github.io/distillery/
 
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
