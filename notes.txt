@@ -8,7 +8,7 @@ flow map: transport, trade, migration (migr)
 Try http://bl.ocks.org/jgaffuri
 
 http://ec.europa.eu/eurostat/help/first-visit/tools
-prom - http://christopheviau.com/d3list/gallery.html#visualizationType=all
+prom - http://christopheviau.com/d3list/gallery.html#visualizationType=all   Jules Grandin
 
 use more estat colors
 use more translation pattern
