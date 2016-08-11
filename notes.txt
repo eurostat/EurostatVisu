@@ -1,4 +1,4 @@
-geojson to topojson: http://shancarter.github.io/distillery/
+finalise nuts map example
 
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
 show COCIOP and NACE hierarchy as sunburst

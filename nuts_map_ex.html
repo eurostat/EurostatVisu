@@ -1,95 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
-
-    <title>Template</title>
+    <meta charset="utf-8">
+    <title>NUTS JSON overview</title>
+    <style>
+        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
+        #bck { fill: LightSteelBlue; }
+        .rg { fill: lightgray; }
+        .rg:hover { fill: darkred; }
+        .bn { fill: none; stroke-linecap:round; stroke-linejoin:round }
+        .bn_0 { stroke: #fff; stroke-width: 1.3px; }
+        .bn_1 { stroke: #fff; stroke-width: 0.6px; }
+        .bn_2 { stroke: #fff; stroke-width: 0.6px; }
+        .bn_3 { stroke: none; }
+        .bn_oth { stroke: #444; stroke-width: 1px; }
+        .infoText { font-size: 13px; }
+    </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
-    <!--     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+
     <script src="js/json-stat.js"></script>
 
     <script src="js/lib.js"></script>
     <script src="js/eurostat-lib.js"></script>
 
-    <style>
-        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
-    </style>
-
 </head>
 
-<style>
-
-    .nuts {
-        fill: #88f;
-        stroke: #ccc;
-        stroke-width: 0.3;
-    }
-
-</style>
-
 <body>
-
-<div id="ex"></div>
+<svg id="map"></svg>
 
 <script>
+    //use d3 quantiles
+    //use color brewer colors
 
-    /**
-     *
-     * @author julien Gaffuri
-     *
-     */
-    (function($, EstLib) {
-        $(function() {
-            //TODO nuts id in topojson
-            //TODO BN
-            //TODO change zoom behaviours (to semantic)
-            //TODO join with stat file and render. Like in http://bl.ocks.org/teslabs/33e8803ae41fdaad245d
+    //get url parameters for projection, level and size
+    var width = 800, height = width*0.87,
 
-            var width = 500, height = 500;
-            var svg = d3.select("body").append("svg").attr("width", width).attr("height", height);
-            var g = svg.append("g");
+    //build svg
+            svg = d3.select("#map").attr("width", width).attr("height", height),
+    //background rectangle
+            bckRect = svg.append("rect").attr("id","bck").attr("x",0).attr("y",0).attr("width", width).attr("height", height),
+    //drawing group
+            g = svg.append("g").attr("transform","translate(0,-50)"),
+    //path function
+            path = d3.geoPath().projection(null),
+            lg="en"
+            ;
 
-            //add zoom/pan behaviour
-            svg.append("rect")
-                    .attr("width", width).attr("height", height)
-                    .style("fill", "none").style("pointer-events", "all")
-                    .call(d3.zoom().scaleExtent([0.5,8])
-                            .on("zoom", function() { g.attr("transform", d3.event.transform); }));
+    $.when(
+            //get nuts geometries
+            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/RG_BN_lvl3.json"}),
+            //get population data
+            $.ajax({url:EstLib.getEstatDataURL("demo_r_pjanaggr3",{age:"TOTAL",sex:"T",time:"2015"})}, lg)
+    ).then(function(nuts,data) {
+                data=data[0]; nuts=nuts[0];
 
-            var projection = d3.geoMercator();
-            var path = d3.geoPath().projection(projection);
+                data = JSONstat(data).Dataset(0);
+                //var geos = data.Dimension("geo").id;
 
-            //TODO move to nuts2json and link to it
-            d3.json("data/nuts/10M_RG_topo.json", function(err, data) {
-                if (err) throw err;
+                //get nuts regions
+                var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg).features;
 
-                var lev = topojson.feature(data, data.objects["10M_RG_LEV2"]);
+                //draw regions
+                g.append("g").selectAll("path").data(nutsRG).enter()
+                        .append("path").attr("d", path)
+                        .attr("fill", function(rg){
+                            var value = data.Data({geo: rg.properties.id});
+                            if(!value || !value.value) return "lightgray";
+                            var col = (value.value-19714)/(14377018-19714);
+                            return "rgb(255, "+Math.round(255*(1-col))+", 0)";
+                        });
 
-                //center
-                projection.scale(1).translate([0, 0]);
-                var b = path.bounds(lev),
-                        s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
-                        t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
-                projection.scale(s).translate(t);
+                //draw borders
+                var bn = topojson.feature(nuts, nuts.objects.nutsbn).features;
+                bn.sort(function(bn1,bn2){ return bn2.properties.lvl - bn1.properties.lvl; });
+                g.append("g").selectAll("path").data(bn).enter()
+                        .append("path").attr("d", path)
+                        .attr("class", function(bn){
+                            bn = bn.properties;
+                            //eu=EU_FLAG,efta=EFTA_FLAG,cc=CC_FLAG,lvl=STAT_LEVL_,oth=OTHR_CNTR_
+                            var cl = ["bn","bn_"+bn.lvl];
+                            if(bn.oth==="T") cl.push("bn_oth");
+                            return cl.join(" ");
+                        });
 
-                g.append("path").datum(lev).attr("d", path)
-                        .attr("class", "nuts")
-                ;
-            });
 
 
-        });
-    }(jQuery, window.EstLib = window.EstLib || {} ));
+            }
+    );
 
 </script>
-
 </body>
-</html>
