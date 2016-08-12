@@ -1,53 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>NUTS JSON overview</title>
-    <style>
-        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
-        #bck { fill: LightSteelBlue; }
-        .bn { fill: none; stroke-linecap:round; stroke-linejoin:round }
-        .bn_0 { stroke: #fff; stroke-width: 1.3px; }
-        .bn_1 { stroke: #fff; stroke-width: 0.6px; }
-        .bn_2 { stroke: #fff; stroke-width: 0.6px; }
-        .bn_3 { stroke: none; }
-        .bn_oth { stroke: #444; stroke-width: 1px; }
-        .infoText { font-size: 13px; }
+<meta charset="utf-8">
+<title>NUTS JSON overview</title>
+<style>
+body {
+	font-family: "Myriad Pro", Myriad, MyriadPro-Regular,
+		'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans",
+		"Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial,
+		sans-serif;
+}
 
-        #info {
-            opacity: 0;
-            position: absolute;
-            padding: 5px;
-            width: 150px;
-            background: white;
-            border: 0px;
-            border-radius: 5px;
-            font: 14px;
-            pointer-events: none;
-            box-shadow: 5px 5px 5px grey;
-        }
+#bck {
+	fill: LightSteelBlue;
+}
 
-    </style>
+.bn {
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round
+}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+.bn_0 {
+	stroke: #fff;
+	stroke-width: 1.3px;
+}
 
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://d3js.org/topojson.v1.min.js"></script>
+.bn_1 {
+	stroke: #fff;
+	stroke-width: 0.6px;
+}
 
-    <script src="js/json-stat.js"></script>
+.bn_2 {
+	stroke: #fff;
+	stroke-width: 0.6px;
+}
 
-    <script src="js/lib.js"></script>
-    <script src="js/eurostat-lib.js"></script>
+.bn_3 {
+	stroke: none;
+}
+
+.bn_oth {
+	stroke: #444;
+	stroke-width: 1px;
+}
+
+.infoText {
+	font-size: 13px;
+}
+
+#info {
+	opacity: 0;
+	position: absolute;
+	padding: 5px;
+	width: 150px;
+	background: white;
+	border: 0px;
+	border-radius: 5px;
+	font: 14px;
+	pointer-events: none;
+	box-shadow: 5px 5px 5px grey;
+}
+</style>
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<script src="js/json-stat.js"></script>
+
+<script src="js/lib.js"></script>
+<script src="js/eurostat-lib.js"></script>
 
 </head>
 
 <body>
-<svg id="map"></svg>
-<div id="info"></div>
+	<svg id="map"></svg>
+	<div id="info"></div>
 
-<script>
-    //use d3 quantiles
-    //use color brewer colors
+	<script>
+    //use colors: https://github.com/d3/d3-scale-chromatic
+    //http://d3-legend.susielu.com/
+    //https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
 
     //get url parameters for projection, level and size
     var width = 800, height = width*0.87,
@@ -65,6 +105,10 @@
             infoDiv = d3.select("#info")
             ;
 
+    //build color scale
+    var colors = [];
+    for(var t=0; t<=1; t+=1/7) colors.push(d3.interpolateYlOrRd(1-t));
+
     $.when(
             //get nuts geometries
             $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/RG_BN_lvl3.json"}),
@@ -74,21 +118,32 @@
                 data=data[0]; nuts=nuts[0];
 
                 data = JSONstat(data).Dataset(0);
-                //var geos = data.Dimension("geo").id;
 
                 //get nuts regions
                 var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg).features;
+
+                //link values and build values list for color legend
+                var values=[];
+                for(var i=0; i<nutsRG.length; i++){
+					var rg = nutsRG[i];
+                	var value = data.Data({geo: rg.properties.id});
+                    if(!value || !value.value) continue;
+                    rg.properties.val = value.value;
+                    values.push(+value.value);
+                }
+
+                var scale = d3.scaleQuantile().domain(values).range(colors);
+                scale.quantiles();
 
                 //draw regions
                 g.append("g").selectAll("path").data(nutsRG).enter()
                         .append("path").attr("d", path)
                         .attr("fill", function(rg){
-                            var value = data.Data({geo: rg.properties.id});
-                            if(!value || !value.value) return "lightgray";
-                            rg.properties.val = value.value;
-                            var col = (value.value-19714)/(14377018-19714);
-                            col = Math.pow(col,0.4);
-                            return "rgb(255, "+Math.round(255*(1-col))+", 0)";
+                            if(!rg.properties.val) return "lightgray";
+                            return scale(rg.properties.val);
+                            //var col = (value.value-19714)/(14377018-19714);
+                            //col = Math.pow(col,0.4);
+                            //return "rgb(255, "+Math.round(255*(1-col))+", 0)";
                         })
 					.on("mouseover", function(rg) {
 						var rg_ = d3.select(this);
