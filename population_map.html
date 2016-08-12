@@ -6,8 +6,6 @@
     <style>
         body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
         #bck { fill: LightSteelBlue; }
-        .rg { fill: lightgray; }
-        .rg:hover { fill: darkred; }
         .bn { fill: none; stroke-linecap:round; stroke-linejoin:round }
         .bn_0 { stroke: #fff; stroke-width: 1.3px; }
         .bn_1 { stroke: #fff; stroke-width: 0.6px; }
@@ -15,6 +13,20 @@
         .bn_3 { stroke: none; }
         .bn_oth { stroke: #444; stroke-width: 1px; }
         .infoText { font-size: 13px; }
+
+        #info {
+            opacity: 0;
+            position: absolute;
+            padding: 5px;
+            width: 150px;
+            background: white;
+            border: 0px;
+            border-radius: 5px;
+            font: 14px;
+            pointer-events: none;
+            box-shadow: 5px 5px 5px grey;
+        }
+
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -31,6 +43,7 @@
 
 <body>
 <svg id="map"></svg>
+<div id="info"></div>
 
 <script>
     //use d3 quantiles
@@ -47,7 +60,9 @@
             g = svg.append("g").attr("transform","translate(0,-50)"),
     //path function
             path = d3.geoPath().projection(null),
-            lg="en"
+            lg="en",
+    //info
+            infoDiv = d3.select("#info")
             ;
 
     $.when(
@@ -70,9 +85,24 @@
                         .attr("fill", function(rg){
                             var value = data.Data({geo: rg.properties.id});
                             if(!value || !value.value) return "lightgray";
+                            rg.properties.val = value.value;
                             var col = (value.value-19714)/(14377018-19714);
                             return "rgb(255, "+Math.round(255*(1-col))+", 0)";
-                        });
+                        })
+					.on("mouseover", function(rg) {
+						var rg_ = d3.select(this);
+						rg_.attr("fill___", rg_.style("fill"));
+						rg_.style("fill","darkred");
+                        infoDiv.html(rg.properties.na+"<br>"+rg.properties.val)
+                        .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
+                        .transition().duration(200).style("opacity",1);
+					})
+					.on("mouseout", function() {
+						var rg_ = d3.select(this);
+						rg_.style("fill",rg_.attr("fill___"));
+						infoDiv.transition().duration(200).style("opacity",0);
+					});
+                        ;
 
                 //draw borders
                 var bn = topojson.feature(nuts, nuts.objects.nutsbn).features;
