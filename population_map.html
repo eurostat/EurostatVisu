@@ -87,6 +87,7 @@
                             if(!value || !value.value) return "lightgray";
                             rg.properties.val = value.value;
                             var col = (value.value-19714)/(14377018-19714);
+                            col = Math.pow(col,0.4);
                             return "rgb(255, "+Math.round(255*(1-col))+", 0)";
                         })
 					.on("mouseover", function(rg) {
