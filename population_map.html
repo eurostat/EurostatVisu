@@ -45,6 +45,9 @@ body {
 	stroke-width: 1px;
 }
 
+.cntrg { fill: lightgray; }
+.cntbn { fill: none; stroke: white; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
+
 .infoText {
 	font-size: 13px;
 }
@@ -111,13 +114,22 @@ body {
 
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/RG_BN_lvl3.json"}),
+            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/NUTS_lvl3.json"}),
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_pjanaggr3",{age:"TOTAL",sex:"T",time:"2015"})}, lg)
     ).then(function(nuts,data) {
                 data=data[0]; nuts=nuts[0];
 
                 data = JSONstat(data).Dataset(0);
+
+                //draw countries
+                g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
+                        .append("path").attr("d", path)
+                        .attr("class", "cntrg");
+
+                g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
+                        .append("path").attr("d", path)
+                        .attr("class", "cntbn");
 
                 //get nuts regions
                 var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg).features;
