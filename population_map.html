@@ -96,7 +96,7 @@
                         .append("path").attr("d", path)
                         .attr("class", "cntrg")
                         .on("mouseover", function(rg) {
-                            infoDiv.html(rg.properties.cna+"<br>"+rg.properties.cid)
+                            infoDiv.html(rg.properties.cna)
                                     .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
                                     .transition().duration(200).style("opacity",1);
                         })
@@ -137,7 +137,7 @@
                             var rg_ = d3.select(this);
                             rg_.attr("fill___", rg_.style("fill"));
                             rg_.style("fill","purple");
-                            infoDiv.html(rg.properties.na+"<br>"+rg.properties.val+" people/km²")
+                            infoDiv.html("<b>"+rg.properties.na+"</b><br>"+rg.properties.val+" people/km²")
                                     .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
                                     .transition().duration(200).style("opacity",1);
                         })
