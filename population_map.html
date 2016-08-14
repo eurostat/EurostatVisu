@@ -13,14 +13,14 @@
 
         #bck { fill: LightSteelBlue; }
         .bn { fill: none; stroke-linecap: round; stroke-linejoin: round }
-        .bn_0 { stroke: #fff; stroke-width: 1.3px; }
-        .bn_1 { stroke: #fff; stroke-width: 0.6px; }
-        .bn_2 { stroke: #fff; stroke-width: 0.6px; }
+        .bn_0 { stroke: #777; stroke-width: 1px; }
+        .bn_1 { stroke: none; stroke-width: 0.6px; }
+        .bn_2 { stroke: none; stroke-width: 0.6px; }
         .bn_3 { stroke: none; }
         .bn_oth { stroke: #444; stroke-width: 1px; }
         .cntrg { fill: lightgray; }
-        .cntrg:hover { fill: darkred; }
-        .cntbn { fill: none; stroke: white; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
+        .cntrg:hover { fill: darkgray; }
+        .cntbn { fill: none; stroke: #777; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
 
         #info {
             opacity: 0;
@@ -58,19 +58,18 @@
 <div id="info"></div>
 
 <script>
-    //use colors: https://github.com/d3/d3-scale-chromatic
     //http://d3-legend.susielu.com/
     //https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
 
     //get url parameters for projection, level and size
-    var width = 800, height = width*0.87,
+    var width = 800, height = width,
 
     //build svg
-            svg = d3.select("#map").attr("width", width).attr("height", height),
+            svg = d3.select("#map").attr("width", width-10).attr("height", height-130),
     //background rectangle
             bckRect = svg.append("rect").attr("id","bck").attr("x",0).attr("y",0).attr("width", width).attr("height", height),
     //drawing group
-            g = svg.append("g").attr("transform","translate(0,-50)"),
+            g = svg.append("g").attr("transform","translate(-5,-65)"),
     //path function
             path = d3.geoPath().projection(null),
             lg="en",
@@ -80,13 +79,13 @@
 
     //build color scale
     var colors = [];
-    for(var t=0; t<=1; t+=1/7) colors.push(d3.interpolateYlOrRd(1-t));
+    for(var t=0; t<=1; t+=1/7) colors.push(d3.interpolateYlOrRd(t));
 
     $.when(
             //get nuts geometries
             $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/NUTS_lvl3.json"}),
             //get population data
-            $.ajax({url:EstLib.getEstatDataURL("demo_r_pjanaggr3",{age:"TOTAL",sex:"T",time:"2015"})}, lg)
+            $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:"2014"})}, lg)
     ).then(function(nuts,data) {
                 data=data[0]; nuts=nuts[0];
 
@@ -107,8 +106,6 @@
                         .on("mouseout", function() {
                             infoDiv.transition().duration(200).style("opacity",0);
                         });
-
-
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
                         .append("path").attr("d", path)
                         .attr("class", "cntbn");
@@ -125,7 +122,6 @@
                     rg.properties.val = value.value;
                     values.push(+value.value);
                 }
-                values.sort( function(a,b){return a-b;} );
 
                 var scale = d3.scaleQuantile().domain(values).range(colors);
                 scale.quantiles();
@@ -135,16 +131,13 @@
                         .append("path").attr("d", path)
                         .attr("fill", function(rg){
                             if(!rg.properties.val) return "lightgray";
-                            return scale(rg.properties.val);
-                            //var col = (value.value-19714)/(14377018-19714);
-                            //col = Math.pow(col,0.4);
-                            //return "rgb(255, "+Math.round(255*(1-col))+", 0)";
+                            return scale(+rg.properties.val);
                         })
                         .on("mouseover", function(rg) {
                             var rg_ = d3.select(this);
                             rg_.attr("fill___", rg_.style("fill"));
-                            rg_.style("fill","darkred");
-                            infoDiv.html(rg.properties.na+"<br>"+rg.properties.val)
+                            rg_.style("fill","purple");
+                            infoDiv.html(rg.properties.na+"<br>"+rg.properties.val+" inhabitants / km²")
                                     .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
                                     .transition().duration(200).style("opacity",1);
                         })
@@ -169,7 +162,6 @@
                             if(bn.oth==="T") cl.push("bn_oth");
                             return cl.join(" ");
                         });
-
             }
     );
 
