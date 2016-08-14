@@ -1,3 +1,24 @@
-show COCIOP hierarchy sunburst
+finalise nuts map example
+add as example
+
+Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
+show COCIOP and NACE hierarchy as sunburst
 generic map for Eurostat
 flow map: transport, trade, migration (migr)
+
+Try http://bl.ocks.org/jgaffuri
+
+http://ec.europa.eu/eurostat/help/first-visit/tools
+prom - http://christopheviau.com/d3list/gallery.html#visualizationType=all   Jules Grandin
+
+use more estat colors
+use more translation pattern
+force page reload - see http://stackoverflow.com/questions/26818091/force-browser-to-reload-index-htm
+
+cartogram
+http://prag.ma/code/d3-cartogram/#netmigrate/2011
+http://bl.ocks.org/mbostock/4150951
+https://github.com/mbostock/us-atlas
+
+Implement https://bost.ocks.org/mike/chart/ for distr chart
+

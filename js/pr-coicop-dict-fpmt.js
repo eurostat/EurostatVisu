@@ -1,4 +1,4 @@
-PrVis.coicopsDictFPMT = {
+EstLib.coicopsDictFPMT = {
 		"CP011" : {desc:"Food", parents:[], children:["CP0111","CP0112","CP0113","CP0114","CP0115","CP0116","CP0117"]},
 		"CP0111" : {desc:"Bread and cereals", parents:["CP011"], children:[]},
 		"CP0112" : {desc:"Meat", parents:["CP011"], children:["CP01121","CP01122","CP01124"]},

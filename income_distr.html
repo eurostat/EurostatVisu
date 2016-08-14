@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+
     <title>Income disparities in Europe</title>
-    <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css">
-    <script src="js/jquery-1.11.3.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/colorbrewer.min.js"></script>
-    <script src="js/moment.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css">
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <!--     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script src="js/json-stat.js"></script>
-    <!-- <script src="js/html2canvas.js"></script> -->
+
     <script src="js/lib.js"></script>
     <script src="js/eurostat-lib.js"></script>
-    <script src="js/income-distr.js"></script>
+    <script src="js/income_distr.js"></script>
 
     <style>
-        body {
-            font-family: sans-serif;
-        }
+        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
 
-        h1 {
-            font-size: 22px;
-        }
+        h1 { font-size: 22px; }
 
         #disrect rect {
-            /*fill: peru;*/
+            fill: peru;
             stroke-width: 0.5;
             stroke: lightgray;
+        }
+        #disrect rect:hover {
+            fill: darkred;
         }
 
         #timeslider label {
@@ -39,51 +43,251 @@
             font-size: 10px;
         }
 
-        .chartLabels{
-            font-size: 14px;
-            /*fill: gray;*/
-        }
-        .arrow{
+        .chartLabels { font-size: 14px; }
+
+        .arrow {
             marker-end: url(#arrow);
             stroke: gray;
             stroke-width: 2.5px;
         }
-        #averageLine{
+
+        #averageLine {
             stroke: black;
             stroke-width: 2px;
             opacity: 0.5;
+        }
+
+        .graticuleYline {
+            stroke: black;
+            stroke-width: 2px;
+            opacity: 0.15;
         }
 
         .ui-widget {
             font-size: 12px !important;
         }
 
-        p {
-            font-size: 10px;
+        #timeslider {
+            width: 200px;
         }
+
+        .nodataTxt {
+            opacity:0;
+            font-size: 18px;
+            font-weight:bold;
+            text-anchor:middle
+        }
+        .bckRect { fill: #f5f5f5; }
 
     </style>
 
 </head>
 
 <body>
-<h1>Income disparities in <span id="geoTitle">-</span> in <span id="timeTitle">-</span></h1>
-<div style="float: left; width:250px; margin-left: 10px; margin-right: 10px;">
-    Country
+<h1>
+    <span id="title1"></span> - <span id="geoTitle">-</span> <span
+        id="title2"></span> <span id="timeTitle">-</span>
+</h1>
+<div style="float: left; width: 250px; margin-left: 10px; margin-right: 10px;">
+    <span id="countryText"></span>
     <div id="geoListDiv">
         <select name="geoN" id="geoList"></select>
     </div>
-    <div style="margin-top: 15px;">
-        Year
+    <div style="margin-top: 8px;">
+        <span id="yearText"></span>
         <div id="timeslider"></div>
     </div>
-    <div id="info" style="width:240px; margin-top: 40px;"></div>
+    <div id="info" style="width: 240px; margin-top: 25px;"></div>
 </div>
 <div id="chart"></div>
 <div>
-    <p>
-        Sources: <a href="http://ec.europa.eu/eurostat/">Eurostat</a> databases on income distribution (<a href="http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview">EU-SILC</a>). More information <a href="http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics">here</a>.
-    </p>
+    <p><a id="linkdist2" href="income_distr_2.html"><span id="focusCntr"></span></a></p>
+    <p><span id="sourceTxt"></span></p>
 </div>
+
+<script>
+
+    /**
+     *
+     * @author julien Gaffuri
+     *
+     */
+    (function($, EstLib) {
+        $(function() {
+            //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
+
+            //TODO update on slider move
+
+            //get language
+            var lg = EstLib.getLang2Chars();
+
+            //select dictionnary
+            var dict = EstLib.dictIncomeDistr;
+            dict = dict[lg] || dict.en;
+            //try to fill page with translated terms
+            EstLib.writeText(dict);
+
+            //write page title
+            document.title = dict.title;
+
+            //build svg element
+            var rnd = 8;
+            var margin = {top: 10+rnd, right: 10+rnd, bottom: 40+rnd, left: 30+rnd};
+            var width = 600 - margin.left - margin.right, height = 350 - margin.top - margin.bottom;
+            var svg = d3.select("#chart").append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom);
+            var chart = svg.append("g").attr("transform", "translate("+margin.left+","+margin.top+ ")");
+
+            //background rectangle
+            chart.append("rect").attr("class","bckRect")
+                .attr("width",width+2*rnd).attr("height",height+rnd)
+                .attr("x",-rnd).attr("y",-rnd)
+                .attr("rx",rnd).attr("ry",rnd);
+
+            var noData = chart.append("g").attr("id","nodata").attr("class","nodataTxt");
+            noData.append("text").attr("x",width*0.5).attr("y",height*0.5+9).text(dict.nodata);
+
+            var rects = chart.append("g").attr("id","disrect");
+
+            //chart axis scales
+            var xScale = d3.scaleLinear().domain([0,100]).range([0, width]);
+            var yMax = 75; //adapt max? min?
+            var yScale = d3.scaleLinear().domain([0,yMax]).range([0, height]);
+
+            //init chart
+            var addRect = function(quantileType,quantileNb,pos){
+                rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
+                        .attr("width",xScale(EstLib.quantileDict[quantileType].percentage)).attr("height",yScale(0));
+            };
+            //deciles
+            for(i=1;i<=10;i++) addRect("D",i,10*(i-1));
+            //first 5 percentiles
+            for(i=0;i<=4;i++) addRect("P",i+1,i);
+            //last 5 percentiles
+            for(i=95;i<=100;i++) addRect("P",i,i-1);
+            //second twentile
+            addRect("T",2,5);
+            //19th twentyfifth
+            addRect("F",24,90);
+
+            //define arrow marker
+            svg.append("defs").append("marker").attr("id","arrow")
+                    .attr("viewBox","0 -5 10 10").attr("refX",5).attr("refY",0)
+                    .attr("markerWidth",3).attr("markerHeight",3).attr("orient","auto")
+                    .append("path").attr("d", "M0,-5L10,0L0,5");
+
+            //draw axis labels
+            var labelsG = svg.append("g").attr("id","labels").attr("transform", "translate("+margin.left+","+margin.top+ ")");
+            labelsG.append("text").attr("class","chartLabels").attr("x",47).attr("y",height+17).text(dict.lowincome);
+            labelsG.append('line').attr("class","arrow").attr("x1",150).attr("y1",height+25).attr("x2",40).attr("y2",height+25);
+            labelsG.append("text").attr("class","chartLabels").attr("x",width-150).attr("y",height+17).text(dict.higincome);
+            labelsG.append('line').attr("class","arrow").attr("x1",width-150).attr("y1",height+25).attr("x2",width-45).attr("y2",height+25);
+            labelsG.append("text").attr("class","chartLabels").attr("transform", "translate(17,"+(height*0.5)+")rotate(-90)").attr("x",0).attr("y",0).text(dict.incomelev);
+            labelsG.append('line').attr("class","arrow").attr("x1",25).attr("y1",height*0.5+5).attr("x2",25).attr("y2",height*0.5-90);
+
+            //draw y graticule
+            for(var y=20; y<yMax; y+=10)
+                labelsG.append('line').attr("class","graticuleYline").attr("x1",0).attr("y1",height-yScale(y)).attr("x2",width).attr("y2",height-yScale(y));
+
+            //draw average line
+            labelsG.append('line').attr("id","averageLine")
+                .attr("x1",0).attr("y1",height-yScale(10)).attr("x2",width).attr("y2",height-yScale(10));
+            labelsG.append("text")
+                .attr("x",5).attr("y",height-yScale(10)-3).attr("font-size","11px").text(dict.avincome);
+
+            //info div
+            var infoDiv = d3.select("#info");
+
+            //the selection
+            var geoSel = EstLib.getParameterByName("geo") || "EU28";
+            var timeSel = EstLib.getParameterByName("time") || "2014";
+
+            //link to other visualisation
+            d3.select("#linkdist2")
+                    .on("click", function() { window.open("income_distr_2.html?"+"time="+timeSel+"&lang="+lg, "_blank"); });
+
+            $.when(
+                    //get income distribution data
+                    $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
+                                quantile:["P100","P99","P98","P97","P96","P95","D10","D9","D8","D7","D6","D5","D4","D3","D2","D1","P5","P4","P3","P2","P1"]
+                            }, lg
+                    )})
+            ).then(function(data) {
+                        var i;
+
+                        //simplify geo label texts
+                        EstLib.overrideCountryNames(data.dimension.geo.category.label, lg);
+
+                        //decode data
+                        data = JSONstat(data).Dataset(0);
+
+                        //build geolist
+                        var geoList = $("#geoList");
+                        var geos = data.Dimension("geo").id;
+                        geos.splice(geos.indexOf("EA12"),1);
+                        geos.splice(geos.indexOf("EA17"),1);
+                        geos.splice(geos.indexOf("EA18"),1);
+                        geos.splice(geos.indexOf("EU15"),1);
+                        geos.splice(geos.indexOf("EU27"),1);
+
+                        EstLib.buildGeoList(geoList, geos, function(geo){
+                            return data.Dimension("geo").Category(geo).label;
+                        }, geoSel, function(){
+                            geoSel=geoList.find(":selected").attr("value"); update(EstLib.getDataObj(data, geoSel, timeSel));
+                        });
+
+                        //build time slider
+                        EstLib.buildTimeSlider($("#timeslider"), data.Dimension("time").id, timeSel, 5, function() {
+                            timeSel= ""+$("#timeslider").slider("value");
+                            update(EstLib.getDataObj(data, geoSel, timeSel));
+                        });
+
+                        //update the chart
+                        var update = function(dataObj){
+
+                            if(!EstLib.dataPresence(dataObj)) {
+                                noData.transition().style("opacity", 1);
+                                labelsG.transition().style("opacity", 0);
+                            } else {
+                                //show
+                                noData.transition().style("opacity", 0);
+                                labelsG.transition().style("opacity", 1);
+                            }
+
+                            rects.selectAll("rect").data(d3.keys(dataObj))
+                                    .on("mouseover", function(qu) {
+                                        infoDiv.html( EstLib.getRectText(qu, dataObj[qu], dict, lg) );
+                                    })
+                                    .on("mouseout", function() {
+                                        infoDiv.text("");
+                                    })
+                                    .transition().attr("y", function(d,i){
+                                        var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
+                                        return yScale(value<0?yMax:yMax-factor*value);
+                                    })
+                                    .attr("height", function(d){
+                                        var value = dataObj[d] || 0, factor = 10.0/EstLib.quantileDict[d.charAt(0)].percentage;
+                                        return yScale(factor*Math.abs(value));
+                                    });
+
+                            //select geoSel in list
+                            $('#geoList option[value='+geoSel+']').attr('selected', 'selected');
+                            //update title
+                            d3.select("#geoTitle").text(data.Dimension("geo").Category(geoSel).label);
+                            d3.select("#timeTitle").text(timeSel);
+                        };
+
+                        update(EstLib.getDataObj(data, geoSel, timeSel));
+
+                    }, function() {
+                        console.log("Could not load data");
+                    }
+            );
+        });
+    }(jQuery, window.EstLib = window.EstLib || {} ));
+
+</script>
+
 </body>
 </html>
