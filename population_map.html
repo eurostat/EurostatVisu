@@ -11,46 +11,16 @@
             sans-serif;
         }
 
-        #bck {
-            fill: LightSteelBlue;
-        }
-
-        .bn {
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round
-        }
-
-        .bn_0 {
-            stroke: #fff;
-            stroke-width: 1.3px;
-        }
-
-        .bn_1 {
-            stroke: #fff;
-            stroke-width: 0.6px;
-        }
-
-        .bn_2 {
-            stroke: #fff;
-            stroke-width: 0.6px;
-        }
-
-        .bn_3 {
-            stroke: none;
-        }
-
-        .bn_oth {
-            stroke: #444;
-            stroke-width: 1px;
-        }
-
+        #bck { fill: LightSteelBlue; }
+        .bn { fill: none; stroke-linecap: round; stroke-linejoin: round }
+        .bn_0 { stroke: #fff; stroke-width: 1.3px; }
+        .bn_1 { stroke: #fff; stroke-width: 0.6px; }
+        .bn_2 { stroke: #fff; stroke-width: 0.6px; }
+        .bn_3 { stroke: none; }
+        .bn_oth { stroke: #444; stroke-width: 1px; }
         .cntrg { fill: lightgray; }
+        .cntrg:hover { fill: darkred; }
         .cntbn { fill: none; stroke: white; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
-
-        .infoText {
-            font-size: 13px;
-        }
 
         #info {
             opacity: 0;
@@ -125,7 +95,19 @@
                 //draw countries
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
                         .append("path").attr("d", path)
-                        .attr("class", "cntrg");
+                        .attr("class", "cntrg")
+                        .on("mouseover", function(rg) {
+                            infoDiv.html(rg.properties.cna+"<br>"+rg.properties.cid)
+                                    .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
+                                    .transition().duration(200).style("opacity",1);
+                        })
+                        .on("mousemove", function() {
+                            infoDiv.style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px");
+                        })
+                        .on("mouseout", function() {
+                            infoDiv.transition().duration(200).style("opacity",0);
+                        });
+
 
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
                         .append("path").attr("d", path)
@@ -166,6 +148,9 @@
                                     .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
                                     .transition().duration(200).style("opacity",1);
                         })
+                        .on("mousemove", function() {
+                            infoDiv.style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px");
+                        })
                         .on("mouseout", function() {
                             var rg_ = d3.select(this);
                             rg_.style("fill",rg_.attr("fill___"));
@@ -184,8 +169,6 @@
                             if(bn.oth==="T") cl.push("bn_oth");
                             return cl.join(" ");
                         });
-
-
 
             }
     );
