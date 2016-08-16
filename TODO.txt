@@ -1,4 +1,4 @@
-factorise infodiv, nutsmap (move to nuts2json)
+factorise infodiv, nutsmap (move to nuts2json - see https://bost.ocks.org/mike/chart/)
 population map: fix no-data regions in UK and DE
 time slider.
 

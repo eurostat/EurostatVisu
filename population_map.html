@@ -22,18 +22,6 @@
         .cntrg:hover { fill: darkgray; }
         .cntbn { fill: none; stroke: #777; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
 
-        #info {
-            opacity: 0;
-            position: absolute;
-            padding: 5px;
-            width: 150px;
-            background: white;
-            border: 0px;
-            border-radius: 5px;
-            font: 14px;
-            pointer-events: none;
-            box-shadow: 5px 5px 5px grey;
-        }
     </style>
 
     <script
@@ -55,7 +43,7 @@
 
 <body>
 <svg id="map"></svg>
-<div id="info"></div>
+<div id="tooltip"></div>
 
 <script>
     //http://d3-legend.susielu.com/
@@ -74,7 +62,7 @@
             path = d3.geoPath().projection(null),
             lg="en",
     //info
-            infoDiv = d3.select("#info")
+            tooltip = EstLib.tooltip()
             ;
 
     //build color scale
@@ -95,17 +83,9 @@
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
                         .append("path").attr("d", path)
                         .attr("class", "cntrg")
-                        .on("mouseover", function(rg) {
-                            infoDiv.html(rg.properties.cna)
-                                    .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
-                                    .transition().duration(200).style("opacity",1);
-                        })
-                        .on("mousemove", function() {
-                            infoDiv.style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px");
-                        })
-                        .on("mouseout", function() {
-                            infoDiv.transition().duration(200).style("opacity",0);
-                        });
+                        .on("mouseover", function(rg) { tooltip.mouseover(rg.properties.cna); })
+                        .on("mousemove", function() { tooltip.mousemove(); })
+                        .on("mouseout", function() { tooltip.mouseout(); })
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
                         .append("path").attr("d", path)
                         .attr("class", "cntbn");
@@ -137,17 +117,13 @@
                             var rg_ = d3.select(this);
                             rg_.attr("fill___", rg_.style("fill"));
                             rg_.style("fill","purple");
-                            infoDiv.html("<b>"+rg.properties.na+"</b><br>"+rg.properties.val+" people/km²")
-                                    .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
-                                    .transition().duration(200).style("opacity",1);
+                            tooltip.mouseover("<b>"+rg.properties.na+"</b><br>"+rg.properties.val+" people/km²");
                         })
-                        .on("mousemove", function() {
-                            infoDiv.style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px");
-                        })
+                        .on("mousemove", function() { tooltip.mousemove(); })
                         .on("mouseout", function() {
                             var rg_ = d3.select(this);
                             rg_.style("fill",rg_.attr("fill___"));
-                            infoDiv.transition().duration(200).style("opacity",0);
+                            tooltip.mouseout();
                         });
 
                 //draw borders
