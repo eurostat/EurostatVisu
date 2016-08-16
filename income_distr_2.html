@@ -61,19 +61,6 @@
 
         .ui-widget { font-size: 12px !important; }
 
-        #info {
-            opacity: 0;
-            position: absolute;
-            padding: 10px;
-            width: 300px;
-            background: white;
-            border: 0px;
-            border-radius: 10px;
-            font: 16px sans-serif;
-            pointer-events: none;
-            box-shadow: 10px 10px 5px grey;
-        }
-
         #timeslider { width: 200px; }
 
         .nodataTxt {
@@ -104,7 +91,7 @@
         <span id="sourceTxt"></span>
     </p>
 </div>
-<div id="info"></div>
+<div id="tooltip"></div>
 
 <script>
 
@@ -147,7 +134,7 @@
             var timeSel = EstLib.getParameterByName("time") || "2014";
 
             //info
-            var infoDiv = d3.select("#info");
+            var tooltip = EstLib.tooltip({width: "300px",font: "16px sans-serif",padding: "10px"});
 
             $.when(
                     //get income distribution data
@@ -247,14 +234,9 @@
                                 //update rectangles with dataObj (within a closure to preserve dataObj value)
                                 (function(dataObj){
                                     rects.selectAll("rect").data(d3.keys(dataObj))
-                                        .on("mouseover", function(qu) {
-                                            infoDiv.html(EstLib.getRectText(qu, dataObj[qu], dict, lg))
-                                                    .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-50) + "px")
-                                                    .transition().duration(200).style("opacity",1);
-                                        })
-                                        .on("mouseout", function() {
-                                            infoDiv.transition().duration(200).style("opacity",0);
-                                        })
+                                        .on("mouseover", function(qu) { tooltip.mouseover(EstLib.getRectText(qu, dataObj[qu], dict, lg)); })
+                                        .on("mousemove", function() { tooltip.mousemove(); })
+                                        .on("mouseout", function() { tooltip.mouseout(); })
                                         .transition()
                                         .attr("y", function(qu){
                                             var value = dataObj[qu] || 0, factor = 10.0/EstLib.quantileDict[qu.charAt(0)].percentage;
