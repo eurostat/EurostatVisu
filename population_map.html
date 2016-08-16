@@ -50,7 +50,11 @@
     //https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
 
     //get url parameters for projection, level and size
-    var width = 800, height = width,
+    var width = EstLib.getParameterByName("s") || 800,
+    height = width,
+	nutsLvl = EstLib.getParameterByName("lvl") || "3",
+	time = EstLib.getParameterByName("time") || "2014",
+	proj = EstLib.getParameterByName("proj") || "laea",
 
     //build svg
             svg = d3.select("#map").attr("width", width-10).attr("height", height-130),
@@ -71,9 +75,9 @@
 
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/NUTS_lvl3.json"}),
+            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/"+proj+"/"+width+"px/NUTS_lvl"+nutsLvl+".json"}),
             //get population data
-            $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:"2014"})}, lg)
+            $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
                 data=data[0]; nuts=nuts[0];
 
