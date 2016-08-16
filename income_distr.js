@@ -76,7 +76,7 @@
             nodata:"Pas de données",
             thisincomeis:"Ces revenus sont",
             negativ:"negatifs"
-        },
+        }
         de:{
             title:"Einkommensungleichheiten in Europa",
             title1:"Einkommensungleiheiten",
@@ -104,7 +104,7 @@
             twentyfifth:"fünf-und-zwanzigste",
             tenth:"zenste",
             sourceTxt:"Quelle: Datenbank <a href='http://ec.europa.eu/eurostat/'>Eurostat</a> über die Einkommensverteilung (<a href='http://ec.europa.eu/eurostat/web/income-and-living-conditions/overview'>EU-SILC</a>). Mehrere Informationen <a href='http://ec.europa.eu/eurostat/statistics-explained/index.php/Income_distribution_statistics'>hier</a>.",
-            focusCntr:"Ländervergleich.",
+            focusCntr:"Comparaison par pays.",
             nodata:"Keine Daten",
             thisincomeis:"Diese Einkommen sind",
             negativ:"negativ"

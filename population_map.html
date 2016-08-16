@@ -1,103 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>NUTS JSON overview</title>
-<style>
-body {
-	font-family: "Myriad Pro", Myriad, MyriadPro-Regular,
-		'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans",
-		"Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial,
-		sans-serif;
-}
+    <meta charset="utf-8">
+    <title>NUTS JSON overview</title>
+    <style>
+        body {
+            font-family: "Myriad Pro", Myriad, MyriadPro-Regular,
+            'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans",
+            "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial,
+            sans-serif;
+        }
 
-#bck {
-	fill: LightSteelBlue;
-}
+        #bck { fill: LightSteelBlue; }
+        .bn { fill: none; stroke-linecap: round; stroke-linejoin: round }
+        .bn_0 { stroke: #777; stroke-width: 1px; }
+        .bn_1 { stroke: none; stroke-width: 0.6px; }
+        .bn_2 { stroke: none; stroke-width: 0.6px; }
+        .bn_3 { stroke: none; }
+        .bn_oth { stroke: #444; stroke-width: 1px; }
+        .cntrg { fill: lightgray; }
+        .cntrg:hover { fill: darkgray; }
+        .cntbn { fill: none; stroke: #777; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
 
-.bn {
-	fill: none;
-	stroke-linecap: round;
-	stroke-linejoin: round
-}
+        #info {
+            opacity: 0;
+            position: absolute;
+            padding: 5px;
+            width: 150px;
+            background: white;
+            border: 0px;
+            border-radius: 5px;
+            font: 14px;
+            pointer-events: none;
+            box-shadow: 5px 5px 5px grey;
+        }
+    </style>
 
-.bn_0 {
-	stroke: #fff;
-	stroke-width: 1.3px;
-}
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
-.bn_1 {
-	stroke: #fff;
-	stroke-width: 0.6px;
-}
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
 
-.bn_2 {
-	stroke: #fff;
-	stroke-width: 0.6px;
-}
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-.bn_3 {
-	stroke: none;
-}
+    <script src="js/json-stat.js"></script>
 
-.bn_oth {
-	stroke: #444;
-	stroke-width: 1px;
-}
-
-.infoText {
-	font-size: 13px;
-}
-
-#info {
-	opacity: 0;
-	position: absolute;
-	padding: 5px;
-	width: 150px;
-	background: white;
-	border: 0px;
-	border-radius: 5px;
-	font: 14px;
-	pointer-events: none;
-	box-shadow: 5px 5px 5px grey;
-}
-</style>
-
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="https://d3js.org/topojson.v1.min.js"></script>
-
-<script src="https://d3js.org/d3-color.v1.min.js"></script>
-<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-
-<script src="js/json-stat.js"></script>
-
-<script src="js/lib.js"></script>
-<script src="js/eurostat-lib.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="js/eurostat-lib.js"></script>
 
 </head>
 
 <body>
-	<svg id="map"></svg>
-	<div id="info"></div>
+<svg id="map"></svg>
+<div id="info"></div>
 
-	<script>
-    //use colors: https://github.com/d3/d3-scale-chromatic
+<script>
     //http://d3-legend.susielu.com/
     //https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
 
     //get url parameters for projection, level and size
-    var width = 800, height = width*0.87,
+    var width = 800, height = width,
 
     //build svg
-            svg = d3.select("#map").attr("width", width).attr("height", height),
+            svg = d3.select("#map").attr("width", width-10).attr("height", height-130),
     //background rectangle
             bckRect = svg.append("rect").attr("id","bck").attr("x",0).attr("y",0).attr("width", width).attr("height", height),
     //drawing group
-            g = svg.append("g").attr("transform","translate(0,-50)"),
+            g = svg.append("g").attr("transform","translate(-5,-65)"),
     //path function
             path = d3.geoPath().projection(null),
             lg="en",
@@ -107,17 +79,36 @@ body {
 
     //build color scale
     var colors = [];
-    for(var t=0; t<=1; t+=1/7) colors.push(d3.interpolateYlOrRd(1-t));
+    for(var t=0; t<=1; t+=1/7) colors.push(d3.interpolateYlOrRd(t));
 
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/RG_BN_lvl3.json"}),
+            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/laea/"+width+"px/NUTS_lvl3.json"}),
             //get population data
-            $.ajax({url:EstLib.getEstatDataURL("demo_r_pjanaggr3",{age:"TOTAL",sex:"T",time:"2015"})}, lg)
+            $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:"2014"})}, lg)
     ).then(function(nuts,data) {
                 data=data[0]; nuts=nuts[0];
 
                 data = JSONstat(data).Dataset(0);
+
+                //draw countries
+                g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
+                        .append("path").attr("d", path)
+                        .attr("class", "cntrg")
+                        .on("mouseover", function(rg) {
+                            infoDiv.html(rg.properties.cna)
+                                    .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
+                                    .transition().duration(200).style("opacity",1);
+                        })
+                        .on("mousemove", function() {
+                            infoDiv.style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px");
+                        })
+                        .on("mouseout", function() {
+                            infoDiv.transition().duration(200).style("opacity",0);
+                        });
+                g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
+                        .append("path").attr("d", path)
+                        .attr("class", "cntbn");
 
                 //get nuts regions
                 var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg).features;
@@ -125,8 +116,8 @@ body {
                 //link values and build values list for color legend
                 var values=[];
                 for(var i=0; i<nutsRG.length; i++){
-					var rg = nutsRG[i];
-                	var value = data.Data({geo: rg.properties.id});
+                    var rg = nutsRG[i];
+                    var value = data.Data({geo: rg.properties.id});
                     if(!value || !value.value) continue;
                     rg.properties.val = value.value;
                     values.push(+value.value);
@@ -140,25 +131,24 @@ body {
                         .append("path").attr("d", path)
                         .attr("fill", function(rg){
                             if(!rg.properties.val) return "lightgray";
-                            return scale(rg.properties.val);
-                            //var col = (value.value-19714)/(14377018-19714);
-                            //col = Math.pow(col,0.4);
-                            //return "rgb(255, "+Math.round(255*(1-col))+", 0)";
+                            return scale(+rg.properties.val);
                         })
-					.on("mouseover", function(rg) {
-						var rg_ = d3.select(this);
-						rg_.attr("fill___", rg_.style("fill"));
-						rg_.style("fill","darkred");
-                        infoDiv.html(rg.properties.na+"<br>"+rg.properties.val)
-                        .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
-                        .transition().duration(200).style("opacity",1);
-					})
-					.on("mouseout", function() {
-						var rg_ = d3.select(this);
-						rg_.style("fill",rg_.attr("fill___"));
-						infoDiv.transition().duration(200).style("opacity",0);
-					});
-                        ;
+                        .on("mouseover", function(rg) {
+                            var rg_ = d3.select(this);
+                            rg_.attr("fill___", rg_.style("fill"));
+                            rg_.style("fill","purple");
+                            infoDiv.html("<b>"+rg.properties.na+"</b><br>"+rg.properties.val+" people/km²")
+                                    .style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px")
+                                    .transition().duration(200).style("opacity",1);
+                        })
+                        .on("mousemove", function() {
+                            infoDiv.style("left", (d3.event.pageX+30) + "px").style("top", (d3.event.pageY-20) + "px");
+                        })
+                        .on("mouseout", function() {
+                            var rg_ = d3.select(this);
+                            rg_.style("fill",rg_.attr("fill___"));
+                            infoDiv.transition().duration(200).style("opacity",0);
+                        });
 
                 //draw borders
                 var bn = topojson.feature(nuts, nuts.objects.nutsbn).features;
