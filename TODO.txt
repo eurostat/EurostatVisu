@@ -1,6 +1,9 @@
-factorise infodiv, nutsmap (move to nuts2json - see https://bost.ocks.org/mike/chart/)
+factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
+
 population map: fix no-data regions in UK and DE
+legend
 time slider.
+more advanced (2 values) thematic maps based on bertin
 
 Flags: see http://ec.europa.eu/eurostat/cache/infographs/price-levels/img/flags/EL.png
 show COCIOP and NACE hierarchy as sunburst
@@ -22,4 +25,3 @@ http://bl.ocks.org/mbostock/4150951
 https://github.com/mbostock/us-atlas
 
 Implement https://bost.ocks.org/mike/chart/ for distr chart
-
