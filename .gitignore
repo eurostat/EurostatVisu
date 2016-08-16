@@ -1,4 +1,5 @@
 .idea/
 .settings/
 .project
-.classpath
+chrome.sh
+chrome.bat
