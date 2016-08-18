@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>NUTS JSON overview</title>
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+    <title>European population map</title>
     <style>
         body {
             font-family: "Myriad Pro", Myriad, MyriadPro-Regular,
@@ -14,8 +15,8 @@
         #bck { fill: LightSteelBlue; }
         .bn { fill: none; stroke-linecap: round; stroke-linejoin: round }
         .bn_0 { stroke: #777; stroke-width: 1px; }
-        .bn_1 { stroke: none; stroke-width: 0.6px; }
-        .bn_2 { stroke: none; stroke-width: 0.6px; }
+        .bn_1 { stroke: none; }
+        .bn_2 { stroke: none; }
         .bn_3 { stroke: none; }
         .bn_oth { stroke: #444; stroke-width: 1px; }
         .cntrg { fill: lightgray; }
@@ -131,6 +132,7 @@
                         });
 
                 //draw borders
+                //TODO do not draw the ones with stroke:none
                 var bn = topojson.feature(nuts, nuts.objects.nutsbn).features;
                 bn.sort(function(bn1,bn2){ return bn2.properties.lvl - bn1.properties.lvl; });
                 g.append("g").selectAll("path").data(bn).enter()
