@@ -24,3 +24,5 @@ http://bl.ocks.org/mbostock/4150951
 https://github.com/mbostock/us-atlas
 
 Implement https://bost.ocks.org/mike/chart/ for distr chart
+
+See http://gka.github.io/chroma.js/
