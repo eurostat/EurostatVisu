@@ -745,4 +745,17 @@
 	};
 
 
+
+	EstLib.loadingImage = function(config){
+		config = config || {};
+		config.imgsrc = config.imgsrc || "img/loading.gif";
+		config.alttxt = config.alttxt || "Loading...";
+
+		var ldiv = $("<div>").css({"width":"100%","height":"100%","top":"0","left":"0","position":"fixed","display":"block","opacity":"0.7","background-color":"#fff","z-index":"99","text-align":"center"}).appendTo("body");
+			$("<img>").attr("src", config.imgsrc).attr("alt", config.alttxt).css({"position":"absolute","top":"50%","left":"50%","z-index":"100"}).appendTo(ldiv);
+
+		return ldiv;
+	};
+
+
 }(jQuery, window.EstLib = window.EstLib || {} ));
