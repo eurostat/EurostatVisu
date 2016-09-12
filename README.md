@@ -14,3 +14,7 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 # Technical details
 
 Data are accessed using the [Eurostat REST webservice](http://ec.europa.eu/eurostat/web/json-and-unicode-web-services/getting-started/rest-request) for [JSON-stat](https://json-stat.org/) data. The data are decoded and queried using [JSON-stat library](https://json-stat.com/). The visualisations are built using mainly [JQuery](https://jquery.com/) and [D3](https://d3js.org/) libraries. Maps based on <a href="http://ec.europa.eu/eurostat/web/nuts/overview" target="_blank">NUTS regions</a> rely on [Nuts2json](https://github.com/jgaffuri/Nuts2json/blob/gh-pages/README.md).
+
+# Support and contribution
+
+Feel free to [ask support](https://github.com/jgaffuri/EurostatVisu/issues/new), fork the project or simply star it (It's always a pleasure).
