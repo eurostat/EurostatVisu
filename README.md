@@ -17,4 +17,4 @@ Data are accessed using the [Eurostat REST webservice](http://ec.europa.eu/euros
 
 # Support and contribution
 
-Feel free to [ask support](https://github.com/jgaffuri/EurostatVisu/issues/new), fork the project or simply star it (It's always a pleasure).
+Feel free to [ask support](https://github.com/jgaffuri/EurostatVisu/issues/new), fork the project or simply star it (it's always a pleasure).
