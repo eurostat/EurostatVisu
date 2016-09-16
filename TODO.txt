@@ -1,5 +1,7 @@
 factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
 
+generic timeseries chart
+
 add legend
 time slider.
 more advanced (2 values) thematic maps based on bertin
