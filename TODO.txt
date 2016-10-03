@@ -1,5 +1,15 @@
 factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
 
+EU Wheel of competitivness - EWoC
+Macroeconomic
+Microeconomic
+Globalisation
+Environmental
+Socio-institutional
+set of 35 indicators
+http://reports.weforum.org/global-competitiveness-index/country-profiles/
+
+
 generic timeseries chart
 
 add legend
