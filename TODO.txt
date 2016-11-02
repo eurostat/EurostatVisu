@@ -1,4 +1,5 @@
 factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
+scr eb for others + inspr doc
 
 EU Wheel of competitivness - EWoC
 Macroeconomic
