@@ -1,5 +1,7 @@
 factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
 
+check: http://ec.europa.eu/eurostat/statistical-atlas/gis/viewer/distribution/v1/
+
 EU Wheel of competitivness - EWoC
 Macroeconomic
 Microeconomic
