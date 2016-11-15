@@ -1,3 +1,4 @@
+scr eb for others + inspr doc
 factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
 
 check: http://ec.europa.eu/eurostat/statistical-atlas/gis/viewer/distribution/v1/
