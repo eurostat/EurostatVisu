@@ -7,13 +7,23 @@
  */
 (function($, EstLib) {
 
-	//colors library of Eurostat
+	//official colors for Eurostat logo and statistical domains
 	EstLib.color = {
 			logo:{gray:"#787878",blue:"#004494",yellow:"#FFF100"},
 			theme:{genreg:"#466eb4",ecofin:"#af4b91",popsoc:"#e6a532",indtradserv:"#00a0e1",agrifish:"#7daf4b",trade:"#b93c46",transp:"#961e2d",envener:"#41afaa",scitech:"#d7642d"}
 	}
 
 	EstLib.getEstatRestDataURLBase = "http://ec.europa.eu/eurostat/wdds/rest/data/";
+
+	
+    /**
+     * Build URL to fetch data from eurobase REST API.
+     * @param {string} table The Eurobase table code
+     * @param {object=} params The query parameters as fro example: {key:value,key:[value1,value2,value3]}
+     * @param {number=} language
+     * @param {number=} format
+     * @param {number=} version
+     */
 	EstLib.getEstatDataURL = function(table, params, language, format, version){
 		language = language || "en";
 		format = format || "json";
@@ -37,7 +47,7 @@
 		return monthInt<=9?"0"+monthInt:""+monthInt;
 	};
 
-	//override country names, to shoter ones
+	//override country names, to shorter ones
 	EstLib.overrideCountryNames = function(dict, lg){
 		lg = lg || "en";
 		var data;
@@ -48,10 +58,12 @@
 		if(dict.MK) dict.MK = {en:"Macedonia (FYRM)", fr:"Macédoine", de:"Mazedonien"}[lg];//"Macedonia (FYRM)";
 	};
 
+	//check if a country code is a geographic aggregate
 	EstLib.isGeoAggregate = function(geo){
 		return geo.indexOf("EA") > -1 || geo.indexOf("EU") > -1 || geo.indexOf("NMS") > -1;
 	};
 
+	//comparison function to be used to sort country lists based on names.
 	EstLib.geoComparison = function(geoToNameFun){
 		geoToNameFun = geoToNameFun || function(a){return a;};
 		return function(g1, g2) {
@@ -63,10 +75,12 @@
 		}
 	};
 
+	//Official country order to be used in Eurostat dissemination
 	EstLib.geoOrderedList = ["EU","EU28","EU27","EU15","EA","EA19","EA18","NMS12","EA17","EA12","BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO","SI","SK","FI","SE","UK","IS","LI","NO","CH","ME","MK","AL","RS","TR","US","JP","MX"];
+	//comparison function to use to sort countries based on official order
 	EstLib.geoComparisonEstatPublications = function(g1, g2) { return EstLib.geoOrderedList.indexOf(g1) - EstLib.geoOrderedList.indexOf(g2); };
 
-	//build geolist
+	//build dropdown list for geographic codes
 	EstLib.buildGeoList = function(geoList, geos, geoToNameFun, geoValue, changeFun, width, height){
 		geoToNameFun = geoToNameFun || function(a){return a;};
 
