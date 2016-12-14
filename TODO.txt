@@ -1,9 +1,3 @@
-COFOG
-gov_10a_main
-gov_10a_exp
-http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=gov_10a_main&lang=en
-
-
 scr eb for others + inspr doc
 factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
 
