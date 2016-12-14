@@ -38,8 +38,32 @@
     (function($, EstLib) {
         $(function() {
 
-            console.log("Hello");
+            //get cofog hierarchy
+            d3.csv("data/cofog99.csv", function(data) {
 
+                //build cofog hierarchy
+                var cofog={};
+                var cofogCodes=[];
+                for(var i=0; i<data.length; i++){
+                    var d=data[i];
+                    d.parents=[];d.children=[];
+                    cofog[d.code]=d;
+                    cofogCodes.push(d.code);
+                }
+                data=null;
+                for(var i=0; i<cofogCodes.length; i++){
+                    cofogCode=cofogCodes[i];
+                    if(cofogCode.length == 4) continue;
+                    var parentCode = cofogCode.substring(0,4);
+                    cofog[parentCode].children.push(cofogCode);
+                    cofog[cofogCode].parents.push(parentCode);
+                }
+                //console.log(cofog);
+
+                
+
+
+            });
         });
     }(jQuery, window.EstLib = window.EstLib || {} ));
 
