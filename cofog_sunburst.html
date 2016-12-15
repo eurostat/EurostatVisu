@@ -56,7 +56,9 @@
     <div>
         <div id="modeR" style="margin-top: 10px;">
             <input type="radio" name="modeR" id="size" value="size" checked>
-            <label for="size">Weights</label> <input type="radio" name="modeR" id="count" value="count"> <label for="count">Equalised hierarchy</label>
+            <label for="size">Weights</label>
+            <input type="radio" name="modeR" id="count" value="count">
+            <label for="count">Equalised hierarchy</label>
         </div>
     </div>
 
@@ -81,7 +83,8 @@
         $(function() {
 
             //get cofog hierarchy
-            d3.csv("data/cofog99.csv", function(data) {
+            d3.csv("http://rawgit.com/jgaffuri/EurostatVisu/gh-pages/data/cofog99.csv", function(data) {
+            //d3.csv("data/cofog99.csv", function(data) {
 
                 //build cofog hierarchy
                 EstLib.cofogsDict={};
@@ -105,7 +108,7 @@
 
 
                 //size
-                var r = 350;
+                var r = 230;
 
                 //year/geo
                 var dataIndex = {};
@@ -152,7 +155,7 @@
                     $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
                     var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
                     var html = EstLib.cofogsDict[cofog].desc + " (" + cofog + ")";
-                    if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#8240;";
+                    if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
                     infoDiv.html(html);
                 };
                 var unHighlightCofog = function(cofog){
@@ -199,7 +202,7 @@
                             }, 300);
 
                             //build years slider
-                            EstLib.buildTimeSlider(sli, years, years[years.length-2], 1, function( event, ui ) {
+                            EstLib.buildTimeSlider(sli, years, years[years.length-2], 2, function( event, ui ) {
                                 $("#yearTXT").text(sli.slider("value"));
                                 updateChart();
                             });
@@ -259,7 +262,7 @@
                                             if(lev){
                                                 var v = data? data[d.name] : 0;
                                                 angle = (d.x + d.dx*0.5) * 180/Math.PI;
-                                                if(v<30){ angle -= 90; if(angle<0) angle+=360; }
+                                                if(v<2){ angle -= 90; if(angle<0) angle+=360; }
                                                 if(angle>90 && angle<270) angle-=180;
                                                 if(angle<0) angle+=360;
                                             }
@@ -287,8 +290,8 @@
                                                 return d.name;
                                             }
                                             var v = data[d.name];
-                                            if(lev) return d.name + "<tspan x=\"0\" dy=\"1.2em\">" + d3.round(v,1).toFixed(1) + " &#8240;</tspan>";
-                                            if(v>5) return d.name;
+                                            //if(lev) return d.name + "<tspan x=\"0\" dy=\"1.2em\">" + d3.round(v,1).toFixed(1) + " &#37;GDP</tspan>";
+                                            if(v>0.5) return d.name;
                                         })
                                         .on("mouseover", function(d) { highlightCofog(d.name); })
                                         .on("mouseout", function(d) { unHighlightCofog(d.name); });
@@ -335,31 +338,26 @@
                                                         for(var i=0; i<arguments.length; i++){
                                                             var data = arguments[i][0];
                                                             var ds = JSONstat(data).Dataset(0);
-                                                            var geos = ds.Dimension("geo").id;
+                                                            var geo = ds.Dimension("geo").id[0];
                                                             var year = ds.Dimension("time").id[0];
                                                             var cofogs = ds.Dimension("cofog99").id;
-                                                            for(var k=0; k<geos.length; k++){
-                                                                var geo = geos[k];
+
                                                                 for(var j=0; j<cofogs.length; j++){
                                                                     var cofog = cofogs[j];
-                                                                    var d = ds.Data({time:year,geo:geo,cofog:cofog});
+                                                                    var d = ds.Data({time:year,geo:geo,cofog99:cofog});
                                                                     var v = 0;
                                                                     if(d && d.value) v = d.value;
                                                                     if(!dataIndex[year]) dataIndex[year]={};
                                                                     if(!dataIndex[year][geo]) dataIndex[year][geo]={};
                                                                     dataIndex[year][geo][cofog] = v;
                                                                 }
-                                                            }
                                                         }
-
-                                                        //
                                                         callback();
                                                     }, function() {
                                                         console.log("Could not load data for " + geoSel + " " + yearSel); //TODO better
                                                     });
                                         }
                                     };
-
                                     EstLib.getCOFOGWeightData(geoSel, yearSel, dataIndex, function(){ updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel); });
                                 }
                             };
