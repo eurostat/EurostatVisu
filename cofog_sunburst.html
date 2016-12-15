@@ -83,8 +83,8 @@
         $(function() {
 
             //get cofog hierarchy
-            d3.csv("http://rawgit.com/jgaffuri/EurostatVisu/gh-pages/data/cofog99.csv", function(data) {
-            //d3.csv("data/cofog99.csv", function(data) {
+            //d3.csv("http://rawgit.com/jgaffuri/EurostatVisu/gh-pages/data/cofog99.csv", function(data) {
+            d3.csv("data/cofog99.csv", function(data) {
 
                 //build cofog hierarchy
                 EstLib.cofogsDict={};
@@ -142,8 +142,8 @@
                 var infoDiv = null;
                 var refreshLegend = function(){
                     lgd.empty();
-                    var mouseoverFun = function() { highlightCofog($(this).attr("id").replace("lgdElt","")); };
-                    var mouseoutFun = function() { unHighlightCofog($(this).attr("id").replace("lgdElt","")); };
+                    //var mouseoverFun = function() { highlightCofog($(this).attr("id").replace("lgdElt","")); };
+                    //var mouseoutFun = function() { unHighlightCofog($(this).attr("id").replace("lgdElt","")); };
                     //TODO build legend EstLib.buildCOICOPLegend(lgd, cofogToColor, mouseoverFun, mouseoutFun);
                     //info
                     infoDiv = $("<div>").appendTo(lgd).css("font-size","1.5em").css("margin-top","10px")/*.css("border","solid 1px").css("width","auto")*/;
