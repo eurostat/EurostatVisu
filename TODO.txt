@@ -1,3 +1,17 @@
+COFOG
+
+handle missing values for second ring
+geo:LV, time:2006
+geo:RO, time:2006
+geo:CH, time:2006
+
+handle negative values
+geo:LU, cofog99:GF0401, time:2001 , -1.6
+geo:EE, cofog99:GF0503, time:2011 , -1.1
+
+
+
+
 scr eb for others + inspr doc
 factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
 
