@@ -1,4 +1,5 @@
 COFOG
+clean/structure code
 
 handle missing values for second ring
 geo:LV, time:2006
@@ -9,7 +10,9 @@ handle negative values
 geo:LU, cofog99:GF0401, time:2001 , -1.6
 geo:EE, cofog99:GF0503, time:2011 , -1.1
 
-
+extract generic legend
+extract generic sunburst
+apply to NACE codes
 
 
 scr eb for others + inspr doc
