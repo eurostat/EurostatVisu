@@ -307,9 +307,9 @@
 
                                 //get data and update chart
                                 if(geoSel && dataIndex[yearSel] && dataIndex[yearSel][geoSel])
-                                    callback();
+                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
                                 else if(!geoSel && dataIndex[yearSel])
-                                    callback();
+                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
                                 else {
                                     //no data: get it!
                                     //build query objects - by year/cofog
