@@ -106,6 +106,7 @@
                 //console.log(EstLib.cofogsDict);
 
 
+
                 //size
                 var r = 230;
 
@@ -229,8 +230,7 @@
                                     else
                                         obj.size = data?data[code]:1;
                                 };
-                                var rootLabel = "TOTAL";
-                                buildDatasetRec(rootLabel,root);
+                                buildDatasetRec("TOTAL",root);
 
                                 //clear previous
                                 svg.selectAll("*").remove();
