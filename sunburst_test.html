@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+
+    <title>Sunburst test</title>
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="js/sunburst-lib.js"></script>
+</head>
+
+<body>
+
+<div id="sunburst"></div>
+
+<script>
+
+    (function(d3) {
+
+        var sb = d3.sunburst();
+
+        //data name,(value),children
+        sb.set({name:"Total",children:[
+            {name:"Part1",children:[
+                {name:"1.1",size:12.4},
+                {name:"1.2",size:2.4},
+                {name:"1.3",size:5.8},
+                {name:"1.4",size:9.2}
+            ]},
+            {name:"Part2",children:[
+                {name:"2.1",size:20.0},
+                {name:"2.2",size:5.4}
+            ]},
+            {name:"Part3",children:[
+                {name:"3.1",size:15.8}
+            ]},
+            {name:"Part4",size:32.3}
+        ]});
+    }(d3));
+
+</script>
+
+</body>
+</html>
