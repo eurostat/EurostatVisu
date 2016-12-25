@@ -32,12 +32,8 @@
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
 
-        // Stash the old values for transition.
-        function stash(d) {
-            d.x0 = d.x;
-            d.dx0 = d.dx;
-        }
-        // Interpolate the arcs in data space.
+        //functions used for transition
+        function stash(d) { d.x0 = d.x; d.dx0 = d.dx; }
         function arcTween(a) {
             var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
             return function(t) {
@@ -50,7 +46,9 @@
 
         var path;
 
-        //data code,children
+        //build chart with values (optional)
+        //codesHierarchy: code,children[]
+        //values: code:value
         out.build = function(codesHierarchy,values){
             //draw shapes
             path = svg.datum(codesHierarchy).selectAll("path")
@@ -70,6 +68,8 @@
             ;
         };
 
+        //set values, with transition
+        //values: code:value
         out.set = function(values){
             path
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
