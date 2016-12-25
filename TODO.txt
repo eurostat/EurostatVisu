@@ -1,5 +1,5 @@
-COFOG
-clean/structure code
+finalise generic sunburst
+use for cofog and coicop
 
 handle missing values for second ring
 geo:LV, time:2006
@@ -11,8 +11,7 @@ geo:LU, cofog99:GF0401, time:2001 , -1.6
 geo:EE, cofog99:GF0503, time:2011 , -1.1
 
 extract generic legend
-extract generic sunburst
-apply to NACE codes
+apply generic sunburst to NACE codes
 
 
 
