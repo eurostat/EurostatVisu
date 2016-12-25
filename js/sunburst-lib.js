@@ -32,19 +32,23 @@
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
 
-        //functions used for shapes transitions
-        function stash(d) { d.x0 = d.x; d.dx0 = d.dx; }
-        function arcTween(a) {
-            var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
+        //functions used for shapes transition
+        function arcStash(d) { d.x0 = d.x; d.dx0 = d.dx; }
+        function arcTween(d) {
+            var i = d3.interpolate({x: d.x0, dx: d.dx0}, d);
             return function(t) {
                 var b = i(t);
-                a.x0 = b.x;
-                a.dx0 = b.dx;
+                d.x0 = b.x;
+                d.dx0 = b.dx;
                 return arc(b);
             };
         }
-        function labelTween(a) {
-            //TODO
+        //TODO function used for label transition
+        function labelStash(d) {}
+        function labelTween(d) {
+            return function(t) {
+                return "";
+            }
         }
 
         var shapes, labels;
@@ -67,7 +71,7 @@
                 .attr("fill", function(d) { return out.options.codeToColor(d.code); })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
                 .on("mouseout", function(d) { out.options.unhighlight(d.code); })
-                .each(stash);
+                .each(arcStash);
 
             //draw labels
             labels = svg.datum(codesHierarchy).selectAll("text")
@@ -93,11 +97,7 @@
                 })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
                 .on("mouseout", function(d) { out.options.unhighlight(d.code); })
-                //.each(stash)
-            ;
-
-
-            //console.log(codesHierarchy);
+                .each(labelStash);
         };
 
         //set values, with transition
@@ -108,11 +108,9 @@
                 .transition().duration(out.options.duration).attrTween("d", arcTween);
             labels
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().duration(out.options.duration).attrTween("d", labelTween);
+                .transition().duration(out.options.duration).attrTween("transform", labelTween);
         };
 
-
-        //console.log("aaa");
         return out;
     }
 
