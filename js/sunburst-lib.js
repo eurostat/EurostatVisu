@@ -11,7 +11,12 @@
         options = options || {};
         options.div = options.div || "sunburst";
         options.radius = options.radius || 150;
+        options.strokeWidth = options.strokeWidth || 1.0;
+        options.strokeColor = options.strokeColor || "gray";
         options.codeToColor = options.codeToColor || function(code){ return "#d9d9d9"; };
+        options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","darkgray"); };
+        options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
+
         var out = {options:options};
 
         var svg = d3.select("#"+options.div).append("svg")
@@ -26,7 +31,7 @@
 
 
 
-        //data code,desc,(value),children
+        //data code,children
         out.build = function(codesHierarchy,data){
             //draw shapes
             svg.datum(codesHierarchy).selectAll("path")
@@ -35,18 +40,17 @@
                 .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
                 .attr("d", arc)
                 .attr("id", function(d) { return "arc"+d.code; })
-                .attr("stroke-width", 0.5)
-                .attr("stroke", "gray")
+                .attr("stroke-width", out.options.strokeWidth)
+                .attr("stroke", out.options.strokeColor)
                 .attr("fill", function(d) { return out.options.codeToColor(d.code); })
-                //.on("mouseover", function(d) { highlightCofog(d.code); })
-                //.on("mouseout", function(d) { unHighlightCofog(d.code); })
+                .on("mouseover", function(d) { out.options.highlight(d.code); })
+                .on("mouseout", function(d) { out.options.unhighlight(d.code); })
             ;
+        };
 
+        out.set = function(values){
+        }
 
-            out.set = function(values){
-            }
-
-            };
 
         //console.log("aaa");
         return out;
