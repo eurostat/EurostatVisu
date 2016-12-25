@@ -49,7 +49,7 @@
         };
 
         out.set = function(values){
-        }
+        };
 
 
         //console.log("aaa");
