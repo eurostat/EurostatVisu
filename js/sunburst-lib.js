@@ -26,23 +26,27 @@
 
 
 
-        //data name,(size),children
-        out.set = function(data){
+        //data code,desc,(value),children
+        out.build = function(codesHierarchy,data){
             //draw shapes
-            svg.datum(data).selectAll("path")
-                .data(partition.value(function(d) { return d.size?d.size:1; }).nodes)
+            svg.datum(codesHierarchy).selectAll("path")
+                .data(partition.value(function(d) { return data?data[d.code]:1; }).nodes)
                 .enter().append("path")
                 .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
                 .attr("d", arc)
-                .attr("id", function(d) { return "arc"+d.name; })
+                .attr("id", function(d) { return "arc"+d.code; })
                 .attr("stroke-width", 0.5)
                 .attr("stroke", "gray")
-                .attr("fill", function(d) { return out.options.codeToColor(d.name); })
-                //.on("mouseover", function(d) { highlightCofog(d.name); })
-                //.on("mouseout", function(d) { unHighlightCofog(d.name); })
+                .attr("fill", function(d) { return out.options.codeToColor(d.code); })
+                //.on("mouseover", function(d) { highlightCofog(d.code); })
+                //.on("mouseout", function(d) { unHighlightCofog(d.code); })
             ;
 
-        };
+
+            out.set = function(values){
+            }
+
+            };
 
         //console.log("aaa");
         return out;

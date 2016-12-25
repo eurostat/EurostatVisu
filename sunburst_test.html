@@ -20,23 +20,38 @@
 
         var sb = d3.sunburst();
 
+        var codesHierarchy = {code:"Total",children:[
+            {code:"Part1",children:[
+                {code:"1.1",value:12.4},
+                {code:"1.2",value:2.4},
+                {code:"1.3",value:5.8},
+                {code:"1.4",value:9.2}
+            ]},
+            {code:"Part2",children:[
+                {code:"2.1",value:20.0},
+                {code:"2.2",value:5.4}
+            ]},
+            {code:"Part3",children:[
+                {code:"3.1",value:15.8}
+            ]},
+            {code:"Part4",value:32.3}
+        ]};
+
+        var values1 = {
+            "1.1":12.4,
+            "1.2":2.4,
+            "1.3":5.8,
+            "1.4":9.2,
+            "2.1":20.0,
+            "2.2":5.4,
+            "3.1":15.8,
+            "Part4":32.3
+        };
+
+
         //data name,(value),children
-        sb.set({name:"Total",children:[
-            {name:"Part1",children:[
-                {name:"1.1",size:12.4},
-                {name:"1.2",size:2.4},
-                {name:"1.3",size:5.8},
-                {name:"1.4",size:9.2}
-            ]},
-            {name:"Part2",children:[
-                {name:"2.1",size:20.0},
-                {name:"2.2",size:5.4}
-            ]},
-            {name:"Part3",children:[
-                {name:"3.1",size:15.8}
-            ]},
-            {name:"Part4",size:32.3}
-        ]});
+        sb.build(codesHierarchy, values1);
+
     }(d3));
 
 </script>
