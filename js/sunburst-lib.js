@@ -14,7 +14,7 @@
         options.radius = options.radius || 150;
         options.strokeWidth = options.strokeWidth || 1.0;
         options.strokeColor = options.strokeColor || "gray";
-        options.codeToColor = options.codeToColor || function(code){ return "#d9d9d9"; };
+        options.codeToColor = options.codeToColor || function(){ return "#d9d9d9"; };
         options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","darkgray"); };
         options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
         options.duration = options.duration || 1500;
@@ -32,7 +32,7 @@
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
 
-        //functions used for transition
+        //functions used for shapes transitions
         function stash(d) { d.x0 = d.x; d.dx0 = d.dx; }
         function arcTween(a) {
             var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
@@ -43,14 +43,18 @@
                 return arc(b);
             };
         }
+        function labelTween(a) {
+            //TODO
+        }
 
         var shapes, labels;
 
 
-        //build chart with values (optional)
+        //build chart with values (optionnal)
         //codesHierarchy: code,children[]
         //values: code:value
         out.build = function(codesHierarchy,values){
+
             //draw shapes
             shapes = svg.datum(codesHierarchy).selectAll("path")
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
@@ -63,8 +67,7 @@
                 .attr("fill", function(d) { return out.options.codeToColor(d.code); })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
                 .on("mouseout", function(d) { out.options.unhighlight(d.code); })
-                .each(stash)
-            ;
+                .each(stash);
 
             //draw labels
             labels = svg.datum(codesHierarchy).selectAll("text")
@@ -90,9 +93,11 @@
                 })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
                 .on("mouseout", function(d) { out.options.unhighlight(d.code); })
+                //.each(stash)
+            ;
 
 
-            console.log(codesHierarchy);
+            //console.log(codesHierarchy);
         };
 
         //set values, with transition
@@ -101,6 +106,9 @@
             shapes
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .transition().duration(out.options.duration).attrTween("d", arcTween);
+            labels
+                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
+                .transition().duration(out.options.duration).attrTween("d", labelTween);
         };
 
 
