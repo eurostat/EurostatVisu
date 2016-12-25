@@ -44,16 +44,15 @@
             };
         }
 
-        var path;
+        var shapes, labels;
+
 
         //build chart with values (optional)
         //codesHierarchy: code,children[]
         //values: code:value
         out.build = function(codesHierarchy,values){
             //draw shapes
-            path = svg.datum(codesHierarchy).selectAll("path")
-                //.data(partition.nodes)
-                //.data(partition.value(function(d) { return 1; }).nodes)
+            shapes = svg.datum(codesHierarchy).selectAll("path")
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .enter().append("path")
                 .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
@@ -66,12 +65,40 @@
                 .on("mouseout", function(d) { out.options.unhighlight(d.code); })
                 .each(stash)
             ;
+
+            //draw labels
+            labels = svg.datum(codesHierarchy).selectAll("text")
+                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
+                .enter().append("text")
+                .attr("transform", function(d) {
+                    var angle = 0;
+                    var v = values? values[d.code] : 0;
+                    angle = (d.x + d.dx*0.5) * 180/Math.PI;
+                    if(v<2){ angle -= 90; if(angle<0) angle+=360; }
+                    if(angle>90 && angle<270) angle-=180;
+                    if(angle<0) angle+=360;
+                    return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
+                })
+                .attr("dy", ".35em")
+                .style("text-anchor", "middle")
+                //.style("fill", function(d) { return "#555"; })
+                //.style("font-weight", function(d) { return "bold"; })
+                //.style("font-size", function(d) { return "10"; })
+                .html(function(d) {
+                    if(!d.depth) return "";  // no inner ring label
+                    return d.code;
+                })
+                .on("mouseover", function(d) { out.options.highlight(d.code); })
+                .on("mouseout", function(d) { out.options.unhighlight(d.code); })
+
+
+            console.log(codesHierarchy);
         };
 
         //set values, with transition
         //values: code:value
         out.set = function(values){
-            path
+            shapes
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .transition().duration(out.options.duration).attrTween("d", arcTween);
         };
