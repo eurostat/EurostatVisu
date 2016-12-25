@@ -6,6 +6,7 @@
  *
  */
 (function(d3) {
+    //See http://bl.ocks.org/mbostock/4063423
 
     d3.sunburst = function(options){
         options = options || {};
