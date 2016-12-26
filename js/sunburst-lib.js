@@ -30,7 +30,19 @@
             .endAngle(function(d) { return d.x + d.dx; })
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-
+        var labelAngle = function(d){
+            var angle = 0;
+            var v= d.value || 0;
+            angle = (d.x + d.dx*0.5) * 180/Math.PI;
+            if(v<2){ angle -= 90; if(angle<0) angle+=360; }
+            if(angle>90 && angle<270) angle-=180;
+            if(angle<0) angle+=360;
+            return angle;
+        };
+        var labelTransform = function(d) {
+            var angle = labelAngle(d);
+            return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
+        };
 
         //functions used for shapes transition
         function arcStash(d) { d.x0 = d.x; d.dx0 = d.dx; }
@@ -44,10 +56,14 @@
             };
         }
         //TODO function used for label transition
-        function labelStash(d) {}
+        function labelStash(d) { d.c0 = arc.centroid(d); d.a0 = labelAngle(d); }
         function labelTween(d) {
+            var i = d3.interpolate({c: d.c0, a: d.a0}, d);
             return function(t) {
-                return "";
+                var b = i(t);
+                d.c0 = b.c;
+                d.a0 = b.a;
+                return labelTransform(b);
             }
         }
 
@@ -77,15 +93,7 @@
             labels = svg.datum(codesHierarchy).selectAll("text")
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .enter().append("text")
-                .attr("transform", function(d) {
-                    var angle = 0;
-                    var v = values? values[d.code] : 0;
-                    angle = (d.x + d.dx*0.5) * 180/Math.PI;
-                    if(v<2){ angle -= 90; if(angle<0) angle+=360; }
-                    if(angle>90 && angle<270) angle-=180;
-                    if(angle<0) angle+=360;
-                    return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
-                })
+                .attr("transform", labelTransform)
                 .attr("dy", ".35em")
                 .style("text-anchor", "middle")
                 //.style("fill", function(d) { return "#555"; })
@@ -107,8 +115,8 @@
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .transition().duration(out.options.duration).attrTween("d", arcTween);
             labels
-                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().duration(out.options.duration).attrTween("transform", labelTween);
+             .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
+             .transition().duration(out.options.duration).attrTween("transform", labelTween);
         };
 
         return out;
