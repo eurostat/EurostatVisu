@@ -30,18 +30,16 @@
             .endAngle(function(d) { return d.x + d.dx; })
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-        var labelAngle = function(d){
+        var labelTransform = function(d) {
             var angle = 0;
             var v= d.value || 0;
             angle = (d.x + d.dx*0.5) * 180/Math.PI;
             if(v<2){ angle -= 90; if(angle<0) angle+=360; }
             if(angle>90 && angle<270) angle-=180;
             if(angle<0) angle+=360;
-            return angle;
-        };
-        var labelTransform = function(d) {
-            var angle = labelAngle(d);
-            return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
+            d.a=angle;
+            d.c=arc.centroid(d);
+            return "translate(" + d.c + ")"+ (d.a==0?"":"rotate("+d.a+")");
         };
 
         //functions used for shapes transition
@@ -50,20 +48,19 @@
             var i = d3.interpolate({x: d.x0, dx: d.dx0}, d);
             return function(t) {
                 var b = i(t);
-                d.x0 = b.x;
-                d.dx0 = b.dx;
+                d.x0 = b.x; d.dx0 = b.dx;
                 return arc(b);
             };
         }
         //TODO function used for label transition
-        function labelStash(d) { d.c0 = arc.centroid(d); d.a0 = labelAngle(d); }
+        function labelStash(d) { d.c0 = d.c; d.a0 = d.a; }
         function labelTween(d) {
             var i = d3.interpolate({c: d.c0, a: d.a0}, d);
             return function(t) {
                 var b = i(t);
-                d.c0 = b.c;
-                d.a0 = b.a;
-                return labelTransform(b);
+                //console.log(b.code, b.c,b.a);
+                d.c0 = b.c; d.a0 = b.a;
+                return "translate(" + b.c + ")"+ (b.a==0?"":"rotate("+b.a+")");
             }
         }
 
@@ -115,8 +112,8 @@
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .transition().duration(out.options.duration).attrTween("d", arcTween);
             labels
-             .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-             .transition().duration(out.options.duration).attrTween("transform", labelTween);
+                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
+                .transition().duration(out.options.duration).attrTween("transform", labelTween);
         };
 
         return out;
