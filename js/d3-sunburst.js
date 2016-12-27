@@ -67,7 +67,7 @@
         var shapes, labels;
 
 
-        //build chart with values (optionnal)
+        //build chart with values (optional)
         //codesHierarchy: code,children[]
         //values: code:value
         out.build = function(codesHierarchy,values){
