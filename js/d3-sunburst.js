@@ -30,10 +30,9 @@
             .endAngle(function(d) { return d.x + d.dx; })
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-        var labelTransform = function(d) {
-            var angle = 0;
+        var computeLabelPosition = function(d) {
             var v= d.value || 0;
-            angle = (d.x + d.dx*0.5) * 180/Math.PI;
+            var angle = (d.x + d.dx*0.5) * 180/Math.PI;
             if(v<2){ angle -= 90; if(angle<0) angle+=360; }
             if(angle>90 && angle<270) angle-=180;
             if(angle<0) angle+=360;
@@ -90,7 +89,7 @@
             labels = svg.datum(codesHierarchy).selectAll("text")
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .enter().append("text")
-                .attr("transform", labelTransform)
+                .attr("transform", computeLabelPosition)
                 .attr("dy", ".35em")
                 .style("text-anchor", "middle")
                 //.style("fill", function(d) { return "#555"; })
