@@ -63,8 +63,10 @@
         //values: code:value
         out.set = function(values, duration){
             duration = duration || 0;
+            out.eraseLabels(); //.transition().style("opacity","0")
             shapes.data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().duration(duration).attrTween("d", arcTween);
+                .transition().each("end", out.drawLabels()).duration(duration).attrTween("d", arcTween)
+                ;
         };
 
         //draw labels
@@ -99,6 +101,7 @@
             labelsG.selectAll("*").remove();
         };
 
+        out.drawLabels();
 
         return out;
     }
