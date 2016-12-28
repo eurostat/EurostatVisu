@@ -8,7 +8,8 @@
 (function(d3) {
     //See http://bl.ocks.org/mbostock/4063423
 
-    d3.sunburst = function(options){
+    //codesHierarchy: code,children[]
+    d3.sunburst = function(codesHierarchy, iniValues, options){
         options = options || {};
         options.div = options.div || "sunburst";
         options.radius = options.radius || 150;
@@ -17,13 +18,9 @@
         options.codeToColor = options.codeToColor || function(){ return "#d9d9d9"; };
         options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","darkgray"); };
         options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
-        options.duration = options.duration || 1500;
 
-        var out = {options:options};
+        var out = {codesHierarchy:codesHierarchy,options:options};
 
-        var svg = d3.select("#"+options.div).append("svg")
-            .attr("width", 2*options.radius).attr("height", 2*options.radius)
-            .append("g").attr("transform", "translate(" + options.radius + "," + options.radius + ")");
         var partition = d3.layout.partition().sort(null).size([2 * Math.PI, options.radius * options.radius]);
         var arc = d3.svg.arc()
             .startAngle(function(d) { return d.x; })
@@ -42,31 +39,39 @@
             };
         }
 
-        var shapes, labels;
+        var svg = d3.select("#"+options.div).append("svg")
+            .attr("width", 2*options.radius).attr("height", 2*options.radius)
+            .append("g").attr("transform", "translate(" + options.radius + "," + options.radius + ")");
+        var shapesG = svg.append("g").attr("id", out.options.div+"_shapes");
+        var labelsG = svg.append("g").attr("id", out.options.div+"_labels");
 
+        //draw shapes
+        var shapes = shapesG.datum(out.codesHierarchy).selectAll("path")
+            .data(partition.value(function(d) { return iniValues?iniValues[d.code]:1; }).nodes)
+            .enter().append("path")
+            .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+            .attr("d", arc)
+            .attr("id", function(d) { return "arc"+d.code; })
+            .attr("stroke-width", out.options.strokeWidth)
+            .attr("stroke", out.options.strokeColor)
+            .attr("fill", function(d) { return out.options.codeToColor(d.code); })
+            .on("mouseover", function(d) { out.options.highlight(d.code); })
+            .on("mouseout", function(d) { out.options.unhighlight(d.code); })
+            .each(arcStash);
 
-        //build chart with values (optional)
-        //codesHierarchy: code,children[]
+        //set values, with transition
         //values: code:value
-        out.build = function(codesHierarchy,values){
+        out.set = function(values, duration){
+            duration = duration || 0;
+            shapes.data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
+                .transition().duration(duration).attrTween("d", arcTween);
+        };
 
-            //draw shapes
-            shapes = svg.datum(codesHierarchy).selectAll("path")
-                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .enter().append("path")
-                .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
-                .attr("d", arc)
-                .attr("id", function(d) { return "arc"+d.code; })
-                .attr("stroke-width", out.options.strokeWidth)
-                .attr("stroke", out.options.strokeColor)
-                .attr("fill", function(d) { return out.options.codeToColor(d.code); })
-                .on("mouseover", function(d) { out.options.highlight(d.code); })
-                .on("mouseout", function(d) { out.options.unhighlight(d.code); })
-                .each(arcStash);
-
+        //draw labels
+        out.drawLabels = function(){
             //draw labels
-            labels = svg.datum(codesHierarchy).selectAll("text")
-                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
+            labelsG.datum(out.codesHierarchy).selectAll("text")
+                .data(partition.nodes)
                 .enter().append("text")
                 .attr("transform", function(d) {
                     var v= d.value || 0;
@@ -89,13 +94,11 @@
                 .on("mouseout", function(d) { out.options.unhighlight(d.code); });
         };
 
-        //set values, with transition
-        //values: code:value
-        out.set = function(values){
-            shapes
-                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().duration(out.options.duration).attrTween("d", arcTween);
+        //remove labels
+        out.eraseLabels = function(){
+            labelsG.selectAll("*").remove();
         };
+
 
         return out;
     }

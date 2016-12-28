@@ -18,8 +18,6 @@
 
     (function(d3) {
 
-        var sb = d3.sunburst();
-
         var codesHierarchy = {code:"Total",children:[
             {code:"Part1",children:[
                 {code:"1_1"},
@@ -67,8 +65,9 @@
             "Part4":28.9
         };
 
-        sb.build(codesHierarchy,values1);
-        sb.set(values2);
+        var sb = d3.sunburst(codesHierarchy, values1);
+        sb.set(values2, 1000);
+        sb.drawLabels();
 
     }(d3));
 
