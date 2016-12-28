@@ -30,16 +30,6 @@
             .endAngle(function(d) { return d.x + d.dx; })
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-        var computeLabelPosition = function(d) {
-            var v= d.value || 0;
-            var angle = (d.x + d.dx*0.5) * 180/Math.PI;
-            if(v<2){ angle -= 90; if(angle<0) angle+=360; }
-            if(angle>90 && angle<270) angle-=180;
-            if(angle<0) angle+=360;
-            d.a=angle;
-            d.c=arc.centroid(d);
-            return "translate(" + d.c + ")"+ (d.a==0?"":"rotate("+d.a+")");
-        };
 
         //functions used for shapes transition
         function arcStash(d) { d.x0 = d.x; d.dx0 = d.dx; }
@@ -50,17 +40,6 @@
                 d.x0 = b.x; d.dx0 = b.dx;
                 return arc(b);
             };
-        }
-        //TODO function used for label transition
-        function labelStash(d) { d.c0 = d.c; d.a0 = d.a; }
-        function labelTween(d) {
-            var i = d3.interpolate({c: d.c0, a: d.a0}, d);
-            return function(t) {
-                var b = i(t);
-                //console.log(b.code, b.c,b.a);
-                d.c0 = b.c; d.a0 = b.a;
-                return "translate(" + b.c + ")"+ (b.a==0?"":"rotate("+b.a+")");
-            }
         }
 
         var shapes, labels;
@@ -89,7 +68,14 @@
             labels = svg.datum(codesHierarchy).selectAll("text")
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .enter().append("text")
-                .attr("transform", computeLabelPosition)
+                .attr("transform", function(d) {
+                    var v= d.value || 0;
+                    var angle = (d.x + d.dx*0.5) * 180/Math.PI;
+                    if(v<2){ angle -= 90; if(angle<0) angle+=360; }
+                    if(angle>90 && angle<270) angle-=180;
+                    if(angle<0) angle+=360;
+                    return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
+                })
                 .attr("dy", ".35em")
                 .style("text-anchor", "middle")
                 //.style("fill", function(d) { return "#555"; })
@@ -100,8 +86,7 @@
                     return d.code;
                 })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
-                .on("mouseout", function(d) { out.options.unhighlight(d.code); })
-                .each(labelStash);
+                .on("mouseout", function(d) { out.options.unhighlight(d.code); });
         };
 
         //set values, with transition
@@ -110,9 +95,6 @@
             shapes
                 .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .transition().duration(out.options.duration).attrTween("d", arcTween);
-            labels
-                .data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().duration(out.options.duration).attrTween("transform", labelTween);
         };
 
         return out;
