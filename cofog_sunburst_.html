@@ -218,7 +218,7 @@
 
                             var updateChart = function(){
                                 if($("input:radio[name=modeR]:checked").val() === "count"){
-                                    updateChart_();
+                                    sb.set(null,500);
                                     return;
                                 }
                                 var geoSel = geoList.find(":selected").attr("value");
@@ -226,9 +226,9 @@
 
                                 //get data and update chart
                                 if(geoSel && dataIndex[yearSel] && dataIndex[yearSel][geoSel])
-                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
+                                    sb.set(dataIndex[yearSel][geoSel],500)
                                 else if(!geoSel && dataIndex[yearSel])
-                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
+                                    sb.set(dataIndex[yearSel][geoSel],500)
                                 else {
                                     //no data: get it!
                                     //build query objects - by year/cofog
@@ -268,8 +268,7 @@
                                                         dataIndex[year][geo][cofog] = v;
                                                     }
                                                 }
-                                                //TODO
-                                                updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
+                                                sb.set(dataIndex[yearSel][geoSel],500);
                                             }, function() {
                                                 console.log("Could not load data for " + geoSel + " " + yearSel); //TODO better
                                             });
