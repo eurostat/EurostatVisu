@@ -1,6 +1,7 @@
 /**
  *
  * Sunburst visualisation
+ * Generic function. reusable.
  *
  * @author julien Gaffuri
  *
