@@ -171,6 +171,9 @@
                 var sli = $("#timeslider");
                 sli.css("width",2*r);
 
+                //the data store: a dictionary of values by year/geo
+                var dataIndex = {};
+
                 //get base information on years and geos
                 $.when($.ajax({url:EstLib.getEstatDataURL("gov_10a_exp",{cofog99:"TOTAL",na_item:"TE",sector:"S13",unit:"PC_GDP"})}))
                         .then(function(ds) {
@@ -213,6 +216,68 @@
                             $("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
                             $("#yearTXT").text(sli.slider("value"));
 
+                            var updateChart = function(){
+                                if($("input:radio[name=modeR]:checked").val() === "count"){
+                                    updateChart_();
+                                    return;
+                                }
+                                var geoSel = geoList.find(":selected").attr("value");
+                                var yearSel = sli.slider("value");
+
+                                //get data and update chart
+                                if(geoSel && dataIndex[yearSel] && dataIndex[yearSel][geoSel])
+                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
+                                else if(!geoSel && dataIndex[yearSel])
+                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
+                                else {
+                                    //no data: get it!
+                                    //build query objects - by year/cofog
+                                    var ajaxs = [];
+
+                                    //get cofog groups (due to limitation in eurostat web service)
+                                    EstLib.getSlicedCOICOPList = function(nb){
+                                        nb = nb || 50;
+                                        var cofogs_ = [];
+                                        for(var i=0; i<(cofogCodes.length/nb); i++)
+                                            cofogs_[i] = cofogCodes.slice(i*nb, Math.min((i+1)*nb,cofogCodes.length));
+                                        return cofogs_;
+                                    };
+                                    var cofogs_ = EstLib.getSlicedCOICOPList();
+
+                                    for(var i=0; i<cofogs_.length; i++)
+                                        if(geoSel) ajaxs.push( $.ajax({url:EstLib.getEstatDataURL("gov_10a_exp",{geo:geoSel,time:yearSel,na_item:"TE",sector:"S13",unit:"PC_GDP",cofog99:cofogs_[i]})}) );
+                                        else ajaxs.push( $.ajax({url:EstLib.getEstatDataURL("gov_10a_exp",{time:yearSel,na_item:"TE",sector:"S13",unit:"PC_GDP",cofog99:cofogs_[i]})}) );
+                                    //get data
+                                    $.when.apply($, ajaxs)
+                                            .then(function() {
+                                                //extract data
+                                                for(var i=0; i<arguments.length; i++){
+                                                    var data = arguments[i][0];
+                                                    var ds = JSONstat(data).Dataset(0);
+                                                    var geo = ds.Dimension("geo").id[0];
+                                                    var year = ds.Dimension("time").id[0];
+                                                    var cofogs = ds.Dimension("cofog99").id;
+
+                                                    for(var j=0; j<cofogs.length; j++){
+                                                        var cofog = cofogs[j];
+                                                        var d = ds.Data({time:year,geo:geo,cofog99:cofog});
+                                                        var v = 0;
+                                                        if(d && d.value) v = d.value;
+                                                        if(!dataIndex[year]) dataIndex[year]={};
+                                                        if(!dataIndex[year][geo]) dataIndex[year][geo]={};
+                                                        dataIndex[year][geo][cofog] = v;
+                                                    }
+                                                }
+                                                //TODO
+                                                updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
+                                            }, function() {
+                                                console.log("Could not load data for " + geoSel + " " + yearSel); //TODO better
+                                            });
+                                }
+                            };
+
+                            //
+                            updateChart();
 
                         }, function() {
                             console.log("Could not load initialisation data");
