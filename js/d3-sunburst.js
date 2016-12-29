@@ -14,10 +14,13 @@
         options.div = options.div || "sunburst";
         options.radius = options.radius || 150;
         options.strokeWidth = options.strokeWidth || 1.0;
-        options.strokeColor = options.strokeColor || "gray";
-        options.codeToColor = options.codeToColor || function(){ return "#d9d9d9"; };
-        options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","darkgray"); };
+        options.strokeColor = options.strokeColor || "white";
+        options.codeToColor = options.codeToColor || function(){ return "#aaa"; };
+        options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","#666"); };
         options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
+        options.fontFamily = options.fontFamily || function(depth){ return "'Myriad Pro', Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', 'Liberation Sans', 'Nimbus Sans L', 'Helvetica Neue', vegur, Vegur, Helvetica, Arial, sans-serif"; };
+        options.fontSize = options.fontSize || function(depth){ return 12; };
+        options.fontFill = options.fontFill || function(depth){ return "#333"; };
 
         var out = {codesHierarchy:codesHierarchy,options:options};
 
@@ -91,9 +94,10 @@
                 })
                 .attr("dy", ".35em")
                 .style("text-anchor", "middle")
-                //.style("fill", function(d) { return "#555"; })
+                .style("font-family", function(d) { return out.options.fontFamily(d.depth); })
+                .style("font-size", function(d) { return out.options.fontSize(d.depth); })
+                .style("fill", function(d) { return out.options.fontFill(d.depth); })
                 //.style("font-weight", function(d) { return "bold"; })
-                //.style("font-size", function(d) { return "10"; })
                 .html(function(d) {
                     if(!d.depth) return "";  // no inner ring label
                     return d.code;
