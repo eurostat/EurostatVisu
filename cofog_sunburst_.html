@@ -112,10 +112,23 @@
                 //console.log(cofogsDict);
                 //console.log(cofogsDict["TOTAL"]);
 
+                //colors
+                var color = colorbrewer.Set3[10];
+                var cofogToColor = function(code){
+                    var fam = code.substring(0,4);
+                    if(fam==="TOTAL") return;
+                    return color[+(fam.replace("GF",""))-1];
+                };
 
                 //build initial sunburst object
                 var sb = d3.sunburst(cofogsDict["TOTAL"], null, {
-
+                    radius : 230,
+                    codeToColor : cofogToColor,
+                    //options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","#aaa"); };
+                    //options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
+                    //options.codeToLabelText = options.codeToLabelText || function(code){ return code; };
+                    //options.fontSize = options.fontSize || function(depth){ return 12; };
+                    fontFill : function(depth){ return "black"; }
                 });
 
             });
