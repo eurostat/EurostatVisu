@@ -121,8 +121,9 @@
                 };
 
                 //build initial sunburst object
+                var r=230;
                 var sb = d3.sunburst(cofogsDict["TOTAL"], null, {
-                    radius : 230,
+                    radius : r,
                     codeToColor : cofogToColor,
                     //options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","#aaa"); };
                     //options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
@@ -130,6 +131,92 @@
                     //options.fontSize = options.fontSize || function(depth){ return 12; };
                     fontFill : function(depth){ return "black"; }
                 });
+
+
+
+                //title
+                var title = $("#title");
+                var titleContentSave = null;
+
+                //legend
+                var lgd = $("#legend");
+                lgd.css("height", 2*r);
+                var infoDiv = null;
+                var refreshLegend = function(){
+                    lgd.empty();
+                    //var mouseoverFun = function() { highlightCofog($(this).attr("id").replace("lgdElt","")); };
+                    //var mouseoutFun = function() { unHighlightCofog($(this).attr("id").replace("lgdElt","")); };
+                    //TODO build legend EstLib.buildCOICOPLegend(lgd, cofogToColor, mouseoverFun, mouseoutFun);
+                    //info
+                    infoDiv = $("<div>").appendTo(lgd).css("font-size","1.5em").css("margin-top","10px")/*.css("border","solid 1px").css("width","auto")*/;
+                };
+                refreshLegend();
+
+                var highlightCofog = function(cofog){
+                    $("#arc"+cofog).attr("fill","red");
+                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
+                    var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
+                    var html = EstLib.cofogsDict[cofog].desc + " (" + cofog + ")";
+                    if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
+                    infoDiv.html(html);
+                };
+                var unHighlightCofog = function(cofog){
+                    $("#arc"+cofog).attr("fill",cofogToColor(cofog));
+                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
+                    infoDiv.html("");
+                };
+
+                var geoList = $("#geoList");
+
+                var sli = $("#timeslider");
+                sli.css("width",2*r);
+
+                //get base information on years and geos
+                $.when($.ajax({url:EstLib.getEstatDataURL("gov_10a_exp",{cofog99:"TOTAL",na_item:"TE",sector:"S13",unit:"PC_GDP"})}))
+                        .then(function(ds) {
+                            EstLib.overrideCountryNames(ds.dimension.geo.category.label);
+                            ds = JSONstat(ds).Dataset(0);
+                            var years = ds.Dimension("time").id.sort();
+                            var geos = ds.Dimension("geo").id;
+
+                            //option
+                            $("input[name='modeR']").change(function () {
+                                if($(this).attr("value") === "count") {
+                                    //disable
+                                    $("#geoListDiv").hide();
+                                    sli.hide();
+                                    titleContentSave = title.html();
+                                    title.html("COFOG hierarchy");
+                                } else {
+                                    //enable
+                                    $("#geoListDiv").show();
+                                    sli.show();
+                                    title.html(titleContentSave);
+                                }
+                                updateChart();
+                            });
+                            $("#modeR").buttonset();
+
+                            //build geolist
+                            EstLib.buildGeoList(geoList, geos, function(geo){return ds.Dimension("geo").Category(geo).label;}, "EU28", function(){
+                                $("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
+                                updateChart();
+                            }, 300);
+
+                            //build years slider
+                            EstLib.buildTimeSlider(sli, years, years[years.length-2], 2, function( event, ui ) {
+                                $("#yearTXT").text(sli.slider("value"));
+                                updateChart();
+                            });
+
+                            //fill text
+                            $("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
+                            $("#yearTXT").text(sli.slider("value"));
+
+
+                        }, function() {
+                            console.log("Could not load initialisation data");
+                        });
 
             });
         });
