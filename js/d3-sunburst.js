@@ -63,14 +63,20 @@
         //values: code:value
         out.set = function(values, duration){
             duration = duration || 0;
-            out.eraseLabels(); //.transition().style("opacity","0")
+            out.eraseLabels(duration*0.75);
             shapes.data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().each("end", out.drawLabels()).duration(duration).attrTween("d", arcTween)
-                ;
+                .transition().duration(duration).attrTween("d", arcTween)
+                .each("end", function(){ out.drawLabels(duration*0.5); })
+            ;
         };
 
         //draw labels
-        out.drawLabels = function(){
+        out.drawLabels = function(duration){
+            duration = duration || 0;
+
+            //hide labels group
+            labelsG.style("opacity","0");
+
             //draw labels
             labelsG.datum(out.codesHierarchy).selectAll("text")
                 .data(partition.nodes)
@@ -94,14 +100,22 @@
                 })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
                 .on("mouseout", function(d) { out.options.unhighlight(d.code); });
+
+            //show labels group
+            labelsG.transition().duration(duration).style("opacity","1");
         };
 
         //remove labels
-        out.eraseLabels = function(){
-            labelsG.selectAll("*").remove();
+        out.eraseLabels = function(duration){
+            duration = duration || 0;
+
+            labelsG.transition().duration(duration).style("opacity","0").each("end", function(){
+                labelsG.selectAll("*").remove();
+                labelsG.style("opacity","1");
+            });
         };
 
-        out.drawLabels();
+        out.drawLabels(0);
 
         return out;
     }
