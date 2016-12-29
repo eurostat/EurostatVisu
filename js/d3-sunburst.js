@@ -89,8 +89,9 @@
                 .enter().append("text")
                 .attr("transform", function(d) {
                     var v= d.value || 0;
+                    if(codesHierarchy.value) v/=codesHierarchy.value;
                     var angle = (d.x + d.dx*0.5) * 180/Math.PI;
-                    if(v<2){ angle -= 90; if(angle<0) angle+=360; }
+                    if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
                     if(angle>90 && angle<270) angle-=180;
                     if(angle<0) angle+=360;
                     return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
@@ -103,7 +104,9 @@
                 .style("font-weight", function(d) { return out.options.fontWeight(d.depth); })
                 .html(function(d) {
                     if(!d.depth) return "";  // no inner ring label
-                    if(d.value && d.value<1.5) return "";
+                    var v= d.value || 0;
+                    if(codesHierarchy.value) v/=codesHierarchy.value;
+                    if(v<0.017) return "";
                     return out.options.codeToLabelText(d.code);
                 })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
@@ -124,8 +127,6 @@
         };
 
         out.drawLabels(0);
-
-        console.log();
 
         return out;
     }
