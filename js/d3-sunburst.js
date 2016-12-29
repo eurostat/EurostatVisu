@@ -103,6 +103,7 @@
                 .style("font-weight", function(d) { return out.options.fontWeight(d.depth); })
                 .html(function(d) {
                     if(!d.depth) return "";  // no inner ring label
+                    if(d.value && d.value<1.5) return "";
                     return out.options.codeToLabelText(d.code);
                 })
                 .on("mouseover", function(d) { out.options.highlight(d.code); })
@@ -123,6 +124,8 @@
         };
 
         out.drawLabels(0);
+
+        console.log();
 
         return out;
     }
