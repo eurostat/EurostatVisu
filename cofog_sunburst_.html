@@ -125,8 +125,20 @@
                 var sb = d3.sunburst(cofogsDict["TOTAL"], null, {
                     radius : r,
                     codeToColor : cofogToColor,
-                    //options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","#aaa"); };
-                    //options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
+                    highlight : function(cofog){
+                        $("#arc"+cofog).attr("fill","red");
+                        $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
+                        var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
+                        var html = cofogsDict[cofog].desc + " (" + cofog + ")";
+                        if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
+                        infoDiv.html(html);
+                    },
+                    unhighlight : function(cofog){
+                        $("#arc"+cofog).attr("fill",cofogToColor(cofog));
+                        $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
+                        infoDiv.html("");
+                    },
+
                     //options.codeToLabelText = options.codeToLabelText || function(code){ return code; };
                     //options.fontSize = options.fontSize || function(depth){ return 12; };
                     fontFill : function(depth){ return "black"; }
@@ -151,20 +163,6 @@
                     infoDiv = $("<div>").appendTo(lgd).css("font-size","1.5em").css("margin-top","10px")/*.css("border","solid 1px").css("width","auto")*/;
                 };
                 refreshLegend();
-
-                var highlightCofog = function(cofog){
-                    $("#arc"+cofog).attr("fill","red");
-                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
-                    var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
-                    var html = EstLib.cofogsDict[cofog].desc + " (" + cofog + ")";
-                    if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
-                    infoDiv.html(html);
-                };
-                var unHighlightCofog = function(cofog){
-                    $("#arc"+cofog).attr("fill",cofogToColor(cofog));
-                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
-                    infoDiv.html("");
-                };
 
                 var geoList = $("#geoList");
 
