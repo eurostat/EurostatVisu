@@ -11,7 +11,6 @@
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="js/d3-sunburst.js"></script>
     <script src="js/colorbrewer.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script src="js/json-stat.js"></script>
@@ -49,7 +48,7 @@
 <body>
 <h1 id="title">Government expenditure for <span id="geoTXT">?</span> in <span id="yearTXT">?</span> by function</h1>
 
-<div id="sunburst" style="float: left; margin-right: 20px;"></div>
+<div id="sb" style="float: left; margin-right: 20px;"></div>
 <div id="legend"></div>
 
 <div style="margin-top: 10px;">
@@ -86,31 +85,33 @@
             //d3.csv("http://rawgit.com/jgaffuri/EurostatVisu/gh-pages/data/cofog99.csv", function(data) {
             d3.csv("data/cofog99.csv", function(data) {
 
-                //build cofog dictionnary
-                var cofogsDict={};
+                //build cofog hierarchy
+                EstLib.cofogsDict={};
                 var cofogCodes=[];
                 for(var i=0; i<data.length; i++){
                     var d=data[i];
-                    d.children=[];
-                    cofogsDict[d.code]=d;
+                    d.parents=[];d.children=[];
+                    EstLib.cofogsDict[d.code]=d;
                     cofogCodes.push(d.code);
                 }
                 data=null;
-                //build cofog hierarchy
-                for(i=0; i<cofogCodes.length; i++){
-                    var cofogCode=cofogCodes[i];
+                for(var i=0; i<cofogCodes.length; i++){
+                    cofogCode=cofogCodes[i];
                     if(cofogCode.length == 4) continue;
                     var parentCode = cofogCode.substring(0,4);
-                    cofogsDict[parentCode].children.push(cofogsDict[cofogCode]);
+                    EstLib.cofogsDict[parentCode].children.push(cofogCode);
+                    EstLib.cofogsDict[cofogCode].parents.push(parentCode);
                 }
-                //build root element of the hierarchy
-                {
-                    cofogsDict.TOTAL={code:"TOTAL",desc:"All",children:[]};
-                    var ch = ["GF01","GF02","GF03","GF04","GF05","GF06","GF07","GF08","GF09","GF10"];
-                    for(i=0;i<ch.length;i++) cofogsDict.TOTAL.children.push(cofogsDict[ch[i]]);
-                }
-                //console.log(cofogsDict);
-                //console.log(cofogsDict["TOTAL"]);
+                EstLib.cofogsDict.TOTAL={code:"TOTAL",desc:"All",parents:[],children:["GF01","GF02","GF03","GF04","GF05","GF06","GF07","GF08","GF09","GF10"]};
+                //console.log(EstLib.cofogsDict);
+
+
+
+                //size
+                var r = 230;
+
+                //the data store: a dictionary of values by year/geo
+                var dataIndex = {};
 
                 //colors
                 var color = colorbrewer.Set3[10];
@@ -120,35 +121,20 @@
                     return color[+(fam.replace("GF",""))-1];
                 };
 
-                //build initial sunburst object
-                var r=230;
-                var sb = d3.sunburst(cofogsDict["TOTAL"], null, {
-                    radius : r,
-                    codeToColor : cofogToColor,
-                    highlight : function(cofog){
-                        $("#arc"+cofog).attr("fill","red");
-                        $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
-                        var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
-                        var html = cofogsDict[cofog].desc + " (" + cofog + ")";
-                        if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
-                        infoDiv.html(html);
-                    },
-                    unhighlight : function(cofog){
-                        $("#arc"+cofog).attr("fill",cofogToColor(cofog));
-                        $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
-                        infoDiv.html("");
-                    },
-
-                    //options.codeToLabelText = options.codeToLabelText || function(code){ return code; };
-                    //options.fontSize = options.fontSize || function(depth){ return 12; };
-                    fontFill : function(depth){ return "black"; }
-                });
-
-
-
                 //title
                 var title = $("#title");
                 var titleContentSave = null;
+
+                //svg element
+                var svg = d3.select("#sb").append("svg")
+                        .attr("width", 2*r).attr("height", 2*r)
+                        .append("g").attr("transform", "translate(" + r + "," + r + ")");
+                var partition = d3.layout.partition().sort(null).size([2 * Math.PI, r * r]);
+                var arc = d3.svg.arc()
+                        .startAngle(function(d) { return d.x; })
+                        .endAngle(function(d) { return d.x + d.dx; })
+                        .innerRadius(function(d) { return Math.sqrt(d.y); })
+                        .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
                 //legend
                 var lgd = $("#legend");
@@ -164,13 +150,24 @@
                 };
                 refreshLegend();
 
+                var highlightCofog = function(cofog){
+                    $("#arc"+cofog).attr("fill","red");
+                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
+                    var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
+                    var html = EstLib.cofogsDict[cofog].desc + " (" + cofog + ")";
+                    if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
+                    infoDiv.html(html);
+                };
+                var unHighlightCofog = function(cofog){
+                    $("#arc"+cofog).attr("fill",cofogToColor(cofog));
+                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
+                    infoDiv.html("");
+                };
+
                 var geoList = $("#geoList");
 
                 var sli = $("#timeslider");
                 sli.css("width",2*r);
-
-                //the data store: a dictionary of values by year/geo
-                var dataIndex = {};
 
                 //get base information on years and geos
                 $.when($.ajax({url:EstLib.getEstatDataURL("gov_10a_exp",{cofog99:"TOTAL",na_item:"TE",sector:"S13",unit:"PC_GDP"})}))
@@ -214,9 +211,97 @@
                             $("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
                             $("#yearTXT").text(sli.slider("value"));
 
+                            var updateChart_ = function(data,year,geo){
+                                //build data structure
+                                var root = {};
+                                var buildDatasetRec = function(code, obj){
+                                    obj.name = code;
+                                    //console.log(code,data[code]);
+                                    var children = EstLib.cofogsDict[code].children.sort();
+                                    if(children.length>0){
+                                        obj.children = [];
+                                        for(var i=0; i<children.length; i++){
+                                            var childCode = children[i];
+                                            var childObj = {};
+                                            obj.children.push(childObj);
+                                            buildDatasetRec(childCode, childObj);
+                                        }
+                                    }
+                                    else
+                                        obj.size = data?data[code]:1;
+                                };
+                                buildDatasetRec("TOTAL",root);
+
+                                //console.log(root);
+
+                                //clear previous
+                                svg.selectAll("*").remove();
+
+                                //draw shapes
+                                svg.datum(root).selectAll("path")
+                                        .data(partition.value($("input:radio[name=modeR]:checked").val() === "count"? function() { return 1; } : function(d) { return d.size; }).nodes)
+                                        .enter().append("path")
+                                        .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+                                        .attr("d", arc)
+                                        .attr("id", function(d) { return "arc"+d.name; })
+                                        .attr("stroke-width", 0.5)
+                                        .attr("stroke", "gray")
+                                        .attr("fill", function(d) {
+                                            //var lev = 2 - Math.min(d.name.length-4,2)
+                                            return cofogToColor(d.name);
+                                        })
+                                        .on("mouseover", function(d) { highlightCofog(d.name); })
+                                        .on("mouseout", function(d) { unHighlightCofog(d.name); });
+
+                                //draw labels
+                                svg.datum(root).selectAll("text")
+                                        .data(partition.value($("input:radio[name=modeR]:checked").val() === "count"? function() { return 1; } : function(d) { return d.size; }).nodes)
+                                        .enter().append("text")
+                                        .attr("transform", function(d) {
+                                            var angle = 0;
+                                            var lev = Math.min(d.name.length-4,2) >= 1;
+                                            if(lev){
+                                                var v = data? data[d.name] : 0;
+                                                angle = (d.x + d.dx*0.5) * 180/Math.PI;
+                                                if(v<2){ angle -= 90; if(angle<0) angle+=360; }
+                                                if(angle>90 && angle<270) angle-=180;
+                                                if(angle<0) angle+=360;
+                                            }
+                                            return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
+                                        })
+                                        .attr("dy", ".35em")
+                                        .style("text-anchor", "middle")
+                                        .style("font-weight", function(d) {
+                                            var lev = Math.min(d.name.length-4,2) == 0;
+                                            if(lev) return "bold";
+                                        })
+                                        .style("fill", function(d) {
+                                            var lev = Math.min(d.name.length-4,2) >= 1;
+                                            if(lev) return "#555";
+                                        })
+                                        .style("font-size", function(d) {
+                                            var lev = Math.min(d.name.length-4,2) >= 1;
+                                            if(lev) return "10";
+                                        })
+                                        .html(function(d) {
+                                            if(d.name==="TOTAL") return;
+                                            var lev = Math.min(d.name.length-4,2) == 0;
+                                            if(lev && !data) return d.name;
+                                            if(!data) {
+                                                return d.name;
+                                            }
+                                            var v = data[d.name];
+                                            //if(lev) return d.name + "<tspan x=\"0\" dy=\"1.2em\">" + d3.round(v,1).toFixed(1) + " &#37;GDP</tspan>";
+                                            if(v>0.5) return d.name;
+                                        })
+                                        .on("mouseover", function(d) { highlightCofog(d.name); })
+                                        .on("mouseout", function(d) { unHighlightCofog(d.name); });
+
+                            };
+
                             var updateChart = function(){
                                 if($("input:radio[name=modeR]:checked").val() === "count"){
-                                    sb.set(null,500);
+                                    updateChart_();
                                     return;
                                 }
                                 var geoSel = geoList.find(":selected").attr("value");
@@ -224,9 +309,9 @@
 
                                 //get data and update chart
                                 if(geoSel && dataIndex[yearSel] && dataIndex[yearSel][geoSel])
-                                    sb.set(dataIndex[yearSel][geoSel],500)
+                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
                                 else if(!geoSel && dataIndex[yearSel])
-                                    sb.set(dataIndex[yearSel][geoSel],500)
+                                    updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
                                 else {
                                     //no data: get it!
                                     //build query objects - by year/cofog
@@ -266,7 +351,7 @@
                                                         dataIndex[year][geo][cofog] = v;
                                                     }
                                                 }
-                                                sb.set(dataIndex[yearSel][geoSel],500);
+                                                updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel);
                                             }, function() {
                                                 console.log("Could not load data for " + geoSel + " " + yearSel); //TODO better
                                             });
