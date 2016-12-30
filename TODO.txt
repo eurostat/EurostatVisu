@@ -1,6 +1,9 @@
-finalise generic sunburst
-use for cofog and coicop
+finalise generic sunburst: label placement automation improvement
+extract generic legend
+use for coicop
+apply generic sunburst to NACE codes and others?
 
+improve cofog:
 handle missing values for second ring
 geo:LV, time:2006
 geo:RO, time:2006
@@ -9,9 +12,6 @@ geo:CH, time:2006
 handle negative values
 geo:LU, cofog99:GF0401, time:2001 , -1.6
 geo:EE, cofog99:GF0503, time:2011 , -1.1
-
-extract generic legend
-apply generic sunburst to NACE codes
 
 
 
