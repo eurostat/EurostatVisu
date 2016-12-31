@@ -2,49 +2,49 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+	<link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
 
 	<title>COICOP</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-    <script src="https://d3js.org/d3.v3.min.js"></script>
+	<script src="https://d3js.org/d3.v3.min.js"></script>
 	<script src="js/d3-sunburst.js"></script>
 	<script src="js/colorbrewer.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
-    <script src="js/json-stat.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+	<script src="js/json-stat.js"></script>
 
 	<script src="js/lib.js"></script>
 	<script src="js/eurostat-lib.js"></script>
 	<script src="js/pr-eurostat-lib.js"></script>
 	<script src="js/pr-coicop-dict.js"></script>
 
-    <style>
-body {
-	font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif;
-	font-size: 80%;
-}
+	<style>
+		body {
+			font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif;
+			font-size: 80%;
+		}
 
-table,th,td {
-	border: 1px solid black;
-	border-collapse: collapse;
-	text-align: center;
-}
+		table,th,td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			text-align: center;
+		}
 
-#timeslider label {
-	position: absolute;
-	width: 20px;
-	margin-top: 20px;
-	margin-left: -10px;
-	text-align: center;
-}
+		#timeslider label {
+			position: absolute;
+			width: 20px;
+			margin-top: 20px;
+			margin-left: -10px;
+			text-align: center;
+		}
 
-.ui-widget {
-	font-size: 90% !important;
-}
-    </style>
+		.ui-widget {
+			font-size: 90% !important;
+		}
+	</style>
 
 </head>
 
@@ -98,244 +98,47 @@ table,th,td {
 			//TODO fill empty spaces ?
 			//TODO coicop 5
 
-			//
-			EstLib.modifyCoicopHierarchy();
 
-			//size
-			var r = 350;
+			d3.csv("data/coicop.csv", function(error, data) {
+				if (error) throw error;
 
-			//year/geo
-			var dataIndex = {};
+				//remove CPs
+				for(var i=0; i<data.length; i++) data[i].code = data[i].code.replace("CP","");
 
-			//colors
-			var color = colorbrewer.Set3[12];
-			var colorSA = {"SERV":colorbrewer.Set3[4][0], "NRG":colorbrewer.Set3[4][1], "FOOD":colorbrewer.Set3[4][2], "IGD_NNRG":colorbrewer.Set3[4][3]};
-			var coicopToColor = function(coicop){
-				if($("input:radio[name=ctype]:checked").val() === "CP00"){
-					var fam = coicop.substring(0,4);
-					if(fam==="CP00") return;
-					return color[+(fam.replace("CP",""))-1];
-				} else {
-					return colorSA[getFamCode(coicop)];
+				//index data
+				data = EstLib.index(data,"code");
+				var codes = Object.keys(data);
+
+				//link to father
+				for(i=0; i<codes.length; i++){
+					var childCode = codes[i];
+					if( ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S"].indexOf(childCode.substring(childCode.length-1, childCode.length)) != -1 ) continue;
+					var father = data[childCode.substring(0, childCode.length-1)];
+					if(father) data[childCode].father = father;
+					//else console.log(childCode);
 				}
-			};
-			var getFamCode = function(coicop){
-				if( $.inArray(coicop, EstLib.coicopsDict["SA"].children)>=0 ) return coicop;
-				var parents = EstLib.coicopsDict[coicop].parents;
-				if(parents.length == 0) return;
-				for(var i=0; i<parents.length; i++){
-					var out = getFamCode(parents[i]);
-					if(out) return out;
+
+				//link to children
+				for(i=0; i<codes.length; i++) {
+					var child = data[codes[i]];
+					if(!child.father) continue;
+					if(!child.father.children) child.father.children = [];
+					child.father.children.push(child);
 				}
-			};
+				data["00"].children = [data["01"],data["02"],data["03"],data["04"],data["05"],data["06"],data["07"],data["08"],data["09"],data["10"],data["11"],data["12"]];
+				data = data["00"];
 
-			//title
-			var title = $("#title");
-			var titleContentSave = null;
+				console.log(data);
 
-			//svg element
-			var svg = d3.select("#sb").append("svg")
-					.attr("width", 2*r).attr("height", 2*r)
-					.append("g").attr("transform", "translate(" + r + "," + r + ")");
-			var partition = d3.layout.partition().sort(null).size([2 * Math.PI, r * r]);
-			var arc = d3.svg.arc()
-					.startAngle(function(d) { return d.x; })
-					.endAngle(function(d) { return d.x + d.dx; })
-					.innerRadius(function(d) { return Math.sqrt(d.y); })
-					.outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-			//legend
-			var lgd = $("#legend");
-			lgd.css("height", 2*r);
-			var infoDiv = null;
-			var refreshLegend = function(){
-				lgd.empty();
-				if($("input:radio[name=ctype]:checked").val() === "CP00"){
-					var mouseoverFun = function() { highlightCoicop($(this).attr("id").replace("lgdElt","")); };
-					var mouseoutFun = function() { unHighlightCoicop($(this).attr("id").replace("lgdElt","")); };
-					EstLib.buildCOICOPLegend(lgd, coicopToColor, mouseoverFun, mouseoutFun);
-				} else {}
-				//info
-				infoDiv = $("<div>").appendTo(lgd).css("font-size","1.5em").css("margin-top","10px")/*.css("border","solid 1px").css("width","auto")*/;
-			};
-			refreshLegend();
 
-			var highlightCoicop = function(coicop){
-				$("#arc"+coicop).attr("fill","red");
-				if($("input:radio[name=ctype]:checked").val() === "CP00") $("#lgdEltRect"+coicop.substring(0,4)).css("fill","red");
-				var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][coicop];
-				var html = EstLib.coicopsDict[coicop].desc + " (" + coicop + ")";
-				if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#8240;";
-				infoDiv.html(html);
-			};
-			var unHighlightCoicop = function(coicop){
-				$("#arc"+coicop).attr("fill",coicopToColor(coicop));
-				if($("input:radio[name=ctype]:checked").val() === "CP00") $("#lgdEltRect"+coicop.substring(0,4)).css("fill",coicopToColor(coicop));
-				infoDiv.html("");
-			};
 
-			var geoList = $("#geoList");
 
-			var sli = $("#timeslider");
-			sli.css("width",2*r);
+			});
 
-			//get base information on years and geos
-			$.when($.ajax({url:EstLib.getEstatDataURL("prc_hicp_inw",{coicop:"CP00"})}))
-					.then(function(ds) {
-						EstLib.overrideCountryNames(ds.dimension.geo.category.label);
-						ds = JSONstat(ds).Dataset(0);
-						var years = ds.Dimension("time").id.sort();
-						var geos = ds.Dimension("geo").id;
 
-						//option
-						var cType = $("#ctype");
-						$("input[name='ctype']").change(function () {
-							updateChart();
-							refreshLegend();
-						});
-						cType.buttonset();
-
-						//option
-						$("input[name='modeR']").change(function () {
-							if($(this).attr("value") === "count") {
-								//disable
-								$("#geoListDiv").hide();
-								sli.hide();
-								titleContentSave = title.html();
-								title.html("Products hierarchy");
-							} else {
-								//enable
-								$("#geoListDiv").show();
-								sli.show();
-								title.html(titleContentSave);
-							}
-							updateChart();
-						});
-						$("#modeR").buttonset();
-
-						//build geolist
-						EstLib.buildGeoList(geoList, geos, function(geo){return ds.Dimension("geo").Category(geo).label;}, "EA", function(){
-							$("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
-							updateChart();
-						}, 300);
-
-						//build years slider
-						EstLib.buildTimeSlider(sli, years, years[years.length-1], 1, function( event, ui ) {
-							$("#yearTXT").text(sli.slider("value"));
-							updateChart();
-						});
-
-						//fill text
-						$("#geoTXT").text( ds.Dimension("geo").Category(geoList.find(":selected").attr("value")).label );
-						$("#yearTXT").text(sli.slider("value"));
-
-						var updateChart_ = function(data,year,geo){
-							//build data structure
-							var root = {};
-							var buildDatasetRec = function(code, obj){
-								obj.name = code;
-								var children = EstLib.coicopsDict[code].children.sort();
-								if(children.length>0){
-									obj.children = [];
-									for(var i=0; i<children.length; i++){
-										var childCode = children[i];
-										var childObj = {};
-										obj.children.push(childObj);
-										buildDatasetRec(childCode, childObj);
-									}
-								}
-								else
-									obj.size = data?data[code]:1;
-							};
-							var rootLabel = $("input:radio[name=ctype]:checked").val();
-							var rootLabelC = rootLabel === "CP00";
-							buildDatasetRec(rootLabel,root);
-
-							//clear previous
-							svg.selectAll("*").remove();
-
-							//draw shapes
-							svg.datum(root).selectAll("path")
-									.data(partition.value($("input:radio[name=modeR]:checked").val() === "count"? function() { return 1; } : function(d) { return d.size; }).nodes)
-									.enter().append("path")
-									.attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
-									.attr("d", arc)
-									.attr("id", function(d) { return "arc"+d.name; })
-									.attr("stroke-width", 0.5)
-									.attr("stroke", "gray")
-									.attr("fill", function(d) {
-										//var lev = 2 - Math.min(d.name.length-4,2)
-										return coicopToColor(d.name);
-									})
-									.on("mouseover", function(d) { highlightCoicop(d.name); })
-									.on("mouseout", function(d) { unHighlightCoicop(d.name); });
-
-							//draw labels
-							svg.datum(root).selectAll("text")
-									.data(partition.value($("input:radio[name=modeR]:checked").val() === "count"? function() { return 1; } : function(d) { return d.size; }).nodes)
-									.enter().append("text")
-									.attr("transform", function(d) {
-										var angle = 0;
-										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)<0;
-										if(lev){
-											var v = data? data[d.name] : 0;
-											angle = (d.x + d.dx*0.5) * 180/Math.PI;
-											if(v<30){ angle -= 90; if(angle<0) angle+=360; }
-											if(angle>90 && angle<270) angle-=180;
-											if(angle<0) angle+=360;
-										}
-										return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
-									})
-									.attr("dy", ".35em")
-									.style("text-anchor", "middle")
-									.style("font-weight", function(d) {
-										var lev = rootLabelC? Math.min(d.name.length-4,2) == 0 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)>=0;
-										if(lev) return "bold";
-									})
-									.style("fill", function(d) {
-										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)<0;
-										if(lev) return "#555";
-									})
-									.style("font-size", function(d) {
-										var lev = rootLabelC? Math.min(d.name.length-4,2) >= 1 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)<0;
-										if(lev) return "10";
-									})
-									.html(function(d) {
-										if(d.name==="CP00" || d.name==="SA") return;
-										var lev = rootLabelC? Math.min(d.name.length-4,2) == 0 : $.inArray(d.name, EstLib.coicopsDict["SA"].children)>=0;
-										if(lev && !data) return d.name;
-										if(!data) {
-											return d.name;
-										}
-										var v = data[d.name];
-										if(lev) return (rootLabelC? d.name : EstLib.coicopsDict[d.name].desc) + "<tspan x=\"0\" dy=\"1.2em\">" + d3.round(v,1).toFixed(1) + " &#8240;</tspan>";
-										if(v>5) return d.name;
-									})
-									.on("mouseover", function(d) { highlightCoicop(d.name); })
-									.on("mouseout", function(d) { unHighlightCoicop(d.name); });
-
-						};
-
-						var updateChart = function(){
-							if($("input:radio[name=modeR]:checked").val() === "count"){
-								updateChart_();
-								return;
-							}
-							var geoSel = geoList.find(":selected").attr("value");
-							var yearSel = sli.slider("value");
-
-							//get data and update chart
-							EstLib.getProductWeightData(geoSel, yearSel, dataIndex, function(){ updateChart_(dataIndex[yearSel][geoSel],yearSel,geoSel); });
-						};
-
-						//
-						updateChart();
-
-					}, function() {
-						console.log("Could not load initialisation data");
-					});
 		});
-    }(jQuery, window.EstLib = window.EstLib || {} ));
+	}(jQuery, window.EstLib = window.EstLib || {} ));
 
 </script>
 
