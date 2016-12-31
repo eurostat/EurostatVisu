@@ -49,56 +49,11 @@
 </head>
 
 <body>
-<h1 id="title">
-	Household expenditure for <span id="geoTXT">?</span> in <span
-		id="yearTXT">?</span> by product
-</h1>
-
 <div id="sunburst" style="float: left; margin-right: 20px;"></div>
-<div id="legend"></div>
-
-<div style="margin-top: 10px;">
-	<div>
-		<div id="ctype" style="float: left; margin-right: 20px; ">
-			<input type="radio" name="ctype" id="CP00" value="CP00" checked>
-			<label for="CP00">COICOP classification</label> <input type="radio" name="ctype" id="SA" value="SA"> <label for="SA">ECB classification</label>
-		</div>
-
-		<div id="modeR" style="margin-top: 10px;">
-			<input type="radio" name="modeR" id="size" value="size" checked>
-			<label for="size">Product weights</label> <input type="radio" name="modeR" id="count" value="count"> <label for="count">Equalised hierarchy</label>
-		</div>
-	</div>
-
-	<div id="geoListDiv" style="margin-top: 10px;">
-		<select name="geoN" id="geoList"></select>
-	</div>
-
-	<div style="margin-top: 10px;">
-		<div id="timeslider"></div>
-	</div>
-
-</div>
 
 <script>
-
-	/**
-	 *
-	 * Visualisation of coicop information as sunburst
-	 *
-	 * @author julien Gaffuri
-	 *
-	 */
 	(function($, EstLib) {
 		$(function() {
-
-			//TODO remove radio circles
-			//TODO show flags
-			//TODO do something when no data
-			//TODO fill empty spaces ?
-			//TODO coicop 5
-
-
 			d3.csv("data/coicop.csv", function(error, data) {
 				if (error) throw error;
 
@@ -136,15 +91,12 @@
 					return color[+fam-1];
 				};
 
-
-
 				var sb = d3.sunburst(data, null, {
 					radius : 350,
 					codeToColor : coicopToColor
 				});
 
 			});
-
 
 		});
 	}(jQuery, window.EstLib = window.EstLib || {} ));
