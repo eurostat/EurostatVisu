@@ -1,7 +1,8 @@
 finalise generic sunburst: label placement automation improvement
 extract generic legend
 use for coicop
-apply generic sunburst to NACE codes and others?
+apply generic sunburst to NACE codes and others? See http://ec.europa.eu/eurostat/data/database?node_code=sbs_sc_1b_se_r2 ? Show employments by sector? sbs_r_nuts06_r2
+
 
 improve cofog:
 handle missing values for second ring
