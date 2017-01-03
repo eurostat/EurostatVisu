@@ -9,29 +9,40 @@
 (function(d3) {
 
     //codesHierarchy: code,children[]
-    d3.sunburst = function(codesHierarchy, iniValues, options){
+    d3.sunburst = function(iniValues){
+
+        var codesHierarchy = {},
+            div = "sunburst",
+            radius = 150,
+            strokeWidth = 1.0,
+            strokeColor = "white",
+            codeToColor = function(){ return "#ccc";},
+            highlight = function(code){ d3.select("#arc"+code).attr("fill","#aaa");},
+            unhighlight = function(code){ d3.select("#arc"+code).attr("fill",codeToColor(code));},
+
+            codeToLabelText = function(code){ return code;},
+            fontFamily = function(depth){ return "'Myriad Pro', Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', 'Liberation Sans', 'Nimbus Sans L', 'Helvetica Neue', vegur, Vegur, Helvetica, Arial, sans-serif";},
+            fontSize = function(depth){ return 12;},
+            fontFill = function(depth){ return "#333";},
+            fontWeight = function(depth){ return depth<=1?"bold":"regular"; };
+
+        out.codesHierarchy = function(v) { if (!arguments.length) return codesHierarchy; codesHierarchy=v; return out; };
+        out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
+        out.radius = function(v) { if (!arguments.length) return radius; radius=v; return out; };
+        out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
+        out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
+        out.codeToColor = function(v) { if (!arguments.length) return codeToColor; codeToColor=v; return out; };
+        out.highlight = function(v) { if (!arguments.length) return highlight; highlight=v; return out; };
+        out.unhighlight = function(v) { if (!arguments.length) return unhighlight; unhighlight=v; return out; };
+
+        out.codeToLabelText = function(v) { if (!arguments.length) return codeToLabelText; codeToLabelText=v; return out; };
+        out.fontFamily = function(v) { if (!arguments.length) return fontFamily; fontFamily=v; return out; };
+        out.fontSize = function(v) { if (!arguments.length) return fontSize; fontSize=v; return out; };
+        out.fontFill = function(v) { if (!arguments.length) return fontFill; fontFill=v; return out; };
+        out.fontWeight = function(v) { if (!arguments.length) return fontWeight; fontWeight=v; return out; };
 
 
-
-
-        options = options || {};
-        options.div = options.div || "sunburst";
-        options.radius = options.radius || 150;
-        options.strokeWidth = options.strokeWidth || 1.0;
-        options.strokeColor = options.strokeColor || "white";
-        options.codeToColor = options.codeToColor || function(){ return "#ccc"; };
-        options.highlight = options.highlight || function(code){ d3.select("#arc"+code).attr("fill","#aaa"); };
-        options.unhighlight = options.unhighlight || function(code){ d3.select("#arc"+code).attr("fill",out.options.codeToColor(code)); };
-
-        options.codeToLabelText = options.codeToLabelText || function(code){ return code; };
-        options.fontFamily = options.fontFamily || function(depth){ return "'Myriad Pro', Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', 'Liberation Sans', 'Nimbus Sans L', 'Helvetica Neue', vegur, Vegur, Helvetica, Arial, sans-serif"; };
-        options.fontSize = options.fontSize || function(depth){ return 12; };
-        options.fontFill = options.fontFill || function(depth){ return "#333"; };
-        options.fontWeight = options.fontWeight|| function(depth){ return depth<=1?"bold":"regular"; };
-
-        var out = {codesHierarchy:codesHierarchy,options:options};
-
-        var partition = d3.layout.partition().sort(null).size([2 * Math.PI, options.radius * options.radius]);
+        var partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius]);
         var arc = d3.svg.arc()
             .startAngle(function(d) { return d.x; })
             .endAngle(function(d) { return d.x + d.dx; })
@@ -49,25 +60,28 @@
             };
         }
 
-        var svg = d3.select("#"+options.div).append("svg")
-            .attr("width", 2*options.radius).attr("height", 2*options.radius)
-            .append("g").attr("transform", "translate(" + options.radius + "," + options.radius + ")");
-        var shapesG = svg.append("g").attr("id", out.options.div+"_shapes");
-        var labelsG = svg.append("g").attr("id", out.options.div+"_labels");
+        var out = function(){
+            var svg = d3.select("#"+div).append("svg")
+                .attr("width", 2*radius).attr("height", 2*radius)
+                .append("g").attr("transform", "translate(" + radius + "," + radius + ")");
+            var shapesG = svg.append("g").attr("id", div+"_shapes");
+            var labelsG = svg.append("g").attr("id", div+"_labels");
 
-        //draw shapes
-        var shapes = shapesG.datum(out.codesHierarchy).selectAll("path")
-            .data(partition.value(function(d) { return iniValues?iniValues[d.code]:1; }).nodes)
-            .enter().append("path")
-            .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
-            .attr("d", arc)
-            .attr("id", function(d) { return "arc"+d.code; })
-            .attr("stroke-width", out.options.strokeWidth)
-            .attr("stroke", out.options.strokeColor)
-            .attr("fill", function(d) { return out.options.codeToColor(d.code); })
-            .on("mouseover", function(d) { out.options.highlight(d.code); })
-            .on("mouseout", function(d) { out.options.unhighlight(d.code); })
-            .each(arcStash);
+            //draw shapes
+            var shapes = shapesG.datum(codesHierarchy).selectAll("path")
+                .data(partition.value(function(d) { return iniValues?iniValues[d.code]:1; }).nodes)
+                .enter().append("path")
+                .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+                .attr("d", arc)
+                .attr("id", function(d) { return "arc"+d.code; })
+                .attr("stroke-width", strokeWidth)
+                .attr("stroke", strokeColor)
+                .attr("fill", function(d) { return codeToColor(d.code); })
+                .on("mouseover", function(d) { highlight(d.code); })
+                .on("mouseout", function(d) { unhighlight(d.code); })
+                .each(arcStash);
+        };
+
 
         //set values, with transition
         //values: code:value
@@ -88,7 +102,7 @@
             labelsG.style("opacity","0");
 
             //draw labels
-            labelsG.datum(out.codesHierarchy).selectAll("text")
+            labelsG.datum(codesHierarchy).selectAll("text")
                 .data(partition.nodes)
                 .enter().append("text")
                 .attr("transform", function(d) {
@@ -102,19 +116,19 @@
                 })
                 .attr("dy", ".35em")
                 .style("text-anchor", "middle")
-                .style("font-family", function(d) { return out.options.fontFamily(d.depth); })
-                .style("font-size", function(d) { return out.options.fontSize(d.depth); })
-                .style("fill", function(d) { return out.options.fontFill(d.depth); })
-                .style("font-weight", function(d) { return out.options.fontWeight(d.depth); })
+                .style("font-family", function(d) { return fontFamily(d.depth); })
+                .style("font-size", function(d) { return fontSize(d.depth); })
+                .style("fill", function(d) { return fontFill(d.depth); })
+                .style("font-weight", function(d) { return fontWeight(d.depth); })
                 .html(function(d) {
                     if(!d.depth) return "";  // no inner ring label
                     var v= d.value || 0;
                     if(codesHierarchy.value) v/=codesHierarchy.value;
                     if(v<0.017) return "";
-                    return out.options.codeToLabelText(d.code);
+                    return codeToLabelText(d.code);
                 })
-                .on("mouseover", function(d) { out.options.highlight(d.code); })
-                .on("mouseout", function(d) { out.options.unhighlight(d.code); });
+                .on("mouseover", function(d) { highlight(d.code); })
+                .on("mouseout", function(d) { unhighlight(d.code); });
 
             //show labels group
             labelsG.transition().duration(duration).style("opacity","1");
