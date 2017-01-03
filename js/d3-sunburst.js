@@ -7,7 +7,6 @@
  *
  */
 (function(d3) {
-    //See http://bl.ocks.org/mbostock/4063423
 
     //codesHierarchy: code,children[]
     d3.sunburst = function(codesHierarchy, iniValues, options){
