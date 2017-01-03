@@ -12,7 +12,6 @@
     d3.sunburst = function(){
 
         var codesHierarchy = {},
-            transitionDuration = 0,
             div = "sunburst",
             radius = 150,
             strokeWidth = 1.0,
@@ -45,24 +44,24 @@
             };
         }
 
-        var labelsG, shapesG;
+        var svg = d3.select("#"+div).append("svg")
+            .attr("width", 2*radius).attr("height", 2*radius)
+            .append("g").attr("transform", "translate(" + radius + "," + radius + ")");
+        var shapesG = svg.append("g").attr("id", div+"_shapes");
+        var labelsG = svg.append("g").attr("id", div+"_labels");
 
-        function out(){
-            var svg = d3.select("#"+div).append("svg")
-                .attr("width", 2*radius).attr("height", 2*radius)
-                .append("g").attr("transform", "translate(" + radius + "," + radius + ")");
-            shapesG = svg.append("g").attr("id", div+"_shapes");
-            labelsG = svg.append("g").attr("id", div+"_labels");
-
-            out.drawLabels(0);
-        }
+        var out = {};
+        var shapes;
 
         out.codesHierarchy = function(v) {
             if (!arguments.length) return codesHierarchy;
             codesHierarchy=v;
 
+            //clean previous
+            shapesG.selectAll("*").remove();
+
             //draw shapes
-            var shapes = shapesG.datum(codesHierarchy).selectAll("path")
+            shapes = shapesG.datum(codesHierarchy).selectAll("path")
                 .data(partition.value(function(d) { return 1; }).nodes)
                 .enter().append("path")
                 .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
@@ -78,31 +77,15 @@
             return out;
         };
 
-
-
-        out.transitionDuration = function(v) { if (!arguments.length) return transitionDuration; transitionDuration=v; return out; };
-        out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
-        out.radius = function(v) { if (!arguments.length) return radius; radius=v; return out; };
-        out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
-        out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
-        out.codeToColor = function(v) { if (!arguments.length) return codeToColor; codeToColor=v; return out; };
-        out.highlight = function(v) { if (!arguments.length) return highlight; highlight=v; return out; };
-        out.unhighlight = function(v) { if (!arguments.length) return unhighlight; unhighlight=v; return out; };
-
-        out.codeToLabelText = function(v) { if (!arguments.length) return codeToLabelText; codeToLabelText=v; return out; };
-        out.fontFamily = function(v) { if (!arguments.length) return fontFamily; fontFamily=v; return out; };
-        out.fontSize = function(v) { if (!arguments.length) return fontSize; fontSize=v; return out; };
-        out.fontFill = function(v) { if (!arguments.length) return fontFill; fontFill=v; return out; };
-        out.fontWeight = function(v) { if (!arguments.length) return fontWeight; fontWeight=v; return out; };
-
-
         //set values, with transition
         //values: code:value
-        out.set = function(values){
-            out.eraseLabels(transitionDuration*0.75);
+        out.set = function(values, duration){
+            duration = duration || 0;
+
+            out.eraseLabels(duration*0.75);
             shapes.data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().duration(transitionDuration).attrTween("d", arcTween)
-                .each("end", function(){ out.drawLabels(transitionDuration*0.5); })
+                .transition().duration(duration).attrTween("d", arcTween)
+                .each("end", function(){ out.drawLabels(duration*0.5); })
             ;
             return out;
         };
@@ -122,7 +105,7 @@
                     var v= d.value || 0;
                     if(codesHierarchy.value) v/=codesHierarchy.value;
                     var angle = (d.x + d.dx*0.5) * 180/Math.PI;
-                    if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
+                        if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
                     if(angle>90 && angle<270) angle-=180;
                     if(angle<0) angle+=360;
                     return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
@@ -161,7 +144,22 @@
             return out;
         };
 
-        out();
+        out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
+        out.radius = function(v) { if (!arguments.length) return radius; radius=v; return out; };
+        out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
+        out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
+        out.codeToColor = function(v) { if (!arguments.length) return codeToColor; codeToColor=v; return out; };
+        out.highlight = function(v) { if (!arguments.length) return highlight; highlight=v; return out; };
+        out.unhighlight = function(v) { if (!arguments.length) return unhighlight; unhighlight=v; return out; };
+
+        out.codeToLabelText = function(v) { if (!arguments.length) return codeToLabelText; codeToLabelText=v; return out; };
+        out.fontFamily = function(v) { if (!arguments.length) return fontFamily; fontFamily=v; return out; };
+        out.fontSize = function(v) { if (!arguments.length) return fontSize; fontSize=v; return out; };
+        out.fontFill = function(v) { if (!arguments.length) return fontFill; fontFill=v; return out; };
+        out.fontWeight = function(v) { if (!arguments.length) return fontWeight; fontWeight=v; return out; };
+
+
+        out.drawLabels(0);
         return out;
     }
 
