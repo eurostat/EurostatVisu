@@ -9,9 +9,10 @@
 (function(d3) {
 
     //codesHierarchy: code,children[]
-    d3.sunburst = function(iniValues){
+    d3.sunburst = function(){
 
         var codesHierarchy = {},
+            transitionDuration = 0,
             div = "sunburst",
             radius = 150,
             strokeWidth = 1.0,
@@ -25,22 +26,6 @@
             fontSize = function(depth){ return 12;},
             fontFill = function(depth){ return "#333";},
             fontWeight = function(depth){ return depth<=1?"bold":"regular"; };
-
-        out.codesHierarchy = function(v) { if (!arguments.length) return codesHierarchy; codesHierarchy=v; return out; };
-        out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
-        out.radius = function(v) { if (!arguments.length) return radius; radius=v; return out; };
-        out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
-        out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
-        out.codeToColor = function(v) { if (!arguments.length) return codeToColor; codeToColor=v; return out; };
-        out.highlight = function(v) { if (!arguments.length) return highlight; highlight=v; return out; };
-        out.unhighlight = function(v) { if (!arguments.length) return unhighlight; unhighlight=v; return out; };
-
-        out.codeToLabelText = function(v) { if (!arguments.length) return codeToLabelText; codeToLabelText=v; return out; };
-        out.fontFamily = function(v) { if (!arguments.length) return fontFamily; fontFamily=v; return out; };
-        out.fontSize = function(v) { if (!arguments.length) return fontSize; fontSize=v; return out; };
-        out.fontFill = function(v) { if (!arguments.length) return fontFill; fontFill=v; return out; };
-        out.fontWeight = function(v) { if (!arguments.length) return fontWeight; fontWeight=v; return out; };
-
 
         var partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius]);
         var arc = d3.svg.arc()
@@ -60,16 +45,25 @@
             };
         }
 
-        var out = function(){
+        var labelsG, shapesG;
+
+        function out(){
             var svg = d3.select("#"+div).append("svg")
                 .attr("width", 2*radius).attr("height", 2*radius)
                 .append("g").attr("transform", "translate(" + radius + "," + radius + ")");
-            var shapesG = svg.append("g").attr("id", div+"_shapes");
-            var labelsG = svg.append("g").attr("id", div+"_labels");
+            shapesG = svg.append("g").attr("id", div+"_shapes");
+            labelsG = svg.append("g").attr("id", div+"_labels");
+
+            out.drawLabels(0);
+        }
+
+        out.codesHierarchy = function(v) {
+            if (!arguments.length) return codesHierarchy;
+            codesHierarchy=v;
 
             //draw shapes
             var shapes = shapesG.datum(codesHierarchy).selectAll("path")
-                .data(partition.value(function(d) { return iniValues?iniValues[d.code]:1; }).nodes)
+                .data(partition.value(function(d) { return 1; }).nodes)
                 .enter().append("path")
                 .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
                 .attr("d", arc)
@@ -80,18 +74,37 @@
                 .on("mouseover", function(d) { highlight(d.code); })
                 .on("mouseout", function(d) { unhighlight(d.code); })
                 .each(arcStash);
+
+            return out;
         };
+
+
+
+        out.transitionDuration = function(v) { if (!arguments.length) return transitionDuration; transitionDuration=v; return out; };
+        out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
+        out.radius = function(v) { if (!arguments.length) return radius; radius=v; return out; };
+        out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
+        out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
+        out.codeToColor = function(v) { if (!arguments.length) return codeToColor; codeToColor=v; return out; };
+        out.highlight = function(v) { if (!arguments.length) return highlight; highlight=v; return out; };
+        out.unhighlight = function(v) { if (!arguments.length) return unhighlight; unhighlight=v; return out; };
+
+        out.codeToLabelText = function(v) { if (!arguments.length) return codeToLabelText; codeToLabelText=v; return out; };
+        out.fontFamily = function(v) { if (!arguments.length) return fontFamily; fontFamily=v; return out; };
+        out.fontSize = function(v) { if (!arguments.length) return fontSize; fontSize=v; return out; };
+        out.fontFill = function(v) { if (!arguments.length) return fontFill; fontFill=v; return out; };
+        out.fontWeight = function(v) { if (!arguments.length) return fontWeight; fontWeight=v; return out; };
 
 
         //set values, with transition
         //values: code:value
-        out.set = function(values, duration){
-            duration = duration || 0;
-            out.eraseLabels(duration*0.75);
+        out.set = function(values){
+            out.eraseLabels(transitionDuration*0.75);
             shapes.data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
-                .transition().duration(duration).attrTween("d", arcTween)
-                .each("end", function(){ out.drawLabels(duration*0.5); })
+                .transition().duration(transitionDuration).attrTween("d", arcTween)
+                .each("end", function(){ out.drawLabels(transitionDuration*0.5); })
             ;
+            return out;
         };
 
         //draw labels
@@ -132,6 +145,8 @@
 
             //show labels group
             labelsG.transition().duration(duration).style("opacity","1");
+
+            return out;
         };
 
         //remove labels
@@ -142,10 +157,11 @@
                 labelsG.selectAll("*").remove();
                 labelsG.style("opacity","1");
             });
+
+            return out;
         };
 
-        out.drawLabels(0);
-
+        out();
         return out;
     }
 
