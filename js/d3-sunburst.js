@@ -8,7 +8,6 @@
  */
 (function(d3) {
 
-
     d3.sunburst = function(){
         var
             codesHierarchy = {}, //codesHierarchy: code,children[]
@@ -26,28 +25,21 @@
             fontFill = function(depth){ return "#333";},
             fontWeight = function(depth){ return depth<=1?"bold":"regular"; };
 
-        var partition;
+        var
+            partition,
+            shapesG,
+            labelsG,
+            shapes
+            ;
+
+        //the output variable
+        var out = {};
+
         var arc = d3.svg.arc()
             .startAngle(function(d) { return d.x; })
             .endAngle(function(d) { return d.x + d.dx; })
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-
-        //functions used for shapes transition
-        function arcTween(d) {
-            var i = d3.interpolate({x: d.x0, dx: d.dx0}, d);
-            return function(t) {
-                var b = i(t);
-                d.x0 = b.x; d.dx0 = b.dx;
-                return arc(b);
-            };
-        }
-
-        var shapesG;
-        var labelsG;
-        var shapes;
-
-        var out = {};
 
         var rebuild = function(){
             partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius]);
@@ -95,6 +87,16 @@
             duration = duration || 0;
 
             out.eraseLabels(duration*0.75);
+
+            var arcTween = function(d) {
+                var i = d3.interpolate({x: d.x0, dx: d.dx0}, d);
+                return function(t) {
+                    var b = i(t);
+                    d.x0 = b.x; d.dx0 = b.dx;
+                    return arc(b);
+                };
+            };
+
             shapes.data(partition.value(function(d) { return values?values[d.code]:1; }).nodes)
                 .transition().duration(duration).attrTween("d", arcTween)
                 .each("end", function(){ out.drawLabels(duration*0.5); })
