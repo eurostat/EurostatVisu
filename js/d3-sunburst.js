@@ -161,8 +161,19 @@
         };
 
         out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
-        out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
-        out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
+
+        out.strokeWidth = function(v) {
+            if (!arguments.length) return strokeWidth;
+            strokeWidth=v;
+            shapes = shapesG.selectAll("path").attr("stroke-width", strokeWidth);
+            return out;
+        };
+        out.strokeColor = function(v) {
+            if (!arguments.length) return strokeColor;
+            strokeColor=v;
+            shapes = shapesG.selectAll("path").attr("stroke", strokeColor);
+            return out;
+        };
 
         out.codeToColor = function(v) {
             if (!arguments.length) return codeToColor;

@@ -124,11 +124,11 @@
                 var r=230;
 
                 var sb = d3.sunburst()
-                                .strokeWidth(0.5)
-                                .strokeColor("#fff")
                                 .codesHierarchy(cofogsDict["TOTAL"])
                                 .radius(r)
                                 .codeToColor(cofogToColor)
+                                .strokeWidth(0.5)
+                                .strokeColor("#fff")
                                 .highlight(function(cofog){
                                     $("#arc"+cofog).attr("fill","red");
                                     $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
