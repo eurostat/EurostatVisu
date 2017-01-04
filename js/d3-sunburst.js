@@ -8,15 +8,15 @@
  */
 (function(d3) {
 
-    //codesHierarchy: code,children[]
-    d3.sunburst = function(){
 
-        var codesHierarchy = {},
-            div = "sunburst",
-            radius = 150,
+    d3.sunburst = function(){
+        var
+            codesHierarchy = {}, //codesHierarchy: code,children[]
+            div = "sunburst", //the div element where to build the svg element
+            radius = 150, //the chart's size
             strokeWidth = 1.0,
             strokeColor = "white",
-            codeToColor = function(){ return "#ccc";},
+            codeToColor = function(code){ return "#ccc";},
             highlight = function(code){ d3.select("#arc"+code).attr("fill","#aaa");},
             unhighlight = function(code){ d3.select("#arc"+code).attr("fill",codeToColor(code));},
 
@@ -34,7 +34,6 @@
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
         //functions used for shapes transition
-        function arcStash(d) { d.x0 = d.x; d.dx0 = d.dx; }
         function arcTween(d) {
             var i = d3.interpolate({x: d.x0, dx: d.dx0}, d);
             return function(t) {
@@ -71,7 +70,7 @@
                 .attr("fill", function(d) { return codeToColor(d.code); })
                 .on("mouseover", function(d) { highlight(d.code); })
                 .on("mouseout", function(d) { unhighlight(d.code); })
-                .each(arcStash);
+                .each( function(d) { d.x0 = d.x; d.dx0 = d.dx; } );
 
             out.drawLabels(0);
         };
