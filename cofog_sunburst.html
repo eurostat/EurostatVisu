@@ -124,6 +124,8 @@
                 var r=230;
 
                 var sb = d3.sunburst()
+                                .strokeWidth(0.5)
+                                .strokeColor("#fff")
                                 .codesHierarchy(cofogsDict["TOTAL"])
                                 .radius(r)
                                 .codeToColor(cofogToColor)
@@ -141,7 +143,7 @@
                                     infoDiv.html("");
                                 })
                                 .fontSize( function(depth){ return depth==1?12:10;} )
-                                .fontFill( function(depth){ return depth==1?"#111":"#666";} )
+                                .fontFill( function(depth){ return depth==1?"#111":"#444";} )
                         ;
 
                 //title
