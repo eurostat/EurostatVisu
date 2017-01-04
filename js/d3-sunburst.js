@@ -32,7 +32,7 @@
             shapes
             ;
 
-        //the output variable
+        //the output object
         var out = {};
 
         var arc = d3.svg.arc()
@@ -163,7 +163,14 @@
         out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
         out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
         out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
-        out.codeToColor = function(v) { if (!arguments.length) return codeToColor; codeToColor=v; return out; };
+
+        out.codeToColor = function(v) {
+            if (!arguments.length) return codeToColor;
+            codeToColor=v;
+            shapes = shapesG.selectAll("path").attr("fill", function(d) { return codeToColor(d.code); });
+            return out;
+        };
+
         out.highlight = function(v) { if (!arguments.length) return highlight; highlight=v; return out; };
         out.unhighlight = function(v) { if (!arguments.length) return unhighlight; unhighlight=v; return out; };
 

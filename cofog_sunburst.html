@@ -124,6 +124,7 @@
                 var r=230;
 
                 var sb = d3.sunburst()
+                                .codesHierarchy(cofogsDict["TOTAL"])
                                 .radius(r)
                                 .codeToColor(cofogToColor)
                                 .highlight(function(cofog){
@@ -139,7 +140,6 @@
                                     $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
                                     infoDiv.html("");
                                 })
-                                .codesHierarchy(cofogsDict["TOTAL"])
                         ;
 
                 //title

@@ -92,9 +92,9 @@
 				};
 
 				var sb = d3.sunburst()
+								.codesHierarchy(data)
 								.radius(500)
 								.codeToColor(coicopToColor)
-								.codesHierarchy(data)
 						;
 
 			});
