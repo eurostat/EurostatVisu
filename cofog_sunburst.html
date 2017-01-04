@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="js/d3-sunburst-old.js"></script>
+    <script src="js/d3-sunburst.js"></script>
     <script src="js/colorbrewer.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
     <script src="js/json-stat.js"></script>
@@ -122,29 +122,25 @@
 
                 //build initial sunburst object
                 var r=230;
-                var sb = d3.sunburst(cofogsDict["TOTAL"], null, {
-                    radius : r,
-                    codeToColor : cofogToColor,
-                    highlight : function(cofog){
-                        $("#arc"+cofog).attr("fill","red");
-                        $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
-                        var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
-                        var html = cofogsDict[cofog].desc + " (" + cofog + ")";
-                        if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
-                        infoDiv.html(html);
-                    },
-                    unhighlight : function(cofog){
-                        $("#arc"+cofog).attr("fill",cofogToColor(cofog));
-                        $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
-                        infoDiv.html("");
-                    },
 
-                    //options.codeToLabelText = options.codeToLabelText || function(code){ return code; };
-                    //options.fontSize = options.fontSize || function(depth){ return 12; };
-                    fontFill : function(depth){ return "black"; }
-                });
-
-
+                var sb = d3.sunburst()
+                                .radius(r)
+                                .codeToColor(cofogToColor)
+                                .highlight(function(cofog){
+                                    $("#arc"+cofog).attr("fill","red");
+                                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
+                                    var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
+                                    var html = cofogsDict[cofog].desc + " (" + cofog + ")";
+                                    if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
+                                    infoDiv.html(html);
+                                })
+                                .unhighlight(function(cofog){
+                                    $("#arc"+cofog).attr("fill",cofogToColor(cofog));
+                                    $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
+                                    infoDiv.html("");
+                                })
+                                .codesHierarchy(cofogsDict["TOTAL"])
+                        ;
 
                 //title
                 var title = $("#title");

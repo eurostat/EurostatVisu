@@ -26,7 +26,7 @@
             fontFill = function(depth){ return "#333";},
             fontWeight = function(depth){ return depth<=1?"bold":"regular"; };
 
-        var partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius]);
+        var partition;
         var arc = d3.svg.arc()
             .startAngle(function(d) { return d.x; })
             .endAngle(function(d) { return d.x + d.dx; })
@@ -44,14 +44,23 @@
             };
         }
 
-        var svg = d3.select("#"+div).append("svg")
-            .attr("width", 2*radius).attr("height", 2*radius)
-            .append("g").attr("transform", "translate(" + radius + "," + radius + ")");
-        var shapesG = svg.append("g").attr("id", div+"_shapes");
-        var labelsG = svg.append("g").attr("id", div+"_labels");
+        var shapesG;
+        var labelsG;
+        var shapes;
 
         var out = {};
-        var shapes;
+
+        out.radius = function(v) { if (!arguments.length) return radius; radius=v;
+            partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius]);
+            d3.select("#"+div).selectAll("*").remove();
+            var svg = d3.select("#"+div).append("svg")
+                .attr("width", 2*radius).attr("height", 2*radius)
+                .append("g").attr("transform", "translate(" + radius + "," + radius + ")");
+            shapesG = svg.append("g").attr("id", div+"_shapes");
+            labelsG = svg.append("g").attr("id", div+"_labels");
+            return out;
+        };
+        out.radius(radius);
 
         out.codesHierarchy = function(v) {
             if (!arguments.length) return codesHierarchy;
@@ -109,7 +118,7 @@
                     var v= d.value || 0;
                     if(codesHierarchy.value) v/=codesHierarchy.value;
                     var angle = (d.x + d.dx*0.5) * 180/Math.PI;
-                        if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
+                    if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
                     if(angle>90 && angle<270) angle-=180;
                     if(angle<0) angle+=360;
                     return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
@@ -149,7 +158,6 @@
         };
 
         out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
-        out.radius = function(v) { if (!arguments.length) return radius; radius=v; return out; };
         out.strokeWidth = function(v) { if (!arguments.length) return strokeWidth; strokeWidth=v; return out; };
         out.strokeColor = function(v) { if (!arguments.length) return strokeColor; strokeColor=v; return out; };
         out.codeToColor = function(v) { if (!arguments.length) return codeToColor; codeToColor=v; return out; };
