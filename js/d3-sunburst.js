@@ -50,7 +50,7 @@
 
         var out = {};
 
-        out.radius = function(v) { if (!arguments.length) return radius; radius=v;
+        var rebuild = function(){
             partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius]);
             d3.select("#"+div).selectAll("*").remove();
             var svg = d3.select("#"+div).append("svg")
@@ -58,16 +58,6 @@
                 .append("g").attr("transform", "translate(" + radius + "," + radius + ")");
             shapesG = svg.append("g").attr("id", div+"_shapes");
             labelsG = svg.append("g").attr("id", div+"_labels");
-            return out;
-        };
-        out.radius(radius);
-
-        out.codesHierarchy = function(v) {
-            if (!arguments.length) return codesHierarchy;
-            codesHierarchy=v;
-
-            //clean previous
-            shapesG.selectAll("*").remove();
 
             //draw shapes
             shapes = shapesG.datum(codesHierarchy).selectAll("path")
@@ -84,7 +74,19 @@
                 .each(arcStash);
 
             out.drawLabels(0);
+        };
 
+        out.radius = function(v) {
+            if (!arguments.length) return radius;
+            radius=v;
+            rebuild();
+            return out;
+        };
+
+        out.codesHierarchy = function(v) {
+            if (!arguments.length) return codesHierarchy;
+            codesHierarchy=v;
+            rebuild();
             return out;
         };
 
