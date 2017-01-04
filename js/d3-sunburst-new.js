@@ -74,6 +74,8 @@
                 .on("mouseout", function(d) { unhighlight(d.code); })
                 .each(arcStash);
 
+            out.drawLabels(0);
+
             return out;
         };
 
@@ -97,8 +99,10 @@
             //hide labels group
             labelsG.style("opacity","0");
 
+
             //draw labels
             labelsG.datum(codesHierarchy).selectAll("text")
+                //.data(partition.value(function(d) { return 1; }).nodes)
                 .data(partition.nodes)
                 .enter().append("text")
                 .attr("transform", function(d) {
@@ -158,8 +162,6 @@
         out.fontFill = function(v) { if (!arguments.length) return fontFill; fontFill=v; return out; };
         out.fontWeight = function(v) { if (!arguments.length) return fontWeight; fontWeight=v; return out; };
 
-
-        out.drawLabels(0);
         return out;
     }
 

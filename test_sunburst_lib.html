@@ -66,9 +66,8 @@
         };
 
         var sb = d3.sunburst().codesHierarchy(codesHierarchy);
-        //sb.set(values1);
-        //var sb = d3.sunburst(codesHierarchy, values1);
-        //setTimeout(function() { sb.set(values2, 2000); }, 2000);
+        sb.set(values1);
+        setTimeout(function() { sb.set(values2, 2000); }, 1000);
 
     }(d3));
 
