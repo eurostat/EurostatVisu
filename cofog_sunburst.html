@@ -140,6 +140,8 @@
                                     $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
                                     infoDiv.html("");
                                 })
+                                .fontSize( function(depth){ return depth==1?12:10;} )
+                                .fontFill( function(depth){ return depth==1?"#111":"#666";} )
                         ;
 
                 //title
