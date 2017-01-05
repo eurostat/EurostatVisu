@@ -65,8 +65,9 @@
             "Part4":28.9
         };
 
-        var sb = d3.sunburst().codesHierarchy(codesHierarchy);
-        sb.set(values1);
+        var sb = d3.sunburst()
+                .codesHierarchy(codesHierarchy)
+                .set(values1);
         setTimeout(function() { sb.set(values2, 2000); }, 1000);
 
     }(d3));
