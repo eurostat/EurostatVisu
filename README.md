@@ -8,7 +8,7 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - [Population map](http://jgaffuri.github.io/EurostatVisu/population_map.html?lvl=3&time=2014&s=1200&proj=laea) of Europe, based on [Nuts2json](https://github.com/jgaffuri/Nuts2json/blob/gh-pages/README.md) datasets
 - [Fishing quotas](http://jgaffuri.github.io/EurostatVisu/fq/quotas.html) repartition accross countries and fishing zones
 - [Government expenditure by function](http://jgaffuri.github.io/EurostatVisu/cofog_sunburst.html) based on the [COFOG classification](http://unstats.un.org/unsd/cr/registry/regcst.asp?Cl=4).
-- [The COICOP classification](http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html)
+- The COICOP classification as [sunburst](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst_5.html) and [star tree](http://jgaffuri.github.io/EurostatVisu/coicop_hierarchy.html)
 - Household expenditures composition, [detailled by product](http://jgaffuri.github.io/EurostatVisu/coicop_sunburst.html) and [evolution accross time](http://jgaffuri.github.io/EurostatVisu/coicop_time_stack.html)
 - [Price time series](http://jgaffuri.github.io/EurostatVisu/timeser.html). Focus on [food prices](http://jgaffuri.github.io/EurostatVisu/FPMT_timeser.html)
 
