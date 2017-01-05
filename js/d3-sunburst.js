@@ -98,7 +98,6 @@
             //hide labels group
             labelsG.style("opacity","0");
 
-
             //draw labels
             labelsG.datum(codesHierarchy).selectAll("text")
                 //.data(partition.value(function(d) { return 1; }).nodes)
