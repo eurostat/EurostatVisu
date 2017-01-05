@@ -252,6 +252,18 @@
             //TODO
             return out;
         };
+        out.labelRotationParameter = function(v) {
+            if (!arguments.length) return labelRotationParameter;
+            labelRotationParameter=v;
+            //TODO
+            return out;
+        };
+        out.labelRemovalParameter = function(v) {
+            if (!arguments.length) return labelRemovalParameter;
+            labelRemovalParameter=v;
+            //TODO
+            return out;
+        };
 
         return out;
     }
