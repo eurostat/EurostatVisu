@@ -92,14 +92,17 @@
 				};
 
 				var sb = d3.sunburst()
-								.fontSize( function(depth){ return [1,20,13,12,12,10][depth]; } )
-								.fontFill( function(depth){ return ["#fff","#444","#555","#666","#666","#666"][depth]; } )
-								.labelRotationParameter( function(depth){ return [1,1,1,1,1,1][depth]; } )
-								.labelRemovalParameter( function(depth){ return [1,0.1,0.2,1,1,1][depth]; } )
+								.fontSize( function(depth){ return [1,20,13,12,11][depth]; } )
+								.fontFill( function(depth){ return ["#fff","#444","#444","#666","#666"][depth]; } )
+								.labelRotationParameter( function(depth){ return [1,1,0.5,1,1][depth]; } )
+								.labelRemovalParameter( function(depth){ return [1,0.1,0.2,0.2,0.2][depth]; } )
 								.codesHierarchy(data)
 								.radius(500)
 								.codeToColor(coicopToColor)
 						;
+
+				//TODO on mouse over, show description
+				//TODO show text for lower levels
 
 			});
 
