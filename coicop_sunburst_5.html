@@ -92,6 +92,8 @@
 				};
 
 				var sb = d3.sunburst()
+								.fontSize( function(depth){ return [1,20,15,14,12,10][depth]; } )
+								.fontFill( function(depth){ return ["#fff","#000","#000","#000","#000","#000"][depth]; } )
 								.codesHierarchy(data)
 								.radius(500)
 								.codeToColor(coicopToColor)
