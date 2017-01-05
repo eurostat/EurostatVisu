@@ -144,6 +144,8 @@
                                 })
                                 .fontSize( function(depth){ return depth==1?12:10;} )
                                 .fontFill( function(depth){ return depth==1?"#111":"#444";} )
+                                .labelRotationParameter( function(depth){ return depth==1?1:2;} )
+                                .labelRemovalParameter( function(depth){ return depth==1?0.5:0.5;} )
                                 .set({},0)
                         ;
 
