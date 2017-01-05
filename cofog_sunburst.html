@@ -129,7 +129,7 @@
                                 .codeToColor(cofogToColor)
                                 .strokeWidth(0.5)
                                 .strokeColor("#fff")
-                                .mouseover(function(cofog){
+                                .setmouseover( function(cofog){
                                     $("#arc"+cofog).attr("fill","red");
                                     $("#lgdEltRect"+cofog.substring(0,4)).css("fill","red");
                                     var v = dataIndex[sli.slider("value")][geoList.find(":selected").attr("value")][cofog];
@@ -137,7 +137,7 @@
                                     if($("input:radio[name=modeR]:checked").val() === "size") html += "<br>" + d3.round(v,1).toFixed(1) + "&#37; of GDP";
                                     infoDiv.html(html);
                                 })
-                                .mouseout(function(cofog){
+                                .setmouseout( function(cofog){
                                     $("#arc"+cofog).attr("fill",cofogToColor(cofog));
                                     $("#lgdEltRect"+cofog.substring(0,4)).css("fill",cofogToColor(cofog));
                                     infoDiv.html("");

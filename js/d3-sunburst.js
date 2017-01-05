@@ -16,7 +16,7 @@
             strokeWidth = 1.0,
             strokeColor = "white",
             codeToColor = function(code){ return "#ccc";},
-            mouseover = function(code){ d3.select("#arc"+code).attr("fill","#aaa");},
+            mouseover = function(code){ d3.select("#arc"+code).attr("fill","#aaa"); },
             mouseout = function(code){ d3.select("#arc"+code).attr("fill",codeToColor(code));},
 
             codeToLabelText = function(code){ return code;},
@@ -104,11 +104,12 @@
                 .data(partition.nodes)
                 .enter().append("text")
                 .attr("transform", function(d) {
-                    var v= d.value || 0;
-                    if(codesHierarchy.value) v/=codesHierarchy.value;
                     var ori = fontOrientation(d.depth);
                     if(ori==="h") return "translate(" + arc.centroid(d) + ")";
                     var angle = (d.x + d.dx*0.5) * 180/Math.PI;
+                    var v= d.value || 0;
+                    if(codesHierarchy.value) v/=codesHierarchy.value;
+                    v*=12/fontSize(d.depth);
                     if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
                     if(angle>90 && angle<270) angle-=180;
                     if(angle<0) angle+=360;
@@ -191,18 +192,22 @@
             return out;
         };
 
-        out.mouseover = function(v) {
+        out.setmouseover = function(v) {
             if (!arguments.length) return mouseover;
             mouseover=v;
-            shapesG.on("mouseover", function(d) { mouseover(d.code); });
-            labelsG.on("mouseover", function(d) { mouseover(d.code); });
+            //shapesG.on("mouseover", null);
+            //shapesG.on("mouseover", function(d) { mouseover(d.code); });
+            //labelsG.on("mouseover", null);
+            //labelsG.on("mouseover", function(d) { mouseover(d.code); });
             return out;
         };
-        out.mouseout = function(v) {
+        out.setmouseout = function(v) {
             if (!arguments.length) return mouseout;
             mouseout=v;
-            shapesG.on("mouseout", function(d) { mouseout(d.code); });
-            labelsG.on("mouseout", function(d) { mouseout(d.code); });
+            //shapesG.on("mouseout", null);
+            //shapesG.on("mouseout", function(d) { mouseout(d.code); });
+            //labelsG.on("mouseout", null);
+            //labelsG.on("mouseout", function(d) { mouseout(d.code); });
             return out;
         };
 
