@@ -24,7 +24,10 @@
             fontSize = function(depth){ return 12;},
             fontFill = function(depth){ return "#333";},
             fontWeight = function(depth){ return depth<=1?"bold":"regular";},
-            fontOrientation = function(depth){ return depth<=1?"h":"n"; };
+            fontOrientation = function(depth){ return depth<=1?"h":"n";},
+            labelRotationParameter = function(depth){ return 1;},
+            labelRemovalParameter = function(depth){ return 1; }
+            ;
 
         var
             partition,
@@ -110,7 +113,7 @@
                     var v= d.value || 0;
                     if(codesHierarchy.value) v/=codesHierarchy.value;
                     v*=12/fontSize(d.depth);
-                    if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
+                    if(v<0.024*labelRotationParameter(d.depth)){ angle -= 90; if(angle<0) angle+=360; }
                     if(angle>90 && angle<270) angle-=180;
                     if(angle<0) angle+=360;
                     return "translate(" + arc.centroid(d) + ")"+ (angle==0?"":"rotate("+angle+")");
@@ -125,7 +128,8 @@
                     if(!d.depth) return "";  // no inner ring label
                     var v= d.value || 0;
                     if(codesHierarchy.value) v/=codesHierarchy.value;
-                    if(v<0.017) return "";
+                    v*=12/fontSize(d.depth);
+                    if(v<0.017*labelRemovalParameter(d.depth)) return "";
                     return codeToLabelText(d.code);
                 })
                 .on("mouseover", function(d) { mouseover(d.code); })
