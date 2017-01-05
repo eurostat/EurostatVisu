@@ -16,14 +16,15 @@
             strokeWidth = 1.0,
             strokeColor = "white",
             codeToColor = function(code){ return "#ccc";},
-            highlight = function(code){ d3.select("#arc"+code).attr("fill","#aaa");},
-            unhighlight = function(code){ d3.select("#arc"+code).attr("fill",codeToColor(code));},
+            mouseover = function(code){ d3.select("#arc"+code).attr("fill","#aaa");},
+            mouseout = function(code){ d3.select("#arc"+code).attr("fill",codeToColor(code));},
 
             codeToLabelText = function(code){ return code;},
             fontFamily = function(depth){ return "'Myriad Pro', Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', 'Liberation Sans', 'Nimbus Sans L', 'Helvetica Neue', vegur, Vegur, Helvetica, Arial, sans-serif";},
             fontSize = function(depth){ return 12;},
             fontFill = function(depth){ return "#333";},
-            fontWeight = function(depth){ return depth<=1?"bold":"regular"; };
+            fontWeight = function(depth){ return depth<=1?"bold":"regular";},
+            fontOrientation = function(depth){ return depth<=1?"h":"n"; };
 
         var
             partition,
@@ -41,7 +42,7 @@
             .innerRadius(function(d) { return Math.sqrt(d.y); })
             .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-        var rebuild = function(){
+        var build = function(){
             partition = d3.layout.partition().sort(null).size([2 * Math.PI, radius * radius]);
             d3.select("#"+div).selectAll("*").remove();
             var svg = d3.select("#"+div).append("svg")
@@ -60,25 +61,11 @@
                 .attr("stroke-width", strokeWidth)
                 .attr("stroke", strokeColor)
                 .attr("fill", function(d) { return codeToColor(d.code); })
-                .on("mouseover", function(d) { highlight(d.code); })
-                .on("mouseout", function(d) { unhighlight(d.code); })
+                .on("mouseover", function(d) { mouseover(d.code); })
+                .on("mouseout", function(d) { mouseout(d.code); })
                 .each( function(d) { d.x0 = d.x; d.dx0 = d.dx; } );
 
             out.drawLabels(0);
-        };
-
-        out.radius = function(v) {
-            if (!arguments.length) return radius;
-            radius=v;
-            rebuild();
-            return out;
-        };
-
-        out.codesHierarchy = function(v) {
-            if (!arguments.length) return codesHierarchy;
-            codesHierarchy=v;
-            rebuild();
-            return out;
         };
 
         //set values, with transition
@@ -120,6 +107,8 @@
                 .attr("transform", function(d) {
                     var v= d.value || 0;
                     if(codesHierarchy.value) v/=codesHierarchy.value;
+                    var ori = fontOrientation(d.depth);
+                    if(ori==="h") return "translate(" + arc.centroid(d) + ")";
                     var angle = (d.x + d.dx*0.5) * 180/Math.PI;
                     if(v<0.024){ angle -= 90; if(angle<0) angle+=360; }
                     if(angle>90 && angle<270) angle-=180;
@@ -139,8 +128,8 @@
                     if(v<0.017) return "";
                     return codeToLabelText(d.code);
                 })
-                .on("mouseover", function(d) { highlight(d.code); })
-                .on("mouseout", function(d) { unhighlight(d.code); });
+                .on("mouseover", function(d) { mouseover(d.code); })
+                .on("mouseout", function(d) { mouseout(d.code); });
 
             //show labels group
             labelsG.transition().duration(duration).style("opacity","1");
@@ -160,36 +149,101 @@
             return out;
         };
 
-        out.div = function(v) { if (!arguments.length) return div; div=v; return out; };
+
+
+        out.codesHierarchy = function(v) {
+            if (!arguments.length) return codesHierarchy;
+            codesHierarchy=v;
+            build();
+            return out;
+        };
+
+        out.div = function(v) {
+            if (!arguments.length) return div;
+            div=v;
+            build();
+            return out;
+        };
+
+        out.radius = function(v) {
+            if (!arguments.length) return radius;
+            radius=v;
+            build();
+            return out;
+        };
 
         out.strokeWidth = function(v) {
             if (!arguments.length) return strokeWidth;
             strokeWidth=v;
-            shapes = shapesG.selectAll("path").attr("stroke-width", strokeWidth);
+            shapesG.selectAll("path").attr("stroke-width", strokeWidth);
             return out;
         };
         out.strokeColor = function(v) {
             if (!arguments.length) return strokeColor;
             strokeColor=v;
-            shapes = shapesG.selectAll("path").attr("stroke", strokeColor);
+            shapesG.selectAll("path").attr("stroke", strokeColor);
             return out;
         };
 
         out.codeToColor = function(v) {
             if (!arguments.length) return codeToColor;
             codeToColor=v;
-            shapes = shapesG.selectAll("path").attr("fill", function(d) { return codeToColor(d.code); });
+            shapesG.selectAll("path").attr("fill", function(d) { return codeToColor(d.code); });
             return out;
         };
 
-        out.highlight = function(v) { if (!arguments.length) return highlight; highlight=v; return out; };
-        out.unhighlight = function(v) { if (!arguments.length) return unhighlight; unhighlight=v; return out; };
+        out.mouseover = function(v) {
+            if (!arguments.length) return mouseover;
+            mouseover=v;
+            shapesG.on("mouseover", function(d) { mouseover(d.code); });
+            labelsG.on("mouseover", function(d) { mouseover(d.code); });
+            return out;
+        };
+        out.mouseout = function(v) {
+            if (!arguments.length) return mouseout;
+            mouseout=v;
+            shapesG.on("mouseout", function(d) { mouseout(d.code); });
+            labelsG.on("mouseout", function(d) { mouseout(d.code); });
+            return out;
+        };
 
-        out.codeToLabelText = function(v) { if (!arguments.length) return codeToLabelText; codeToLabelText=v; return out; };
-        out.fontFamily = function(v) { if (!arguments.length) return fontFamily; fontFamily=v; return out; };
-        out.fontSize = function(v) { if (!arguments.length) return fontSize; fontSize=v; return out; };
-        out.fontFill = function(v) { if (!arguments.length) return fontFill; fontFill=v; return out; };
-        out.fontWeight = function(v) { if (!arguments.length) return fontWeight; fontWeight=v; return out; };
+
+        out.codeToLabelText = function(v) {
+            if (!arguments.length) return codeToLabelText;
+            codeToLabelText=v;
+            //TODO
+            return out;
+        };
+        out.fontFamily = function(v) {
+            if (!arguments.length) return fontFamily;
+            fontFamily=v;
+            //TODO
+            return out;
+        };
+        out.fontSize = function(v) {
+            if (!arguments.length) return fontSize;
+            fontSize=v;
+            //TODO
+            return out;
+        };
+        out.fontFill = function(v) {
+            if (!arguments.length) return fontFill;
+            fontFill=v;
+            //TODO
+            return out;
+        };
+        out.fontWeight = function(v) {
+            if (!arguments.length) return fontWeight;
+            fontWeight=v;
+            //TODO
+            return out;
+        };
+        out.fontOrientation = function(v) {
+            if (!arguments.length) return fontOrientation;
+            fontOrientation=v;
+            //TODO
+            return out;
+        };
 
         return out;
     }
