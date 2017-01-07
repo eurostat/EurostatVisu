@@ -96,15 +96,24 @@
 								.fontFill( function(depth){ return ["#fff","#444","#444","#666","#666"][depth]; } )
 								.labelRotationParameter( function(depth){ return [1,1,0.5,1,1][depth]; } )
 								.labelRemovalParameter( function(depth){ return [1,0.1,0.2,0.2,0.2][depth]; } )
-								.setmouseover( function(code){ d3.select("#arc"+code).attr("fill","red"); } )
-								.setmouseout( function(code){ d3.select("#arc"+code).attr("fill",sb.codeToColor()(code));} )
+								.setmouseover( function(code){
+									d3.select("#arc"+code).attr("fill","red");
+									//TODO show text
+								})
+								.setmouseout( function(code){
+									d3.select("#arc"+code).attr("fill",sb.codeToColor()(code));
+									//TODO hide text
+								})
 								.codesHierarchy(data)
 								.radius(500)
 								.codeToColor(coicopToColor)
 						;
 
-				//TODO on mouse over, show description
-				//TODO show text for lower levels
+				//TODO build description text element
+				//var description = d3.select("#arc"+code);
+
+
+				//TODO show text for lower levels ?
 
 			});
 
