@@ -1,3 +1,5 @@
+GDP ccelertion - MIP
+
 use for coicop - extract generic legend
 finalise generic sunburst: label placement automation improvement
 apply generic sunburst to NACE codes and others? See http://ec.europa.eu/eurostat/data/database?node_code=sbs_sc_1b_se_r2 ? Show employments by sector? sbs_r_nuts06_r2
