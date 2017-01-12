@@ -1,4 +1,5 @@
-GDP ccelertion - MIP
+Show time series chart for GDP as acceleration*value
+MIP heat map
 
 use for coicop - extract generic legend
 finalise generic sunburst: label placement automation improvement
