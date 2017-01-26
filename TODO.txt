@@ -5,6 +5,8 @@ apply generic sunburst to NACE codes and others? See http://ec.europa.eu/eurosta
 Show time series chart for GDP as acceleration*value
 MIP heat map
 
+See http://c3js.org/examples.html
+
 
 
 
