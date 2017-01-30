@@ -1,6 +1,7 @@
 use for coicop - extract generic legend
 
 Show time series chart for GDP as acceleration*value
+naio_10_cp15 - show as sunburst and sankey. Aggregated version: naio_10_cp15a10
 MIP heat map
 
 See http://c3js.org/examples.html
