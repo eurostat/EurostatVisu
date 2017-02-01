@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+
+    <title>Template</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script   src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+<!--     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+    <script src="js/json-stat.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.js"></script>
+
+    <script src="js/lib.js"></script>
+    <script src="js/eurostat-lib.js"></script>
+
+    <style>
+        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
+    </style>
+
+</head>
+
+<body>
+
+<div>
+	<div id="graph" style="width: 1000px; height: 300px;"></div>
+	<div id="timerange" style="margin-top: 20px;"></div>
+</div>
+
+<script>
+
+    /**
+     *
+     * @author julien Gaffuri
+     *
+     */
+    (function($, EstLib) {
+        $(function() {
+
+        	geoSel = "EU28";
+
+
+        	//conversion
+        	EstLib.prQuarterToRTime = function(prMonth){
+        		prMonth = prMonth.replace("Q1","M02").replace("Q2","M05").replace("Q3","M08").replace("Q4","M11");
+        		return moment(prMonth.replace("Q","-"), "YYYY-MM").diff([1970,00,-15])*0.001;
+        	};
+
+        	
+        	//get GDP data TODO. check if it is the right one
+        	$.when($.ajax({url:EstLib.getEstatDataURL("namq_10_gdp",{geo:geoSel,na_item:"B1GQ",s_adj:"SCA",unit:"CP_MEUR"})}))
+            .then(function(data) {
+				//decode data
+				data = JSONstat(data).Dataset(0);
+
+				serie = {};
+				//serie.color = colors[j%8];
+				serie.name = data.Dimension("geo").Category(geoSel).label;
+				serie.data = [];
+				var times = data.Dimension("time").Category();
+				for(var i=0; i<times.length; i++){
+					var time = times[i].label;
+					var d = data.Data({time:time});
+					if(!d || d.length || (d.value!=0 && !d.value)) continue;
+					//console.log(time,d.value);
+					serie.data.push({x:EstLib.prQuarterToRTime(time),y:d.value});
+				}
+
+				//graph
+				var gDiv = $("#graph");
+				var graph = new Rickshaw.Graph({
+					element: gDiv.get(0),
+					//renderer: "line",
+					//min:"auto",
+					//interpolation: "linear",
+					series: [serie]
+				});
+				//graph.renderer.strokeWidth = 1.5;
+
+				
+            }, function() {
+                console.log("Could not load data");
+            });
+        	
+       });
+    }(jQuery, window.EstLib = window.EstLib || {} ));
+
+</script>
+
+</body>
+</html>
