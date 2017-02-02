@@ -33,6 +33,7 @@
 	<div id="graph" style="width: 1000px; height: 300px;"></div>
 	<div id="timerange" style="margin-top: 20px;"></div>
 </div>
+<div id="legend" style="margin-left: 30px; height: 300px;"></div>
 
 
 <script>
@@ -103,8 +104,72 @@
 					graph: graph,
 					element: sliR.get(0)
 				} );
+
+				//legend
+				var legend = new Rickshaw.Graph.Legend( {
+					graph: graph,
+					element: document.getElementById("legend"),
+					naturalOrder:true
+				} );
 				
 				
+
+				//zoom/pan graph
+				var focusOn = function(values){
+					sliR.slider("values", values);
+					graph.window.xMin = values[0];
+					graph.window.xMax = values[1];
+					graph.render();
+				};
+
+				var pan = false, xC=0;
+				gDiv.mousedown(function(e){
+					pan = true;
+					xC = e.offsetX;
+				});
+				gDiv.mouseup(function(){
+					pan = false;
+					xC = 0;
+				});
+				gDiv.mousemove(function(e){
+					var sv = sliR.slider("values");
+					if(!pan) return;
+					var dt = xC - e.offsetX; //in pixel screen
+					dt = dt / gDiv.width(); //in graph width ratio
+					dt = dt*(sv[1]-sv[0]); //in time
+					var dom = graph.dataDomain();
+					var newV0 = sv[0] + dt;
+					if(newV0 < dom[0]) return;
+					var newV1 = sv[1] + dt;
+					if(newV1 > dom[1]) return;
+					if(newV0>=newV1) return; //should not happen.
+					focusOn([newV0,newV1]);
+					xC = e.offsetX;
+				});
+				var temporalResMin = 40000; //the minimum temporal resolution, in seconds by pixel
+				gDiv.mousewheel(function(e) {
+					var sv = sliR.slider("values");
+					var w = gDiv.width();
+					var dt = 0.2 * (sv[1]-sv[0]);
+					dt = e.deltaY>0?dt:-dt;
+					var r = e.offsetX / w;
+					var dom = graph.dataDomain();
+					var newV0 = Math.max(dom[0], sv[0] + r*dt);
+					var newV1 = Math.min(dom[1], sv[1] - (1-r)*dt);
+
+					//zoom-in threshold, based on temporal resolution
+					if( (newV1-newV0)/w < temporalResMin) {
+						var mid = 0.5*(sv[0]+sv[1]);
+						dt = 0.5*w*temporalResMin;
+						newV0 = mid - dt;
+						newV1 = mid + dt;
+					}
+
+					focusOn([newV0,newV1]);
+				});
+				
+				
+
             }, function() {
                 console.log("Could not load data");
             });
