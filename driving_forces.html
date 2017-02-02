@@ -1,42 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+<meta http-equiv="Content-Type" content="text/html;charset=utf8" />
+<link rel="shortcut icon" type="image/png" href="img/favicon.png" />
 
-    <title>Template</title>
+<title>Template</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<script src="js/jquery.mousewheel.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="js/jquery.mousewheel.min.js"></script>
 
-    <script src="https://d3js.org/d3.v3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
-    <script src="js/json-stat.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+<script src="js/json-stat.js"></script>
+<script src="js/colorbrewer.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.js"></script>
 
-    <script src="js/lib.js"></script>
-    <script src="js/eurostat-lib.js"></script>
+<script src="js/lib.js"></script>
+<script src="js/eurostat-lib.js"></script>
 
-    <style>
-        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
-    </style>
+<style>
+body {
+	font-family: "Myriad Pro", Myriad, MyriadPro-Regular,
+		'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans",
+		"Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial,
+		sans-serif;
+}
+</style>
 
 </head>
 
 <body>
 
-<div style="float: left; border-top: solid; border-right: solid; border-width: 1px; border-color: #BBB">
-	<div id="graph" style="width: 1000px; height: 300px;"></div>
-	<div id="timerange" style="margin-top: 20px;"></div>
-</div>
-<div id="legend" style="margin-left: 30px; height: 300px;"></div>
+	<div
+		style="float: left; border-top: solid; border-right: solid; border-width: 1px; border-color: #BBB">
+		<div id="graph" style="width: 1000px; height: 300px;"></div>
+		<div id="timerange" style="margin-top: 20px;"></div>
+	</div>
+	<div id="legend" style="margin-left: 30px; height: 300px;"></div>
 
 
-<script>
+	<script>
 
     /**
      *
@@ -46,7 +58,8 @@
     (function($, EstLib) {
         $(function() {
 
-        	geoSel = "EU28";
+        	var geoSel = ["EU28","EL","IE","IT","ES","FR","DE","UK"];
+   			var colors = colorbrewer["Dark2"][Math.min(Math.max(geoSel.length,3),8)];
 
 
         	//conversion
@@ -59,20 +72,54 @@
         	//get GDP data TODO. check if it is the right one
         	$.when($.ajax({url:EstLib.getEstatDataURL("namq_10_gdp",{geo:geoSel,na_item:"B1GQ",s_adj:"SCA",unit:"CP_MEUR"})}))
             .then(function(data) {
-				//decode data
+				//prepare and decode data
+				EstLib.overrideCountryNames(data.dimension.geo.category.label);
 				data = JSONstat(data).Dataset(0);
 
-				serie = {};
-				serie.color = "steelblue";
-				serie.name = data.Dimension("geo").Category(geoSel).label;
-				serie.data = [];
+				var geoNames = data.Dimension("geo");
 				var times = data.Dimension("time").Category();
-				for(var i=0; i<times.length; i++){
-					var time = times[i].label;
-					var d = data.Data({time:time});
-					if(!d || d.length || (d.value!=0 && !d.value)) continue;
-					//console.log(time,d.value);
-					serie.data.push({x:EstLib.prQuarterToRTime(time),y:d.value});
+
+				//enrich with new data: speed + acceleration + value*acceleration
+				//indic:geo:time
+				var dataset = { value:{}, speed:{}, acceleration:{}, strength:{} };
+				for(var g=0; g<geoSel.length; g++){
+					var geo = geoSel[g];
+
+					//value
+					dataset.value[geo]={};
+					for(var i=0; i<times.length; i++){
+						var time = times[i].label;
+						var d = data.Data({time:time,geo:geo});
+						if(!d || d.length || (d.value!=0 && !d.value)) continue;
+						dataset.value[geo][time] = d;
+					}
+
+					//speed
+					dataset.speed[geo]={};
+
+					//acceleration
+					dataset.acceleration[geo]={};
+
+					//strength
+					dataset.strength[geo]={};
+				}
+				data = null;
+
+				//build data structure
+				var series = [];
+				for(var g=0; g<geoSel.length; g++){
+					var geo = geoSel[g];
+					var serie = {};
+					serie.name = geoNames.Category(geo).label;
+					serie.color = colors[g%8];
+					serie.data = [];
+					for(var i=0; i<times.length; i++){
+						var time = times[i].label;
+						var d = dataset.value[geo][time];
+						if(!d || d.length || (d.value!=0 && !d.value)) continue;
+						serie.data.push({x:EstLib.prQuarterToRTime(time),y:d.value});
+					}
+					series.push(serie);
 				}
 
 				//graph
@@ -82,21 +129,37 @@
 					renderer: "line",
 					min:"auto",
 					interpolation: "linear",
-					series: [serie]
+					series: series
 				});
-				graph.renderer.strokeWidth = 1.5;
+				graph.renderer.strokeWidth = 1;
 				graph.render();
-				
+
 				//hover
 				var hoverDetail = new Rickshaw.Graph.HoverDetail( {
 				    graph: graph,
-				    xFormatter: function(x) { return "Time = "+x; },
-				    yFormatter: function(y) { return "Value = "+y; }
+					formatter: function(series, x, y) {
+						var m = moment(new Date(x * 1000));
+						var date = m.year() + " Q" + m.quarter();
+						//var flag = series.ds.Data({time:EstLib.rTimeToPrMonth(x)}).status;
+						//if(flag === "e") flag = " (estimated)";
+						return series.name.replace(" - ","<br>") + "<br>" + date + "<br><b>" + y.toFixed(1) + "</b>";
+					},
+					xFormatter : function() { return ""; }
 				} );
 
 				//show axis
 				new Rickshaw.Graph.Axis.Time({ graph: graph }).render();
 				new Rickshaw.Graph.Axis.Y({ graph: graph }).render();
+				
+				//legend
+				var legend = new Rickshaw.Graph.Legend( {
+					graph: graph,
+					element: document.getElementById("legend"),
+					naturalOrder:true
+				} );
+				new Rickshaw.Graph.Behavior.Series.Toggle({ graph: graph, legend: legend });
+				new Rickshaw.Graph.Behavior.Series.Highlight({ graph: graph, legend: legend });
+				new Rickshaw.Graph.Behavior.Series.Order({ graph: graph, legend: legend });
 				
 				//timerange slider - see https://jqueryui.com/slider/#range
 				var sliR = $("#timerange");
@@ -104,15 +167,6 @@
 					graph: graph,
 					element: sliR.get(0)
 				} );
-
-				//legend
-				var legend = new Rickshaw.Graph.Legend( {
-					graph: graph,
-					element: document.getElementById("legend"),
-					naturalOrder:true
-				} );
-				
-				
 
 				//zoom/pan graph
 				var focusOn = function(values){
@@ -167,7 +221,6 @@
 
 					focusOn([newV0,newV1]);
 				});
-				
 				
 
             }, function() {
