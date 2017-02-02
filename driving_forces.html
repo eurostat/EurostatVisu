@@ -62,13 +62,18 @@ body {
    			var colors = colorbrewer["Dark2"][Math.min(Math.max(geoSel.length,3),8)];
 
 
-        	//conversion
-        	EstLib.prQuarterToRTime = function(prMonth){
-        		prMonth = prMonth.replace("Q1","-02").replace("Q2","-05").replace("Q3","-08").replace("Q4","-11");
-        		return moment(prMonth, "YYYY-MM").diff([1970,00])*0.001;
+        	//time conversion
+        	EstLib.prQuarterToRTime = function(prQuarter){
+        		prQuarter = prQuarter.replace("Q1","-02").replace("Q2","-05").replace("Q3","-08").replace("Q4","-11");
+        		return moment(prQuarter, "YYYY-MM").diff([1970,00])*0.001;
+        	};
+        	//get previous quarter
+        	EstLib.getPreviousQuarter = function(quarterEB){
+        		var year = quarterEB.substring(0, 4);
+        		var quarter = quarterEB.substring(5, 6);
+        		return quarter==1? (year-1)+"Q4" : year+"Q"+(quarter-1);
         	};
 
-        	
         	//get GDP data TODO. check if it is the right one
         	$.when($.ajax({url:EstLib.getEstatDataURL("namq_10_gdp",{geo:geoSel,na_item:"B1GQ",s_adj:"SCA",unit:"CP_MEUR"})}))
             .then(function(data) {
@@ -96,6 +101,12 @@ body {
 
 					//speed
 					dataset.speed[geo]={};
+					for(var i=0; i<times.length; i++){
+						var time = times[i].label;
+						//var d = data.Data({time:time,geo:geo});
+						//if(!d || d.length || (d.value!=0 && !d.value)) continue;
+						dataset.speed[geo][time] = d;
+					}
 
 					//acceleration
 					dataset.acceleration[geo]={};
