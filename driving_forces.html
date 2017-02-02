@@ -19,10 +19,8 @@
 <script src="js/json-stat.js"></script>
 <script src="js/colorbrewer.min.js"></script>
 
-<link rel="stylesheet" type="text/css"
-	href="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.css">
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.js"></script>
 
 <script src="js/lib.js"></script>
 <script src="js/eurostat-lib.js"></script>
@@ -47,6 +45,14 @@ body {
 	</div>
 	<div id="legend" style="margin-left: 30px; height: 300px;"></div>
 
+		<div id="indic" style="margin-top: 50px; ">
+			<input type="radio" name="indic" id="value" value="value" checked> <label for="value">GDP</label><br >
+			<input type="radio" name="indic" id="roc" value="roc"> <label for="roc">GDP rate of change - (GDP(t)-GDP(t-1))/GDP(t)</label><br >
+			<input type="radio" name="indic" id="speed" value="speed"> <label for="speed">Speed - GDP(t)-GDP(t-1)</label><br >
+			<input type="radio" name="indic" id="acceleration" value="acceleration"> <label for="acceleration">Acceleration - GDP(t+1)-2*GDP(t)+GDP(t-1)</label><br >
+			<input type="radio" name="indic" id="strength" value="strength"> <label for="strength">Strength - GDP(t)*acceleration(t)</label>
+		</div>
+
 
 	<script>
 
@@ -58,15 +64,26 @@ body {
     (function($, EstLib) {
         $(function() {
 
-        	var geoSel = ["EU28","EL","IE","IT","ES","FR","DE","UK"];
-   			var colors = colorbrewer["Dark2"][Math.min(Math.max(geoSel.length,3),8)];
+        	//?geo=DE,FR,IT,UK,ES&indic=strength
 
-   			//TODO toogle button
-   			//var indic = "value";
-			//var indic = "roc";
-			//var indic = "speed";
-			//var indic = "acceleration";
-			var indic = "strength";
+        	//load geo from URL
+        	var geoSel = EstLib.getParameterByName("geo");
+			if(geoSel){
+				var geoSel_ = geoSel.split(",");
+				geoSel = [];
+				for(var i=0; i<geoSel_.length; i++) geoSel.push(geoSel_[i]);
+			} else geoSel = ["EU28","EL","IE","IT","ES","FR","DE","UK"];
+
+			//load indicator from URL
+			var indic = EstLib.getParameterByName("indic");
+
+			//indic radio
+			if(indic) $('input:radio[name=indic][value='+indic+']').attr('checked',true);
+			$("input[name='indic']").change(function () {
+				console.log($("input:radio[name=indic]:checked").val());
+				//TODO refresh
+			});
+			//$("#indic").buttonset();
 
 
         	//time conversion
@@ -87,6 +104,9 @@ body {
         		var quarter = quarterEB.substring(5, 6);
         		return quarter==1? (year-1)+"Q4" : year+"Q"+(quarter-1);
         	};
+
+        	//colors
+        	var colors = colorbrewer["Dark2"][Math.min(Math.max(geoSel.length,3),8)];
 
         	//get GDP data TODO. check if it is the right one
         	$.when($.ajax({url:EstLib.getEstatDataURL("namq_10_gdp",{geo:geoSel,na_item:"B1GQ",s_adj:"SCA",unit:"CP_MEUR"})}))
@@ -163,7 +183,7 @@ body {
 					serie.data = [];
 					for(var i=0; i<times.length; i++){
 						var time = times[i].label;
-						var d = dataset[indic][geo][time];
+						var d = dataset[ $("input:radio[name=indic]:checked").val() ][geo][time];
 						if(!d || d.length || (d.value!=0 && !d.value)) continue;
 						serie.data.push({x:EstLib.prQuarterToRTime(time),y:d.value});
 					}
