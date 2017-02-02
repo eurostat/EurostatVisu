@@ -149,7 +149,7 @@
                             dataset.roc[geo] = {};
                             for (i = 0; i < times.length; i++) {
                                 time = times[i].label;
-                                var time1 = EstLib.getNextQuarter(time);
+                                var time1 = EstLib.getPreviousQuarter(time);
 
                                 var d = data.Data({time: time, geo: geo});
                                 var d1 = data.Data({time: time1, geo: geo});
@@ -157,8 +157,8 @@
                                 if (!d || d.length || (d.value != 0 && !d.value)) continue;
                                 if (!d1 || d1.length || (d1.value != 0 && !d1.value)) continue;
 
-                                dataset.speed[geo][time] = {value: d1.value - d.value};
-                                if (d1.value != 0) dataset.roc[geo][time] = {value: 100 * (d1.value - d.value) / d.value};
+                                dataset.speed[geo][time] = {value: d.value - d1.value};
+                                if (d1.value != 0) dataset.roc[geo][time] = {value: 100 * dataset.speed[geo][time] / d1.value};
                             }
 
                             //compute acceleration and strength
@@ -178,7 +178,7 @@
                                 if (!dp1 || dp1.length || (dp1.value != 0 && !dp1.value)) continue;
 
                                 dataset.acceleration[geo][time] = {value: dp1.value - 2 * d.value + dm1.value};
-                                dataset.strength[geo][time] = {value: d.value * (dp1.value - 2 * d.value + dm1.value)};
+                                dataset.strength[geo][time] = {value: d.value * dataset.acceleration[geo][time]};
                             }
 
                         }
