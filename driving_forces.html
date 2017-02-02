@@ -61,11 +61,25 @@ body {
         	var geoSel = ["EU28","EL","IE","IT","ES","FR","DE","UK"];
    			var colors = colorbrewer["Dark2"][Math.min(Math.max(geoSel.length,3),8)];
 
+   			//TODO toogle button
+   			//var indic = "value";
+			//var indic = "roc";
+			//var indic = "speed";
+			//var indic = "acceleration";
+			var indic = "strength";
+
 
         	//time conversion
         	EstLib.prQuarterToRTime = function(prQuarter){
         		prQuarter = prQuarter.replace("Q1","-02").replace("Q2","-05").replace("Q3","-08").replace("Q4","-11");
         		return moment(prQuarter, "YYYY-MM").diff([1970,00])*0.001;
+        	};
+
+        	//get next quarter
+        	EstLib.getNextQuarter = function(quarterEB){
+        		var year = quarterEB.substring(0, 4);
+        		var quarter = quarterEB.substring(5, 6);
+        		return quarter==4? (1*year+1)+"Q1" : year+"Q"+(1*quarter+1);
         	};
         	//get previous quarter
         	EstLib.getPreviousQuarter = function(quarterEB){
@@ -86,7 +100,7 @@ body {
 
 				//enrich with new data: speed + acceleration + value*acceleration
 				//indic:geo:time
-				var dataset = { value:{}, speed:{}, acceleration:{}, strength:{} };
+				var dataset = { value:{}, speed:{}, roc:{}, acceleration:{}, strength:{} };
 				for(var g=0; g<geoSel.length; g++){
 					var geo = geoSel[g];
 
@@ -99,24 +113,47 @@ body {
 						dataset.value[geo][time] = d;
 					}
 
-					//speed
+					//compute speed and rate of change
 					dataset.speed[geo]={};
+					dataset.roc[geo]={};
 					for(var i=0; i<times.length; i++){
 						var time = times[i].label;
-						//var d = data.Data({time:time,geo:geo});
-						//if(!d || d.length || (d.value!=0 && !d.value)) continue;
-						dataset.speed[geo][time] = d;
+						var time1 = EstLib.getNextQuarter(time);
+
+						var d = data.Data({time:time,geo:geo});
+						var d1 = data.Data({time:time1,geo:geo});
+
+						if(!d || d.length || (d.value!=0 && !d.value)) continue;
+						if(!d1 || d1.length || (d1.value!=0 && !d1.value)) continue;
+
+						dataset.speed[geo][time] = {value: d1.value-d.value};
+						if(d1.value != 0) dataset.roc[geo][time] = {value: 100*(d1.value-d.value)/d.value};
 					}
 
-					//acceleration
+					//compute acceleration and strength
 					dataset.acceleration[geo]={};
-
-					//strength
 					dataset.strength[geo]={};
+					for(var i=0; i<times.length; i++){
+						var time = times[i].label;
+						var time1 = EstLib.getNextQuarter(time);
+						var time2 = EstLib.getNextQuarter(time1);
+
+						var d = data.Data({time:time,geo:geo});
+						var d1 = data.Data({time:time1,geo:geo});
+						var d2 = data.Data({time:time2,geo:geo});
+
+						if(!d || d.length || (d.value!=0 && !d.value)) continue;
+						if(!d1 || d1.length || (d1.value!=0 && !d1.value)) continue;
+						if(!d2 || d2.length || (d2.value!=0 && !d2.value)) continue;
+
+						dataset.acceleration[geo][time] = {value: d2.value-2*d1.value+2*d.value};
+						dataset.strength[geo][time] = {value: d.value*(d2.value-2*d1.value+2*d.value)};
+					}
+
 				}
 				data = null;
 
-				//build data structure
+				//build graph data structure
 				var series = [];
 				for(var g=0; g<geoSel.length; g++){
 					var geo = geoSel[g];
@@ -126,7 +163,7 @@ body {
 					serie.data = [];
 					for(var i=0; i<times.length; i++){
 						var time = times[i].label;
-						var d = dataset.value[geo][time];
+						var d = dataset[indic][geo][time];
 						if(!d || d.length || (d.value!=0 && !d.value)) continue;
 						serie.data.push({x:EstLib.prQuarterToRTime(time),y:d.value});
 					}
