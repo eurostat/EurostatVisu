@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf8"/>
     <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
 
-    <title></title>
+    <title>GDP evolution</title>
 
     <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -64,6 +64,7 @@
     (function ($, EstLib) {
         $(function () {
 
+        	//?geo=DE,FR,IT,UK,ES,PT,PL,EL
             //?geo=DE,FR,IT,UK,ES&indic=strength
 
             //load geo from URL
@@ -110,6 +111,7 @@
                         //get dimension
                         var geoDim = data.Dimension("geo");
                         var timeDim = data.Dimension("time");
+
 
 
                         //build dataset
@@ -238,7 +240,7 @@
                             focusOn([newV0, newV1]);
                             xC = e.offsetX;
                         });
-                        var temporalResMin = 40000; //the minimum temporal resolution, in seconds by pixel
+                        var temporalResMin = 200000; //the minimum temporal resolution, in seconds by pixel
                         gDiv.mousewheel(function (e) {
                             var sv = sliR.slider("values");
                             var w = gDiv.width();
@@ -260,6 +262,7 @@
                             focusOn([newV0, newV1]);
                         });
 
+
                         //indic radio
                         if (indic) $('input:radio[name=indic][value=' + indic + ']').attr('checked', true);
                         $("input[name='indic']").change(function () {
@@ -271,8 +274,6 @@
             			var redrawGraph = function(){
                             //erase previous drawing
             				gDiv.children("svg").empty();
-            				var legDiv = $("#legend");
-            				legDiv.empty();
 
             				//empty series data
             				graph.series.length = 0;
@@ -293,13 +294,11 @@
             					graph.series.push(serie);
                             }
 
-                            console.log($("input:radio[name=indic]:checked").val());
-                            console.log(dataset[$("input:radio[name=indic]:checked").val()]);
-                            console.log(graph);
-
+                            //render graph
                             graph.render();
 
-                            //legend
+                            //refresh legend
+            				$("#legend").empty();
                             var legend = new Rickshaw.Graph.Legend({
                                 graph: graph,
                                 element: document.getElementById("legend"),
