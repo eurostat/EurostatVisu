@@ -47,12 +47,17 @@
 <div id="legend" style="margin-left: 30px; height: 300px;"></div>
 
 <div id="indic" style="margin-top: 50px; ">
-    <input type="radio" name="indic" id="value" value="value" checked> <label for="value">GDP value: GDP(t)</label><br>
-    <input type="radio" name="indic" id="roc" value="roc"> <label for="roc">GDP rate of change   (GDP(t)-GDP(t-1))/GDP(t)</label><br>
-    <input type="radio" name="indic" id="speed" value="speed"> <label for="speed">Speed - GDP(t)-GDP(t-1)</label><br>
-    <input type="radio" name="indic" id="acceleration" value="acceleration"> <label for="acceleration">Acceleration   GDP(t+1)-2*GDP(t)+GDP(t-1)</label><br>
-    <input type="radio" name="indic" id="strength" value="strength"> <label for="strength">Strength   GDP(t)*acceleration(t)</label>
+    <input type="radio" name="indic" id="value" value="value" checked> <label for="value"><b>GDP value</b></label><br>
+    <input type="radio" name="indic" id="roc" value="roc"> <label for="roc"><b>GDP rate of change</b>: (GDP(t)-GDP(t-1))/GDP(t)</label><br>
+    <input type="radio" name="indic" id="speed" value="speed"> <label for="speed"><b>GDP speed</b>: GDP(t)-GDP(t-1). Unit is million euro per quarter</label><br>
+    <input type="radio" name="indic" id="acceleration" value="acceleration"> <label for="acceleration"><b>Acceleration</b>: GDP(t+1)-2*GDP(t)+GDP(t-1). Unit is million euro per quarter²</label><br>
+    <input type="radio" name="indic" id="strength" value="strength"> <label for="strength"><b>Strength</b>: GDP(t)*acceleration(t). Unit is million euro² per quarter²</label>
 </div>
+
+<p>
+<u>NB:</u> GDP data are from Eurostat database <strong>namq_10_gdp</strong>: Gross domestic product at market prices (na_item = B1GQ), current prices in million euro (unit = CP_MEUR), seasonally and calendar adjusted data (s_adj = SCA). See <a href="http://appsso.eurostat.ec.europa.eu/nui/show.do?query=BOOKMARK_DS-406779_QID_5554CD09_UID_-3F171EB0&layout=TIME,C,X,0;GEO,L,Y,0;UNIT,L,Z,0;S_ADJ,L,Z,1;NA_ITEM,L,Z,2;INDICATORS,C,Z,3;&zSelection=DS-406779INDICATORS,OBS_FLAG;DS-406779UNIT,CP_MEUR;DS-406779S_ADJ,NSA;DS-406779NA_ITEM,B1GQ;&rankName1=UNIT_1_2_-1_2&rankName2=INDICATORS_1_2_-1_2&rankName3=NA-ITEM_1_2_-1_2&rankName4=S-ADJ_1_2_-1_2&rankName5=TIME_1_0_0_0&rankName6=GEO_1_2_0_1&sortC=ASC_-1_FIRST&rStp=&cStp=&rDCh=&cDCh=&rDM=true&cDM=true&footnes=false&empty=false&wai=false&time_mode=NONE&time_most_recent=false&lang=EN&cfo=%23%23%23%2C%23%23%23.%23%23%23">here</a>.
+</p>
+
 
 <script>
 

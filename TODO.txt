@@ -1,4 +1,3 @@
-Show time series chart for GDP as acceleration*value
 naio_10_cp15 - show as sunburst and sankey. Aggregated version: naio_10_cp15a10
 
 use for coicop - extract generic legend
