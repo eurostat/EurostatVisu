@@ -184,6 +184,7 @@
                         }
                         data = null;
 
+
                         //build graph data structure
                         var series = [];
                         for (var g = 0; g < geoSel.length; g++) {
@@ -303,6 +304,49 @@
                             focusOn([newV0, newV1]);
                         });
 
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+            			var redrawGraph = function(){
+            				//erase previous drawing
+            				gDiv.children("svg").empty();
+
+            				//empty series data
+            				graph.series.length = 0;
+
+            				//fill graph data structure
+            				/*var selNb = sel.length;
+            				var colors = colorbrewer["Dark2"][Math.min(Math.max(selNb,3),8)];
+            				var indic = $("input:radio[name=indic]:checked").val();
+            				for(var j=0; j<selNb; j++){
+            					var sel_ = sel[j];
+            					var ds = dsDict[indic][sel_.geo+"_"+sel_.coicop];
+            					if(!ds) continue;
+            					serie = {};
+            					serie.color = colors[j%8];
+            					serie.name = ds.Dimension("geo").Category(sel_.geo).label + " - " + EstLib.coicopsDict[sel_.coicop].desc;
+            					serie.data = [];
+            					serie.ds = ds; //necessary to show the flags in tooltip
+            					var months = ds.Dimension("time").Category();
+            					for(var i=0; i<months.length; i++){
+            						var month = months[i].label;
+            						var d = ds.Data({time:month});
+            						if(!d || d.length || (d.value!=0 && !d.value)) continue;
+            						serie.data.push({x:EstLib.prMonthToRTime(month),y:d.value});
+            					}
+            					graph.series.push(serie);
+            				}*/
+
+            				graph.render();
+            				//graph.update();
+            			}
+                        
+                        
+                        
 
                     }, function () {
                         console.log("Could not load data");
