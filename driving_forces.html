@@ -47,16 +47,12 @@
 <div id="legend" style="margin-left: 30px; height: 300px;"></div>
 
 <div id="indic" style="margin-top: 50px; ">
-    <input type="radio" name="indic" id="value" value="value" checked> <label for="value">GDP</label><br>
-    <input type="radio" name="indic" id="roc" value="roc"> <label for="roc">GDP rate of change -
-    (GDP(t)-GDP(t-1))/GDP(t)</label><br>
+    <input type="radio" name="indic" id="value" value="value" checked> <label for="value">GDP value: GDP(t)</label><br>
+    <input type="radio" name="indic" id="roc" value="roc"> <label for="roc">GDP rate of change   (GDP(t)-GDP(t-1))/GDP(t)</label><br>
     <input type="radio" name="indic" id="speed" value="speed"> <label for="speed">Speed - GDP(t)-GDP(t-1)</label><br>
-    <input type="radio" name="indic" id="acceleration" value="acceleration"> <label for="acceleration">Acceleration -
-    GDP(t+1)-2*GDP(t)+GDP(t-1)</label><br>
-    <input type="radio" name="indic" id="strength" value="strength"> <label for="strength">Strength -
-    GDP(t)*acceleration(t)</label>
+    <input type="radio" name="indic" id="acceleration" value="acceleration"> <label for="acceleration">Acceleration   GDP(t+1)-2*GDP(t)+GDP(t-1)</label><br>
+    <input type="radio" name="indic" id="strength" value="strength"> <label for="strength">Strength   GDP(t)*acceleration(t)</label>
 </div>
-
 
 <script>
 
@@ -80,15 +76,6 @@
 
             //load indicator from URL
             var indic = EstLib.getParameterByName("indic");
-
-            //indic radio
-            if (indic) $('input:radio[name=indic][value=' + indic + ']').attr('checked', true);
-            $("input[name='indic']").change(function () {
-                console.log($("input:radio[name=indic]:checked").val());
-                //TODO refresh
-            });
-            //$("#indic").buttonset();
-
 
             //time conversion
             EstLib.prQuarterToRTime = function (prQuarter) {
@@ -114,22 +101,19 @@
 
             //get GDP data TODO. check if it is the right one
             $.when($.ajax({
-                url: EstLib.getEstatDataURL("namq_10_gdp", {
-                    geo: geoSel,
-                    na_item: "B1GQ",
-                    s_adj: "SCA",
-                    unit: "CP_MEUR"
-                })
-            }))
-                    .then(function (data) {
+            	url: EstLib.getEstatDataURL("namq_10_gdp", {geo: geoSel,na_item: "B1GQ",s_adj: "SCA",unit: "CP_MEUR"})}))
+            	.then(function (data) {
                         //prepare and decode data
                         EstLib.overrideCountryNames(data.dimension.geo.category.label);
                         data = JSONstat(data).Dataset(0);
 
-                        var geoNames = data.Dimension("geo");
-                        var times = data.Dimension("time").Category();
+                        //get dimension
+                        var geoDim = data.Dimension("geo");
+                        var timeDim = data.Dimension("time");
 
-                        //enrich with new data: speed + acceleration + value*acceleration
+
+                        //build dataset
+
                         //indic:geo:time
                         var dataset = {value: {}, speed: {}, roc: {}, acceleration: {}, strength: {}};
                         for (var g = 0; g < geoSel.length; g++) {
@@ -137,8 +121,8 @@
 
                             //value
                             dataset.value[geo] = {};
-                            for (var i = 0; i < times.length; i++) {
-                                var time = times[i].label;
+                            for (var i = 0; i < timeDim.Category().length; i++) {
+                                var time = timeDim.Category()[i].label;
                                 var d = data.Data({time: time, geo: geo});
                                 if (!d || d.length || (d.value != 0 && !d.value)) continue;
                                 dataset.value[geo][time] = d;
@@ -147,8 +131,8 @@
                             //compute speed and rate of change
                             dataset.speed[geo] = {};
                             dataset.roc[geo] = {};
-                            for (i = 0; i < times.length; i++) {
-                                time = times[i].label;
+                            for (i = 0; i < timeDim.Category().length; i++) {
+                                time = timeDim.Category()[i].label;
                                 var time1 = EstLib.getPreviousQuarter(time);
 
                                 var d = data.Data({time: time, geo: geo});
@@ -158,14 +142,14 @@
                                 if (!d1 || d1.length || (d1.value != 0 && !d1.value)) continue;
 
                                 dataset.speed[geo][time] = {value: d.value - d1.value};
-                                if (d1.value != 0) dataset.roc[geo][time] = {value: 100 * dataset.speed[geo][time] / d1.value};
+                                if (d1.value != 0) dataset.roc[geo][time] = {value: 100 * dataset.speed[geo][time].value / d1.value};
                             }
 
                             //compute acceleration and strength
                             dataset.acceleration[geo] = {};
                             dataset.strength[geo] = {};
-                            for (i = 0; i < times.length; i++) {
-                                time = times[i].label;
+                            for (i = 0; i < timeDim.Category().length; i++) {
+                                time = timeDim.Category()[i].label;
                                 var time_m1 = EstLib.getPreviousQuarter(time);
                                 var time_p1 = EstLib.getNextQuarter(time);
 
@@ -178,41 +162,23 @@
                                 if (!dp1 || dp1.length || (dp1.value != 0 && !dp1.value)) continue;
 
                                 dataset.acceleration[geo][time] = {value: dp1.value - 2 * d.value + dm1.value};
-                                dataset.strength[geo][time] = {value: d.value * dataset.acceleration[geo][time]};
+                                dataset.strength[geo][time] = {value: d.value * dataset.acceleration[geo][time].value};
                             }
 
                         }
                         data = null;
 
 
-                        //build graph data structure
-                        var series = [];
-                        for (var g = 0; g < geoSel.length; g++) {
-                            var geo = geoSel[g];
-                            var serie = {};
-                            serie.name = geoNames.Category(geo).label;
-                            serie.color = colors[g % 8];
-                            serie.data = [];
-                            for (var i = 0; i < times.length; i++) {
-                                var time = times[i].label;
-                                var d = dataset[$("input:radio[name=indic]:checked").val()][geo][time];
-                                if (!d || d.length || (d.value != 0 && !d.value)) continue;
-                                serie.data.push({x: EstLib.prQuarterToRTime(time), y: d.value});
-                            }
-                            series.push(serie);
-                        }
-
-                        //graph
+                        //build graph
                         var gDiv = $("#graph");
                         var graph = new Rickshaw.Graph({
                             element: gDiv.get(0),
                             renderer: "line",
                             min: "auto",
                             interpolation: "linear",
-                            series: series
+                            series: []
                         });
                         graph.renderer.strokeWidth = 1;
-                        graph.render();
 
                         //hover
                         new Rickshaw.Graph.HoverDetail({
@@ -232,16 +198,6 @@
                         //show axis
                         new Rickshaw.Graph.Axis.Time({graph: graph}).render();
                         new Rickshaw.Graph.Axis.Y({graph: graph}).render();
-
-                        //legend
-                        var legend = new Rickshaw.Graph.Legend({
-                            graph: graph,
-                            element: document.getElementById("legend"),
-                            naturalOrder: true
-                        });
-                        new Rickshaw.Graph.Behavior.Series.Toggle({graph: graph, legend: legend});
-                        new Rickshaw.Graph.Behavior.Series.Highlight({graph: graph, legend: legend});
-                        new Rickshaw.Graph.Behavior.Series.Order({graph: graph, legend: legend});
 
                         //timerange slider - see https://jqueryui.com/slider/#range
                         var sliR = $("#timerange");
@@ -304,50 +260,59 @@
                             focusOn([newV0, newV1]);
                         });
 
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+                        //indic radio
+                        if (indic) $('input:radio[name=indic][value=' + indic + ']').attr('checked', true);
+                        $("input[name='indic']").change(function () {
+                            redrawGraph();
+                        });
+                        //$("#indic").buttonset();
+
+
             			var redrawGraph = function(){
-            				//erase previous drawing
+                            //erase previous drawing
             				gDiv.children("svg").empty();
+            				var legDiv = $("#legend");
+            				legDiv.empty();
 
             				//empty series data
             				graph.series.length = 0;
 
-            				//fill graph data structure
-            				/*var selNb = sel.length;
-            				var colors = colorbrewer["Dark2"][Math.min(Math.max(selNb,3),8)];
-            				var indic = $("input:radio[name=indic]:checked").val();
-            				for(var j=0; j<selNb; j++){
-            					var sel_ = sel[j];
-            					var ds = dsDict[indic][sel_.geo+"_"+sel_.coicop];
-            					if(!ds) continue;
-            					serie = {};
-            					serie.color = colors[j%8];
-            					serie.name = ds.Dimension("geo").Category(sel_.geo).label + " - " + EstLib.coicopsDict[sel_.coicop].desc;
-            					serie.data = [];
-            					serie.ds = ds; //necessary to show the flags in tooltip
-            					var months = ds.Dimension("time").Category();
-            					for(var i=0; i<months.length; i++){
-            						var month = months[i].label;
-            						var d = ds.Data({time:month});
-            						if(!d || d.length || (d.value!=0 && !d.value)) continue;
-            						serie.data.push({x:EstLib.prMonthToRTime(month),y:d.value});
-            					}
+                            //build graph data structure
+                            for (var g = 0; g < geoSel.length; g++) {
+                                var geo = geoSel[g];
+                                var serie = {};
+                                serie.name = geoDim.Category(geo).label;
+                                serie.color = colors[g % 8];
+                                serie.data = [];
+                                for (var i = 0; i < timeDim.Category().length; i++) {
+                                    var time = timeDim.Category()[i].label;
+                                    var d = dataset[$("input:radio[name=indic]:checked").val()][geo][time];
+                                    if (!d || d.length || (d.value != 0 && !d.value)) continue;
+                                    serie.data.push({x: EstLib.prQuarterToRTime(time), y: d.value});
+                                }
             					graph.series.push(serie);
-            				}*/
+                            }
 
-            				graph.render();
-            				//graph.update();
-            			}
-                        
-                        
-                        
+                            console.log($("input:radio[name=indic]:checked").val());
+                            console.log(dataset[$("input:radio[name=indic]:checked").val()]);
+                            console.log(graph);
 
+                            graph.render();
+
+                            //legend
+                            var legend = new Rickshaw.Graph.Legend({
+                                graph: graph,
+                                element: document.getElementById("legend"),
+                                naturalOrder: true
+                            });
+                            new Rickshaw.Graph.Behavior.Series.Toggle({graph: graph, legend: legend});
+                            new Rickshaw.Graph.Behavior.Series.Highlight({graph: graph, legend: legend});
+                            new Rickshaw.Graph.Behavior.Series.Order({graph: graph, legend: legend});
+            			};
+                        
+                        //first redraw
+                        redrawGraph();
+                        
                     }, function () {
                         console.log("Could not load data");
                     });
