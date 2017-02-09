@@ -31,6 +31,7 @@ factorise nutsmap in estatlib (see https://bost.ocks.org/mike/chart/)
 check: http://ec.europa.eu/eurostat/statistical-atlas/gis/viewer/distribution/v1/
 http://ec.europa.eu/eurostat/statistical-atlas/gis/viewer/distribution/v1/topojson/countries-2014/CNTR_RG_60M_2014.json
 
+https://www.youtube.com/watch?v=jbkSRLYSojo
 
 EU Wheel of competitivness - EWoC
 Macroeconomic
