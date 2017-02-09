@@ -1,13 +1,11 @@
-dri-for: pb with exchange rate.
-
 naio_10_cp15 - show as sunburst and sankey. Aggregated version: naio_10_cp15a10
-
+dri-for: pb with exchange rate.
 use for coicop - extract generic legend
 
 MIP heat map
 
 See http://c3js.org/examples.html
-
+https://github.com/Leaflet/Leaflet/blob/master/PLUGIN-GUIDE.md
 
 
 
