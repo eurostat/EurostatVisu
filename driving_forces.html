@@ -49,11 +49,12 @@
 <div id="indic" style="margin-top: 50px; ">
     <input type="radio" name="indic" id="value" value="value" checked> <label for="value"><b>GDP value</b></label><br>
     <input type="radio" name="indic" id="roc" value="roc"> <label for="roc"><b>GDP rate of change</b>: (GDP(t)-GDP(t-1))/GDP(t-1)</label><br>
-    <input type="radio" name="indic" id="rocroc" value="rocroc"> <label for="rocroc"><b>Rate of change of GDP rate of change</b>: (GDP(t-1)/GDP(t)).(GDP(t+1)-GDP(t))/(GDP(t)-GDP(t-1))-1</label><br>
-    <input type="radio" name="indic" id="force2" value="force2"> <label for="force2"><b>Force2</b>: GDP(t)*RocRoc(t)</label><br>
     <input type="radio" name="indic" id="speed" value="speed"> <label for="speed"><b>Speed</b>: GDP(t)-GDP(t-1). Unit is million euro per quarter</label><br>
     <input type="radio" name="indic" id="acceleration" value="acceleration"> <label for="acceleration"><b>Acceleration</b>: GDP(t+1)-2*GDP(t)+GDP(t-1). Unit is million euro per quarter²</label><br>
-    <input type="radio" name="indic" id="force" value="force"> <label for="force"><b>Force</b>: GDP(t)*acceleration(t). Unit is million euro² per quarter²</label>
+    <input type="radio" name="indic" id="force" value="force"> <label for="force"><b>Force</b>: GDP(t)*acceleration(t). Unit is million euro² per quarter²</label><br>
+    <input type="radio" name="indic" id="acceleration2" value="acceleration2"> <label for="acceleration2"><b>Acceleration 2</b>: acceleration(t)/GDP(t)</label><br>
+    <input type="radio" name="indic" id="rocroc" value="rocroc"> <label for="rocroc"><b>Rate of change of GDP rate of change</b>: (GDP(t-1)/GDP(t)).(GDP(t+1)-GDP(t))/(GDP(t)-GDP(t-1))-1</label><br>
+    <input type="radio" name="indic" id="force2" value="force2"> <label for="force2"><b>Force2</b>: GDP(t)*RocRoc(t)</label>
 </div>
 
 <p>
@@ -176,6 +177,7 @@
 
                             //compute acceleration and force
                             dataset.acceleration[geo] = {};
+                            dataset.acceleration2[geo] = {};
                             dataset.force[geo] = {};
                             for (i = 0; i < timeDim.Category().length; i++) {
                                 time = timeDim.Category()[i].label;
@@ -191,6 +193,7 @@
                                 if (!dp1 || dp1.length || (dp1.value != 0 && !dp1.value)) continue;
 
                                 dataset.acceleration[geo][time] = {value: dp1.value - 2 * d.value + dm1.value};
+                                dataset.acceleration2[geo][time] = {value: dataset.acceleration[geo][time].value / d.value};
                                 dataset.force[geo][time] = {value: d.value * dataset.acceleration[geo][time].value};
                             }
 
