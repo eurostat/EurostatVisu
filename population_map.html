@@ -19,8 +19,7 @@
         .cntbn { fill: none; stroke: #777; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
     </style>
 
-    <script
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
@@ -41,10 +40,10 @@
 <div id="tooltip"></div>
 
 <script>
-    //http://d3-legend.susielu.com/
-    //https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
+    //See also: http://d3-legend.susielu.com/
+    //See also: https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
 
-    //get url parameters for projection, level and size
+    //get url parameters for size, nuts level, time and projection
     var size = EstLib.getParameterByName("s") || 1200,
 	nutsLvl = EstLib.getParameterByName("lvl") || "3",
 	time = EstLib.getParameterByName("time") || "2014",
@@ -61,7 +60,7 @@
     //drawing group
     var g = svg.append("g").attr("transform","translate(0,0)");
 
-    //zoom
+    //zooming capability
     var zoom;
     svg.call(zoom=d3.zoom().scaleExtent([0.5,6]).on("zoom", function() {
         var k = d3.event.transform.k;
@@ -74,7 +73,7 @@
     //tooltip element
     var tooltip = EstLib.tooltip();
 
-    //loading image
+    //show loading image
     var loadingDiv = EstLib.loadingImage({imgsrc:"img/loading.png"});
 
     var path = d3.geoPath().projection(null);
@@ -83,6 +82,7 @@
     var colors = [];
     for(var t=0; t<=1; t+=1/7) colors.push(d3.interpolateYlOrRd(t));
 
+    //launch HTTP queries
     $.when(
             //get nuts geometries
             $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/"+proj+"/"+size+"px/NUTS_lvl"+nutsLvl+".json"}),
@@ -91,8 +91,10 @@
     ).then(function(nuts,data) {
                 data=data[0]; nuts=nuts[0];
 
+                //decode stat data
                 data = JSONstat(data).Dataset(0);
 
+                //hide loading image
                 loadingDiv.hide();
 
                 zoom.scaleBy(svg, 0.5);
@@ -110,10 +112,10 @@
                         .append("path").attr("d", path)
                         .attr("class", "cntbn");
 
-                //get nuts regions
+                //decode NUTS regions data
                 var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg).features;
 
-                //link values and build values list for color legend
+                //link values to NUTS regions and build values list for color legend
                 var values=[];
                 for(var i=0; i<nutsRG.length; i++){
                     var rg = nutsRG[i];
@@ -123,6 +125,7 @@
                     values.push(+value.value);
                 }
 
+                //build color scale based on quantiles
                 var scale = d3.scaleQuantile().domain(values).range(colors);
                 scale.quantiles();
 
