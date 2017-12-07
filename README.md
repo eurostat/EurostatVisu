@@ -10,7 +10,7 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - [Government expenditure by function](http://eurostat.github.io/EurostatVisu/cofog_sunburst.html) based on the [COFOG classification](http://unstats.un.org/unsd/cr/registry/regcst.asp?Cl=4).
 - The COICOP classification as [sunburst](http://eurostat.github.io/EurostatVisu/coicop_sunburst_5.html) and [star tree](http://eurostat.github.io/EurostatVisu/coicop_hierarchy.html)
 - Household expenditures composition, [detailled by product](http://eurostat.github.io/EurostatVisu/coicop_sunburst.html) and [evolution accross time](http://eurostat.github.io/EurostatVisu/coicop_time_stack.html)
-- [Price time series](http://eurostat.github.io/EurostatVisu/timeser.html).<!---  Focus on [food prices](http://eurostat.github.io/EurostatVisu/FPMT_timeser.html) -->
+- [Price time series](http://eurostat.github.io/EurostatVisu/timeser.html)<!--- . Focus on [food prices](http://eurostat.github.io/EurostatVisu/FPMT_timeser.html) -->
 - [GDP evolution in Europe](http://eurostat.github.io/EurostatVisu/driving_forces.html?geo=DE,FR,IT,ES,PT,PL,EL)
 
 ## Technical details
