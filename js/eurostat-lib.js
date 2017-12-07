@@ -13,7 +13,7 @@
 			theme:{genreg:"#466eb4",ecofin:"#af4b91",popsoc:"#e6a532",indtradserv:"#00a0e1",agrifish:"#7daf4b",trade:"#b93c46",transp:"#961e2d",envener:"#41afaa",scitech:"#d7642d"}
 	}
 
-	EstLib.getEstatRestDataURLBase = "http://ec.europa.eu/eurostat/wdds/rest/data/";
+	EstLib.getEstatRestDataURLBase = "https://ec.europa.eu/eurostat/wdds/rest/data/";
 
 	
     /**
