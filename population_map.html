@@ -85,7 +85,7 @@
     //launch HTTP queries
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://rawgit.com/jgaffuri/Nuts2json/gh-pages/json/topojson/"+proj+"/"+size+"px/NUTS_lvl"+nutsLvl+".json"}),
+            $.ajax({url:"https://rawgit.com/eurostat/Nuts2json/gh-pages/json/topojson/"+proj+"/"+size+"px/NUTS_lvl"+nutsLvl+".json"}),
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
