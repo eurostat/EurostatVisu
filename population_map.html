@@ -48,7 +48,8 @@
 	nutsLvl = EstLib.getParameterByName("lvl") || "3",
 	time = EstLib.getParameterByName("time") || "2014",
 	proj = EstLib.getParameterByName("proj") || "laea",
-            lg="en",
+        lg="en",
+	year=2013,
 
     //build blank svg
             width = "100%",
@@ -85,7 +86,7 @@
     //launch HTTP queries
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://rawgit.com/eurostat/Nuts2json/gh-pages/json/topojson/"+proj+"/"+size+"px/NUTS_lvl"+nutsLvl+".json"}),
+            $.ajax({url:"https://rawgit.com/eurostat/Nuts2json/gh-pages/json/topojson/"+year+"/"+proj+"/"+size+"px/NUTS_lvl"+nutsLvl+".json"}),
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
