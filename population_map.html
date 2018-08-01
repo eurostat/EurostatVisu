@@ -92,6 +92,9 @@
     ).then(function(nuts,data) {
                 data=data[0]; nuts=nuts[0];
 
+                //decode nuts geometries
+                nuts = JSON.parse(nuts);
+
                 //decode stat data
                 data = JSONstat(data).Dataset(0);
 
