@@ -86,7 +86,7 @@
     //launch HTTP queries
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://eurostat.github.io/Nuts2json/"+year+"/"+proj+"/"+size+"/"+nutsLvl+".topojson"}),
+            $.ajax({url:"https://raw.githubusercontent.com/eurostat/Nuts2json/gh-pages/"+year+"/"+proj+"/"+size+"/"+nutsLvl+".topojson"}),
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
