@@ -44,7 +44,7 @@
     //See also: https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
 
     //get url parameters for size, nuts level, time and projection
-    var size = EstLib.getParameterByName("s") || 1200,
+    var size = ( EstLib.getParameterByName("s") || 1200 ) + "px",
 	nutsLvl = EstLib.getParameterByName("lvl") || "3",
 	time = EstLib.getParameterByName("time") || "2014",
 	proj = EstLib.getParameterByName("proj") || "laea",
@@ -86,7 +86,7 @@
     //launch HTTP queries
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://rawgit.com/eurostat/Nuts2json/gh-pages/topojson/"+year+"/"+proj+"/"+size+"px/NUTS_lvl"+nutsLvl+".json"}),
+            $.ajax({url:"https://rawgit.com/eurostat/Nuts2json/gh-pages/topojson/"+year+"/"+proj+"/"+size+"/"+nutsLvl+".json"}),
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
