@@ -107,7 +107,7 @@
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
                         .append("path").attr("d", path)
                         .attr("class", "cntrg")
-                        .on("mouseover", function(rg) { tooltip.mouseover(rg.properties.cna); })
+                        .on("mouseover", function(rg) { tooltip.mouseover(rg.properties.na); })
                         .on("mousemove", function() { tooltip.mousemove(); })
                         .on("mouseout", function() { tooltip.mouseout(); })
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
