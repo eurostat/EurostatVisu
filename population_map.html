@@ -43,6 +43,9 @@
     //See also: http://d3-legend.susielu.com/
     //See also: https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
 
+    //show loading image
+    var loadingDiv = EstLib.loadingImage({imgsrc:"img/loading.png"});
+
     //get url parameters for size, nuts level, time and projection
     var size = ( EstLib.getParameterByName("s") || 1200 ),
 	nutsLvl = EstLib.getParameterByName("lvl") || "3",
@@ -73,9 +76,6 @@
 
     //tooltip element
     var tooltip = EstLib.tooltip();
-
-    //show loading image
-    var loadingDiv = EstLib.loadingImage({imgsrc:"img/loading.png"});
 
     //build color scale
     var colors = [];
@@ -156,7 +156,6 @@
                         .append("path").attr("d", path)
                         .attr("class", function(bn){
                             bn = bn.properties;
-                            //eu=EU_FLAG,efta=EFTA_FLAG,cc=CC_FLAG,lvl=STAT_LEVL_,oth=OTHR_CNTR_
                             var cl = ["bn","bn_"+bn.lvl];
                             if(bn.oth==="T") cl.push("bn_oth");
                             return cl.join(" ");
