@@ -47,7 +47,7 @@
     var size = ( EstLib.getParameterByName("s") || 1200 ) + "px",
 	nutsLvl = EstLib.getParameterByName("lvl") || "3",
 	time = EstLib.getParameterByName("time") || "2014",
-	proj = EstLib.getParameterByName("proj") || "laea",
+	proj = EstLib.getParameterByName("proj") || "3035",
         lg="en",
 	year=2013,
 
@@ -77,8 +77,6 @@
     //show loading image
     var loadingDiv = EstLib.loadingImage({imgsrc:"img/loading.png"});
 
-    var path = d3.geoPath().projection(null);
-
     //build color scale
     var colors = [];
     for(var t=0; t<=1; t+=1/7) colors.push(d3.interpolateYlOrRd(t));
@@ -90,22 +88,22 @@
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
-                data=data[0]; nuts=nuts[0];
-
-                //decode nuts geometry data
-                nuts = JSON.parse(nuts);
-
-                //decode stat data
-                data = JSONstat(data).Dataset(0);
-
                 //hide loading image
                 loadingDiv.hide();
 
-                zoom.scaleBy(svg, 0.5);
-                //zoom.translateBy(svg,(-nuts.bbox[0]),(-nuts.bbox[1]));
-                zoom.translateBy(svg,0,-300);
+                //decode nuts geometry data
+                nuts = JSON.parse(nuts[0]);
 
-                //draw countries
+                //decode stat data
+                data = JSONstat(data[0]).Dataset(0);
+
+                //decode NUTS regions data
+                var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg);
+
+   	        var path = d3.geoPath().projection(d3.geoIdentity().reflectY(true).fitSize([size,size], nutsRG));
+		nutsRG = nutsRG.features;
+
+		//draw countries
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
                         .append("path").attr("d", path)
                         .attr("class", "cntrg")
@@ -115,9 +113,6 @@
                 g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
                         .append("path").attr("d", path)
                         .attr("class", "cntbn");
-
-                //decode NUTS regions data
-                var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg).features;
 
                 //link values to NUTS regions and build values list for color legend
                 var values=[];
