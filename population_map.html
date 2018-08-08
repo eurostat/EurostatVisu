@@ -7,8 +7,8 @@
     <style>
         html { height: 100%; margin:0; padding:0; }
         body { height: 100%; margin:0; padding:0; font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
-        #bck { fill: LightSteelBlue; }
-        .bn { fill: none; stroke-linecap: round; stroke-linejoin: round }
+        #bck { fill: #b3cde3; }
+        .bn { fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .bn_0 { stroke: #777; stroke-width: 1px; }
         .bn_1 { stroke: none; }
         .bn_2 { stroke: none; }
@@ -16,7 +16,8 @@
         .bn_oth { stroke: #444; stroke-width: 1px; }
         .cntrg { fill: lightgray; }
         .cntrg:hover { fill: darkgray; }
-        .cntbn { fill: none; stroke: #777; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round }
+        .cntbn { fill: none; stroke: #777; stroke-width: 1px; stroke-linecap:round; stroke-linejoin:round; }
+        .gra { fill: none; stroke: gray; stroke-width: 1px; }
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -40,39 +41,17 @@
 <div id="tooltip"></div>
 
 <script>
-    //See also: http://d3-legend.susielu.com/
-    //See also: https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.9.0/d3-legend.min.js
-
     //show loading image
     var loadingDiv = EstLib.loadingImage({imgsrc:"img/loading.png"});
 
-    //get url parameters for size, nuts level, time and projection
-    var size = ( EstLib.getParameterByName("s") || 1000 ),
-	nutsLvl = EstLib.getParameterByName("lvl") || "3",
-	time = EstLib.getParameterByName("time") || "2016",
-	proj = EstLib.getParameterByName("proj") || "3035",
+    //get url parameters for width, nuts level, time and projection
+    var width = EstLib.getParameterByName("s") || 800,
+		nutsLvl = EstLib.getParameterByName("lvl") || "3",
+		time = EstLib.getParameterByName("time") || "2016",
+		proj = EstLib.getParameterByName("proj") || "3035",
         lg="en",
-	year=2013,
-
-    //build blank svg
-            width = "100%",
-            height = "100%",
-    //build svg
-            svg = d3.select("#map").attr("width", width).attr("height", height);
-    //background rectangle
-    svg.append("rect").attr("id","bck").attr("x",0).attr("y",0).attr("width", width).attr("height", height);
-    //drawing group
-    var g = svg.append("g").attr("transform","translate(0,0)");
-
-    //zooming capability
-    var zoom;
-    svg.call(zoom=d3.zoom().scaleExtent([0.5,6]).on("zoom", function() {
-        var k = d3.event.transform.k;
-        d3.selectAll(".bn_0").style("stroke-width", (1/k)+"px");
-        d3.selectAll(".bn_oth").style("stroke-width", (1/k)+"px");
-        d3.selectAll(".cntbn").style("stroke-width", (1/k)+"px");
-        g.attr("transform", d3.event.transform);
-    }));
+        NUTSyear = EstLib.getParameterByName("y") || 2013
+	;
 
     //tooltip element
     var tooltip = EstLib.tooltip();
@@ -84,7 +63,7 @@
     //launch HTTP queries
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://raw.githubusercontent.com/eurostat/Nuts2json/gh-pages/"+year+"/"+proj+"/"+size+"px"+"/"+nutsLvl+".json"}),
+            $.ajax({url:"https://raw.githubusercontent.com/eurostat/Nuts2json/gh-pages/"+NUTSyear+"/"+proj+"/"+width+"px"+"/"+nutsLvl+".json"}),
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
@@ -93,30 +72,52 @@
 
                 //decode nuts geometry data
                 nuts = JSON.parse(nuts[0]);
-
                 //decode stat data
                 data = JSONstat(data[0]).Dataset(0);
 
-                //decode NUTS regions data
-                var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg);
+                //build blank svg
+        		var height = width*(nuts.bbox[3]-nuts.bbox[1])/(nuts.bbox[2]-nuts.bbox[0]),
+        			svg = d3.select("#map").attr("width", width).attr("height", height)
+					path = d3.geoPath().projection(d3.geoIdentity().reflectY(true).fitSize([width,height], topojson.feature(nuts, nuts.objects.gra)))
+				;
 
-   	        var path = d3.geoPath().projection(d3.geoIdentity().reflectY(true).fitSize([size,size], nutsRG));
-		nutsRG = nutsRG.features;
+                //draw background rectangle
+                svg.append("rect").attr("id","bck").attr("x",0).attr("y",0).attr("width", width).attr("height", height);
+                //prepare drawing group
+                var g = svg.append("g").attr("transform","translate(0,0)");
 
-		//draw countries
-                g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
-                        .append("path").attr("d", path)
-                        .attr("class", "cntrg")
-                        .on("mouseover", function(rg) { tooltip.mouseover(rg.properties.na); })
-                        .on("mousemove", function() { tooltip.mousemove(); })
-                        .on("mouseout", function() { tooltip.mouseout(); })
-                g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
-                        .append("path").attr("d", path)
-                        .attr("class", "cntbn");
+                //add zooming function
+                var zoom;
+                svg.call(zoom=d3.zoom().scaleExtent([0.5,6]).on("zoom", function() {
+                    var k = d3.event.transform.k;
+                    d3.selectAll(".bn_0").style("stroke-width", (1/k)+"px");
+                    d3.selectAll(".bn_oth").style("stroke-width", (1/k)+"px");
+                    d3.selectAll(".cntbn").style("stroke-width", (1/k)+"px");
+                    g.attr("transform", d3.event.transform);
+                }));
 
-                //link values to NUTS regions and build values list for color legend
-                var values=[];
-                for(var i=0; i<nutsRG.length; i++){
+        		//draw graticule
+        		g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.gra).features).enter()
+        			.append("path").attr("d", path)
+					.attr("class", "gra");
+
+                //draw countries
+				g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntrg).features).enter()
+					.append("path").attr("d", path)
+					.attr("class", "cntrg")
+					.on("mouseover", function(rg) { tooltip.mouseover(rg.properties.na); })
+					.on("mousemove", function() { tooltip.mousemove(); })
+					.on("mouseout", function() { tooltip.mouseout(); })
+				g.append("g").selectAll("path").data(topojson.feature(nuts, nuts.objects.cntbn).features).enter()
+					.append("path").attr("d", path)
+					.attr("class", "cntbn");
+
+                //prepare NUTS regions data
+				var nutsRG = topojson.feature(nuts, nuts.objects.nutsrg).features;
+
+				//link values to NUTS regions and build values list for color legend
+				var values=[];
+				for(var i=0; i<nutsRG.length; i++){
                     var rg = nutsRG[i];
                     var value = data.Data({geo: rg.properties.id});
                     if(!value || !value.value) continue;
@@ -128,7 +129,7 @@
                 var scale = d3.scaleQuantile().domain(values).range(colors);
                 scale.quantiles();
 
-                //draw regions
+                //draw NUTS regions regions
                 g.append("g").selectAll("path").data(nutsRG).enter()
                         .append("path").attr("d", path)
                         .attr("fill", function(rg){
@@ -148,8 +149,7 @@
                             tooltip.mouseout();
                         });
 
-                //draw borders
-                //TODO do not draw the ones with stroke:none
+                //draw boundaries
                 var bn = topojson.feature(nuts, nuts.objects.nutsbn).features;
                 bn.sort(function(bn1,bn2){ return bn2.properties.lvl - bn1.properties.lvl; });
                 g.append("g").selectAll("path").data(bn).enter()
@@ -162,6 +162,5 @@
                         });
             }
     );
-
 </script>
 </body>
