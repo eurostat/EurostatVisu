@@ -46,7 +46,8 @@
     var loadingDiv = EstLib.loadingImage({imgsrc:"img/loading.png"});
 
     //get url parameters for width, nuts level, time and projection
-    var width = EstLib.getParameterByName("s") || 1000,
+    var width = EstLib.getParameterByName("w") || 1000,
+		scale = EstLib.getParameterByName("s") || "10M",
 		nutsLvl = EstLib.getParameterByName("lvl") || "3",
 		time = EstLib.getParameterByName("time") || "2016",
 		proj = EstLib.getParameterByName("proj") || "3035",
@@ -64,7 +65,7 @@
     //get remote data
     $.when(
             //get nuts geometries
-            $.ajax({url:"https://raw.githubusercontent.com/eurostat/Nuts2json/gh-pages/"+NUTSyear+"/"+proj+"/"+width+"px"+"/"+nutsLvl+".json"}),
+            $.ajax({url:"https://raw.githubusercontent.com/eurostat/Nuts2json/gh-pages/"+NUTSyear+"/"+proj+"/"+scale+"/"+nutsLvl+".json"}),
             //get population data
             $.ajax({url:EstLib.getEstatDataURL("demo_r_d3dens",{time:time})}, lg)
     ).then(function(nuts,data) {
