@@ -5,7 +5,7 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 
 - [Income disparities in European countries](http://eurostat.github.io/EurostatVisu/income_distr.html). Focus on [country comparison](http://eurostat.github.io/EurostatVisu/income_distr_2.html)
 - [Economy's twists and turns](http://eurostat.github.io/EurostatVisu/crisis_route.html)
-- [Population map](http://eurostat.github.io/EurostatVisu/population_map.html?lvl=3&time=2014&s=1200&proj=laea) of Europe, based on [Nuts2json](https://github.com/eurostat/Nuts2json/blob/gh-pages/README.md) datasets
+- [Population map](http://eurostat.github.io/EurostatVisu/population_map.html?proj=3035&lvl=3&w=1000&s=20M&time=2016) of Europe, based on [Nuts2json](https://github.com/eurostat/Nuts2json/blob/gh-pages/README.md) datasets
 <!--- [//]: # (- [Fishing quotas](http://eurostat.github.io/EurostatVisu/fq/quotas.html) repartition accross countries and fishing zones) -->
 - [Government expenditure by function](http://eurostat.github.io/EurostatVisu/cofog_sunburst.html) based on the [COFOG classification](http://ec.europa.eu/eurostat/statistics-explained/index.php/Glossary:Classification_of_the_functions_of_government_(COFOG)).
 - The COICOP classification as [sunburst](http://eurostat.github.io/EurostatVisu/coicop_sunburst_5.html) and [star tree](http://eurostat.github.io/EurostatVisu/coicop_hierarchy.html)
