@@ -84,7 +84,9 @@
 				;
 
         		//define filter for coastal margin
-        		svg.append("filter").attr("id","blur").append("feGaussianBlur").attr("in","SourceGraphic").attr("stdDeviation","4");
+        		svg.append("filter").attr("id","blur").attr("x","-100%").attr("y","-100%").attr("width","400%").attr("height","400%")
+        			.append("feGaussianBlur").attr("in","SourceGraphic").attr("stdDeviation","4")
+        		;
 
                 //draw background rectangle
                 svg.append("rect").attr("id","bck").attr("x",0).attr("y",0).attr("width", width).attr("height", height);
