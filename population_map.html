@@ -30,10 +30,10 @@
     <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 
-    <script src="js/json-stat.js"></script>
+    <script src="https://rawgit.com/eurostat/EurostatVisu/gh-pages/js/json-stat.js"></script>
 
-    <script src="js/lib.js"></script>
-    <script src="js/eurostat-lib.js"></script>
+    <script src="https://rawgit.com/eurostat/EurostatVisu/gh-pages/js/lib.js"></script>
+    <script src="https://rawgit.com/eurostat/EurostatVisu/gh-pages/js/eurostat-lib.js"></script>
 
 </head>
 
@@ -43,7 +43,7 @@
 
 <script>
     //show loading image
-    var loadingDiv = EstLib.loadingImage({imgsrc:"img/loading.png"});
+    var loadingDiv = EstLib.loadingImage({imgsrc:"https://raw.githubusercontent.com/eurostat/EurostatVisu/gh-pages/img/loading.png"});
 
     //get url parameters for width, nuts level, time and projection
     var width = EstLib.getParameterByName("w") || 1000,
