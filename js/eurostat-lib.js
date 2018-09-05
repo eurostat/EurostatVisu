@@ -13,6 +13,23 @@
 			theme:{genreg:"#466eb4",ecofin:"#af4b91",popsoc:"#e6a532",indtradserv:"#00a0e1",agrifish:"#7daf4b",trade:"#b93c46",transp:"#961e2d",envener:"#41afaa",scitech:"#d7642d"}
 	}
 
+	
+	//get url parameters
+	EstLib.loadURLParameters = function() {
+		var opts = {};
+		opts.width = EstLib.getParameterByName("w") || 800;
+		opts.scale = EstLib.getParameterByName("s") || "10M";
+		opts.nutsLvl = EstLib.getParameterByName("lvl") || "3";
+		opts.time = EstLib.getParameterByName("time") || "2016";
+		opts.proj = EstLib.getParameterByName("proj") || "3035";
+		opts.NUTSyear = EstLib.getParameterByName("y") || 2013;
+		opts.clnb = EstLib.getParameterByName("clnb") || 7;
+		opts.lg = EstLib.getParameterByName("lg") || "en";
+		return opts;
+	};
+
+	
+	
 	EstLib.getEstatRestDataURLBase = "https://ec.europa.eu/eurostat/wdds/rest/data/";
 
 	
