@@ -2,28 +2,28 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="https://rawgit.com/eurostat/eurostat.js/master/img/favicon.png"/>
 
 	<title>Inflation in Europe</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<script src="js/jquery.mousewheel.min.js"></script>
+	<script src="https://rawgit.com/eurostat/eurostat.js/master/js/jquery.mousewheel.min.js"></script>
 
     <script src="https://d3js.org/d3.v3.min.js"></script>
-	<script src="js/colorbrewer.min.js"></script>
+	<script src="https://rawgit.com/eurostat/eurostat.js/master/js/colorbrewer.min.js"></script>
 	<!--     <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
-	<script src="js/json-stat.js"></script>
+	<script src="https://rawgit.com/eurostat/eurostat.js/master/js/json-stat.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/rickshaw/1.6.0/rickshaw.min.js"></script>
 
-	<script src="js/lib.js"></script>
-	<script src="js/eurostat-lib.js"></script>
-	<script src="js/pr-eurostat-lib.js"></script>
-	<script src="js/pr-coicop-dict.js"></script>
+	<script src="https://rawgit.com/eurostat/eurostat.js/master/js/lib.js"></script>
+	<script src="https://rawgit.com/eurostat/eurostat.js/master/js/eurostat-lib.js"></script>
+	<script src="https://rawgit.com/eurostat/eurostat.js/master/js/pr-eurostat-lib.js"></script>
+	<script src="https://rawgit.com/eurostat/eurostat.js/master/js/pr-coicop-dict.js"></script>
 
     <style>
 body {
@@ -231,7 +231,7 @@ table,th,td {
 				//add "remove button" to legend elements
 				legDiv.children(0).children().each(function(i,el){
 					var img = $("<img>")
-							.attr("src","img/ico-delete.png")
+							.attr("src","https://rawgit.com/eurostat/eurostat.js/master/img/ico-delete.png")
 							.attr("height","13").attr("width","13")
 							.attr("title","Remove")
 							.click(function(){ removeSelection(i); });
