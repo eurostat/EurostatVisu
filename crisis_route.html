@@ -82,7 +82,7 @@
 						//$.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{unit:"RCH_A",coicop:"CP00"})}),
 						$.ajax({url:EstLib.getEstatDataURL("prc_hicp_aind",{unit:"RCH_A_AVG",coicop:"CP00"})}),
 						//get unemployment data
-						//$.ajax({url:EstLib.getEstatDataURL("une_rt_m",{age:"TOTAL",sex:"T",s_adj:"NSA",unit:"PC_ACT"})}) //use seasonal adjusted?
+						//$.ajax({url:EstLib.getEstatDataURL("une_rt_m",{age:"Y15-74",sex:"T",s_adj:"NSA",unit:"PC_ACT"})}) //use seasonal adjusted?
 						$.ajax({url:EstLib.getEstatDataURL("une_rt_a",{age:"TOTAL",sex:"T",unit:"PC_ACT"})})
 				).then(function(inflationData, unemploymentData) {
 							EstLib.overrideCountryNames(inflationData[0].dimension.geo.category.label);
