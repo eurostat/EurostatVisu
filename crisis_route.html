@@ -76,13 +76,15 @@
 				//TODO tw
 				//TODO graticule dashed
 
+				const urlInflation = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_aind?format=json&lang=en&unit=RCH_A_AVG&coicop=CP00"
+				const urlUnemp = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_a?format=json&lang=en&age=Y15-74&sex=T&unit=PC_ACT"
 				$.when(
 						//get inflation data
 						//$.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{unit:"RCH_A",coicop:"CP00"})}),
-						$.ajax({url:EstLib.getEstatDataURL("prc_hicp_aind",{unit:"RCH_A_AVG",coicop:"CP00"})}),
+						$.ajax({url:urlInflation}),
 						//get unemployment data
 						//$.ajax({url:EstLib.getEstatDataURL("une_rt_m",{age:"Y15-74",sex:"T",s_adj:"NSA",unit:"PC_ACT"})}) //use seasonal adjusted?
-						$.ajax({url:EstLib.getEstatDataURL("une_rt_a",{age:"Y15-74",sex:"T",unit:"PC_ACT"})})
+						$.ajax({url:urlUnemp})
 				).then(function(inflationData, unemploymentData) {
 							EstLib.overrideCountryNames(inflationData[0].dimension.geo.category.label);
 							EstLib.overrideCountryNames(unemploymentData[0].dimension.geo.category.label);
