@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf8" />
-    <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/eurostat/eurostat.js/master/img/favicon.png"/>
+    <link rel="shortcut icon" type="image/png"
+        href="https://raw.githubusercontent.com/eurostat/eurostat.js/master/img/favicon.png" />
 
     <title>Income disparities in Europe</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+        integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -21,14 +24,22 @@
     <script src="https://cdn.jsdelivr.net/gh/eurostat/eurostat.js@0.1/js/income_distr.js"></script>
 
     <style>
-        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
-        h1 { font-size: 22px; }
+        body {
+            font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 22px;
+        }
 
         .disrect rect {
             fill: peru;
             stroke-width: 0;
         }
-        .disrect rect:hover { fill: darkred; }
+
+        .disrect rect:hover {
+            fill: darkred;
+        }
 
         #timeslider label {
             position: absolute;
@@ -39,7 +50,9 @@
             font-size: 10px;
         }
 
-        .svgCntr { cursor: pointer; }
+        .svgCntr {
+            cursor: pointer;
+        }
 
         .arrow {
             marker-end: url(#arrow);
@@ -59,210 +72,220 @@
             opacity: 0.15;
         }
 
-        .ui-widget { font-size: 12px !important; }
+        .ui-widget {
+            font-size: 12px !important;
+        }
 
-        #timeslider { width: 200px; }
+        #timeslider {
+            width: 200px;
+        }
 
         .nodataTxt {
-            opacity:0;
+            opacity: 0;
             font-size: 14px;
-            font-weight:bold;
-            text-anchor:middle
+            font-weight: bold;
+            text-anchor: middle
         }
-        .cntrLbl { font-size: 14px; }
-        .bckRect { fill: #eee; }
 
+        .cntrLbl {
+            font-size: 14px;
+        }
+
+        .bckRect {
+            fill: #eee;
+        }
     </style>
 
 </head>
 
 <body>
-<h1>
-    <span id="title1"></span> <span id="title2"></span> <span
-        id="timeTitle">-</span>
-</h1>
-<div style="padding-bottom: 25px; padding-left: 10px;">
-    <span id="yearText"></span>
-    <div id="timeslider"></div>
-</div>
-<div id="charts"></div>
-<div>
-    <p>
-        <span id="sourceTxt"></span>
-    </p>
-</div>
-<div id="tooltip"></div>
+    <h1>
+        <span id="title1"></span> <span id="title2"></span> <span id="timeTitle">-</span>
+    </h1>
+    <div style="padding-bottom: 25px; padding-left: 10px;">
+        <span id="yearText"></span>
+        <div id="timeslider"></div>
+    </div>
+    <div id="charts"></div>
+    <div>
+        <p>
+            <span id="sourceTxt"></span>
+        </p>
+    </div>
+    <div id="tooltip"></div>
 
-<script>
+    <script>
 
-    /**
-     *
-     * @author julien Gaffuri
-     *
-     */
-    (function($, EstLib) {
-        $(function() {
-            //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
+        /**
+         *
+         * @author julien Gaffuri
+         *
+         */
+        (function ($, EstLib) {
+            $(function () {
+                //http://appsso.eurostat.ec.europa.eu/nui/show.do?dataset=ilc_di01&lang=fr
 
-            //TODO update on slider move
+                //TODO update on slider move
 
-            //get language
-            var lg = EstLib.getLang2Chars();
+                //get language
+                var lg = EstLib.getLang2Chars();
 
-            //select dictionnary
-            var dict = EstLib.dictIncomeDistr;
-            dict = dict[lg] || dict.en;
-            //try to fill page with translated terms
-            EstLib.writeText(dict);
+                //select dictionnary
+                var dict = EstLib.dictIncomeDistr;
+                dict = dict[lg] || dict.en;
+                //try to fill page with translated terms
+                EstLib.writeText(dict);
 
 
-            //write page title
-            document.title = dict.title;
+                //write page title
+                document.title = dict.title;
 
-            //dimensions
-            var rnd = 8;
-            var margin = {top: 3+rnd, right: 3+rnd, bottom: 3+rnd, left: 3+rnd},
+                //dimensions
+                var rnd = 8;
+                var margin = { top: 3 + rnd, right: 3 + rnd, bottom: 3 + rnd, left: 3 + rnd },
                     width = 200 - margin.left - margin.right,
                     height = 130 - margin.top - margin.bottom;
 
-            //chart axis scales
-            var xScale = d3.scaleLinear().domain([0,100]).range([0, width]);
-            var yMax = 75;
-            var yScale = d3.scaleLinear().domain([0,yMax]).range([0, height]);
+                //chart axis scales
+                var xScale = d3.scaleLinear().domain([0, 100]).range([0, width]);
+                var yMax = 75;
+                var yScale = d3.scaleLinear().domain([0, yMax]).range([0, height]);
 
-            //the selection
-            var timeSel = EstLib.getParameterByName("time") || "2016";
+                //the selection
+                var timeSel = EstLib.getParameterByName("time") || "2016";
 
-            //info
-            var tooltip = EstLib.tooltip({width: "300px",font: "16px sans-serif",padding: "10px"});
+                //info
+                var tooltip = EstLib.tooltip({ width: "300px", font: "16px sans-serif", padding: "10px" });
 
-            $.when(
+                //const url = "ilc_di01?format=json&lang=" + lg + "&currency=EUR&indic_il=SHARE&quantile=P100&quantile=P99&quantile=P98&quantile=P97&quantile=P96&quantile=P95&quantile=D10&quantile=D9&quantile=D8&quantile=D7&quantile=D6&quantile=D5&quantile=D4&quantile=D3&quantile=D2&quantile=D1&quantile=P5&quantile=P4&quantile=P3&quantile=P2&quantile=P1"
+
+                const url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_di01?&currency=EUR&indic_il=SHARE&quantile=P100&quantile=P99&quantile=P98&quantile=P97&quantile=P96&quantile=P95&quantile=D10&quantile=D9&quantile=D8&quantile=D7&quantile=D6&quantile=D5&quantile=D4&quantile=D3&quantile=D2&quantile=D1&quantile=P5&quantile=P4&quantile=P3&quantile=P2&quantile=P1"
+
+                $.when(
                     //get income distribution data
-                    $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
-                                quantile:["P100","P99","P98","P97","P96","P95","D10","D9","D8","D7","D6","D5","D4","D3","D2","D1","P5","P4","P3","P2","P1"]
-                            }, lg
-                    )})
-            ).then(function(data) {
-                        //simplify geo label texts
-                        EstLib.overrideCountryNames(data.dimension.geo.category.label, lg);
+                    $.ajax({ url: url })
+                ).then(function (data) {
+                    //simplify geo label texts
+                    EstLib.overrideCountryNames(data.dimension.geo.category.label, lg);
 
-                        //decode data
-                        data = JSONstat(data).Dataset(0);
+                    //decode data
+                    data = JSONstat(data).Dataset(0);
 
-                        //build time slider
-                        EstLib.buildTimeSlider($("#timeslider"), data.Dimension("time").id, timeSel, 5, function() {
-                            timeSel= ""+$("#timeslider").slider("value");
-                            update();
-                        });
+                    //build time slider
+                    EstLib.buildTimeSlider($("#timeslider"), data.Dimension("time").id, timeSel, 5, function () {
+                        timeSel = "" + $("#timeslider").slider("value");
+                        update();
+                    });
 
-                        //get geos
-                        var geos = data.Dimension("geo").id;
-                        geos.splice(geos.indexOf("EA12"),1);
-                        geos.splice(geos.indexOf("EA17"),1);
-                        geos.splice(geos.indexOf("EA18"),1);
-                        geos.splice(geos.indexOf("EU15"),1);
-                        geos.splice(geos.indexOf("EU27"),1);
-                        geos.splice(geos.indexOf("NMS12"),1);
-						geos.sort(EstLib.geoComparisonEstatPublications);
+                    //get geos
+                    var geos = data.Dimension("geo").id;
+                    geos.splice(geos.indexOf("EA12"), 1);
+                    geos.splice(geos.indexOf("EA17"), 1);
+                    geos.splice(geos.indexOf("EA18"), 1);
+                    geos.splice(geos.indexOf("EU15"), 1);
+                    geos.splice(geos.indexOf("EU27"), 1);
+                    geos.splice(geos.indexOf("NMS12"), 1);
+                    geos.sort(EstLib.geoComparisonEstatPublications);
 
-                        //build initial charts
-                        for(var j=0; j<geos.length; j++) {
-                            var geo = geos[j];
+                    //build initial charts
+                    for (var j = 0; j < geos.length; j++) {
+                        var geo = geos[j];
 
-                            //build svg element
-                            var svg = d3.select("#charts")
-                                    .append("svg")
-                                    .attr("id", "svg"+geo)
-                                    .attr("class", "svgCntr")
-                                    .attr("width", width + margin.left + margin.right)
-                                    .attr("height", height + margin.top + margin.bottom)
-                                    .attr("geo", geo).on("click", function() { window.open("income_distr.html?geo="+d3.select(this).attr("geo")+"&time="+timeSel+"&lang="+lg, "_blank"); });
+                        //build svg element
+                        var svg = d3.select("#charts")
+                            .append("svg")
+                            .attr("id", "svg" + geo)
+                            .attr("class", "svgCntr")
+                            .attr("width", width + margin.left + margin.right)
+                            .attr("height", height + margin.top + margin.bottom)
+                            .attr("geo", geo).on("click", function () { window.open("income_distr.html?geo=" + d3.select(this).attr("geo") + "&time=" + timeSel + "&lang=" + lg, "_blank"); });
 
-                            var chart = svg.append("g").attr("transform", "translate("+(margin.left)+","+(margin.top)+ ")");
+                        var chart = svg.append("g").attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")");
 
-                            //background rectangle
-                            chart.append("rect")
-                                .attr("width",width+2*rnd).attr("height",height+2*rnd)
-                                .attr("x",-rnd).attr("y",-rnd)
-                                .attr("rx",rnd).attr("ry",rnd)
-                                .attr("class","bckRect");
+                        //background rectangle
+                        chart.append("rect")
+                            .attr("width", width + 2 * rnd).attr("height", height + 2 * rnd)
+                            .attr("x", -rnd).attr("y", -rnd)
+                            .attr("rx", rnd).attr("ry", rnd)
+                            .attr("class", "bckRect");
 
-                            //no data
-                            chart.append("g").attr("id","nodata"+geo).attr("class","nodataTxt")
-                                .append("text").attr("x",width*0.5).attr("y",height*0.5+7).text(dict.nodata);
+                        //no data
+                        chart.append("g").attr("id", "nodata" + geo).attr("class", "nodataTxt")
+                            .append("text").attr("x", width * 0.5).attr("y", height * 0.5 + 7).text(dict.nodata);
 
-                            //rectangles
-                            var rects = chart.append("g").attr("id","disrect"+geo).attr("class","disrect");
-                            var addRect = function(quantileType,quantileNb,pos){
-                                rects.append("rect").attr("x",xScale(pos)).attr("y",yScale(yMax))
-                                        .attr("width",xScale(EstLib.quantileDict[quantileType].percentage)).attr("height",yScale(0))
-                            };
-                            //deciles
-                            var i;
-                            for(i=1;i<=10;i++) addRect("D",i,10*(i-1));
-                            //first 5 percentiles
-                            for(i=0;i<=4;i++) addRect("P",i+1,i);
-                            //last 5 percentiles
-                            for(i=95;i<=100;i++) addRect("P",i,i-1);
-                            //second twentile
-                            addRect("T",2,5);
-                            //19th twentyfifth
-                            addRect("F",24,90);
+                        //rectangles
+                        var rects = chart.append("g").attr("id", "disrect" + geo).attr("class", "disrect");
+                        var addRect = function (quantileType, quantileNb, pos) {
+                            rects.append("rect").attr("x", xScale(pos)).attr("y", yScale(yMax))
+                                .attr("width", xScale(EstLib.quantileDict[quantileType].percentage)).attr("height", yScale(0))
+                        };
+                        //deciles
+                        var i;
+                        for (i = 1; i <= 10; i++) addRect("D", i, 10 * (i - 1));
+                        //first 5 percentiles
+                        for (i = 0; i <= 4; i++) addRect("P", i + 1, i);
+                        //last 5 percentiles
+                        for (i = 95; i <= 100; i++) addRect("P", i, i - 1);
+                        //second twentile
+                        addRect("T", 2, 5);
+                        //19th twentyfifth
+                        addRect("F", 24, 90);
 
-                            //country name title
-                            chart.append("text").attr("x",22).attr("y",16).attr("class","cntrLbl").text( data.Dimension("geo").Category(geo).label );
+                        //country name title
+                        chart.append("text").attr("x", 22).attr("y", 16).attr("class", "cntrLbl").text(data.Dimension("geo").Category(geo).label);
 
-                            //flag
-                            chart.append("svg:image")
-                                    .attr("x",0).attr("y",0).attr('width', 20).attr('height', 20)
-                                    .attr("xlink:href","https://raw.githubusercontent.com/eurostat/eurostat.js/master/img/flags/1/"+(geo.substring(0,2))+".png")
+                        //flag
+                        chart.append("svg:image")
+                            .attr("x", 0).attr("y", 0).attr('width', 20).attr('height', 20)
+                            .attr("xlink:href", "https://raw.githubusercontent.com/eurostat/eurostat.js/master/img/flags/1/" + (geo.substring(0, 2)) + ".png")
+                    }
+
+
+                    //update the chart
+                    var update = function () {
+                        for (var i = 0; i < geos.length; i++) {
+                            var geo = geos[i];
+                            var dataObj = EstLib.getDataObj(data, geo, timeSel);
+                            var rects = d3.select("#disrect" + geo);
+                            var noData = d3.select("#nodata" + geo);
+
+                            //check if "no data" message should be shown
+                            if (!EstLib.dataPresence(dataObj)) noData.transition().style("opacity", 1);
+                            else noData.transition().style("opacity", 0);
+
+                            //update rectangles with dataObj (within a closure to preserve dataObj value)
+                            (function (dataObj) {
+                                rects.selectAll("rect").data(d3.keys(dataObj))
+                                    .on("mouseover", function (qu) { tooltip.mouseover(EstLib.getRectText(qu, dataObj[qu], dict, lg)); })
+                                    .on("mousemove", function () { tooltip.mousemove(); })
+                                    .on("mouseout", function () { tooltip.mouseout(); })
+                                    .transition()
+                                    .attr("y", function (qu) {
+                                        var value = dataObj[qu] || 0, factor = 10.0 / EstLib.quantileDict[qu.charAt(0)].percentage;
+                                        return yScale(value < 0 ? yMax : yMax - factor * value);
+                                    })
+                                    .attr("height", function (qu) {
+                                        var value = dataObj[qu] || 0, factor = 10.0 / EstLib.quantileDict[qu.charAt(0)].percentage;
+                                        return yScale(factor * Math.abs(value));
+                                    });
+                            })(dataObj);
                         }
 
+                        //update title
+                        d3.select("#timeTitle").text(timeSel);
+                    };
 
-                        //update the chart
-                        var update = function(){
-                            for(var i=0; i<geos.length; i++){
-                                var geo = geos[i];
-                                var dataObj = EstLib.getDataObj(data, geo, timeSel);
-                                var rects = d3.select("#disrect"+geo);
-                                var noData = d3.select("#nodata"+geo);
+                    update();
 
-                                //check if "no data" message should be shown
-                                if(!EstLib.dataPresence(dataObj)) noData.transition().style("opacity", 1);
-                                else noData.transition().style("opacity", 0);
+                }, function () {
+                    console.log("Could not load data");
+                }
+                );
+            });
+        }(jQuery, window.EstLib = window.EstLib || {}));
 
-                                //update rectangles with dataObj (within a closure to preserve dataObj value)
-                                (function(dataObj){
-                                    rects.selectAll("rect").data(d3.keys(dataObj))
-                                        .on("mouseover", function(qu) { tooltip.mouseover(EstLib.getRectText(qu, dataObj[qu], dict, lg)); })
-                                        .on("mousemove", function() { tooltip.mousemove(); })
-                                        .on("mouseout", function() { tooltip.mouseout(); })
-                                        .transition()
-                                        .attr("y", function(qu){
-                                            var value = dataObj[qu] || 0, factor = 10.0/EstLib.quantileDict[qu.charAt(0)].percentage;
-                                            return yScale(value<0?yMax:yMax-factor*value);
-                                        })
-                                        .attr("height", function(qu){
-                                            var value = dataObj[qu] || 0, factor = 10.0/EstLib.quantileDict[qu.charAt(0)].percentage;
-                                            return yScale(factor*Math.abs(value));
-                                        });
-                                })(dataObj);
-                            }
-
-                            //update title
-                            d3.select("#timeTitle").text(timeSel);
-                        };
-
-                        update();
-
-                    }, function() {
-                        console.log("Could not load data");
-                    }
-            );
-        });
-    }(jQuery, window.EstLib = window.EstLib || {} ));
-
-</script>
+    </script>
 
 </body>
+
 </html>
