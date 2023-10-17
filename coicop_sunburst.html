@@ -179,7 +179,8 @@ table,th,td {
 			sli.css("width",2*r);
 
 			//get base information on years and geos
-			$.when($.ajax({url:EstLib.getEstatDataURL("prc_hicp_inw",{coicop:"CP00"})}))
+			const url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_inw?format=json&lang=en&coicop=CP00"
+			$.when($.ajax({url:url}))
 					.then(function(ds) {
 						EstLib.overrideCountryNames(ds.dimension.geo.category.label);
 						ds = JSONstat(ds).Dataset(0);
