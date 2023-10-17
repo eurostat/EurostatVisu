@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="ISO-8859-1">
-    <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/eurostat/eurostat.js/master/img/favicon.png"/>
+	<link rel="shortcut icon" type="image/png"
+		href="https://raw.githubusercontent.com/eurostat/eurostat.js/master/img/favicon.png" />
 
 	<title>Inflation and unemployment</title>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsonstat@0.13.3/json-stat.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jsonstat@0.13.3/json-stat.js"></script>
 
 	<script src="https://cdn.jsdelivr.net/gh/eurostat/eurostat.js@0.1/js/eurostat-lib.js"></script>
 
 	<style>
-        body { font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif; }
+		body {
+			font-family: "Myriad Pro", Myriad, MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', "Liberation Sans", "Nimbus Sans L", "Helvetica Neue", vegur, Vegur, Helvetica, Arial, sans-serif;
+		}
 
-		.curve { fill: none; }
+		.curve {
+			fill: none;
+		}
 
 		.axis path,
 		.axis line {
@@ -26,6 +32,7 @@
 			/*shape-rendering: crispEdges;*/
 			/* 	stroke-dasharray:5,5; */
 		}
+
 		.tick text {
 			font-family: sans-serif;
 			font-size: 11px;
@@ -37,7 +44,8 @@
 			font-weight: bold;
 		}
 
-		.lblTime, .lblGeo {
+		.lblTime,
+		.lblGeo {
 			font-family: sans-serif;
 			font-size: 11px;
 			fill: maroon;
@@ -56,18 +64,23 @@
 			fill: maroon;
 			font-weight: bold;
 		}
-
 	</style>
 
 <body>
-<h1>Economy's twists and turns in Europe</h1>
-<div id="curves" style="float: left; margin-right: 20px;"></div>
-<div id="legend"></div>
-<div><p>Sources: <a href="http://ec.europa.eu/eurostat/">Eurostat</a> databases on inflation (<a href="http://ec.europa.eu/eurostat/web/hicp/overview">HICP</a>) and unemployment (<a href="http://ec.europa.eu/eurostat/web/lfs/overview">LFS</a>)</a>.<br />Inspired by <a href="http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0">this visualisation</a> by Tom Giratikanon and Alicia Parlapiano.</p></div>
+	<h1>Economy's twists and turns in Europe</h1>
+	<div id="curves" style="float: left; margin-right: 20px;"></div>
+	<div id="legend"></div>
+	<div>
+		<p>Sources: <a href="http://ec.europa.eu/eurostat/">Eurostat</a> databases on inflation (<a
+				href="http://ec.europa.eu/eurostat/web/hicp/overview">HICP</a>) and unemployment (<a
+				href="http://ec.europa.eu/eurostat/web/lfs/overview">LFS</a>)</a>.<br />Inspired by <a
+				href="http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0">this
+				visualisation</a> by Tom Giratikanon and Alicia Parlapiano.</p>
+	</div>
 
 	<script>
-        (function($, EstLib) {
-			$(function() {
+		(function ($, EstLib) {
+			$(function () {
 				//http://www.nytimes.com/interactive/2013/10/09/us/yellen-fed-chart.html?_r=0
 				//https://www.dashingd3js.com/svg-paths-and-d3js
 
@@ -79,241 +92,242 @@
 				const urlInflation = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_aind?format=json&lang=en&unit=RCH_A_AVG&coicop=CP00"
 				const urlUnemp = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/une_rt_a?format=json&lang=en&age=Y15-74&sex=T&unit=PC_ACT"
 				$.when(
-						//get inflation data
-						//$.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{unit:"RCH_A",coicop:"CP00"})}),
-						$.ajax({url:urlInflation}),
-						//get unemployment data
-						//$.ajax({url:EstLib.getEstatDataURL("une_rt_m",{age:"Y15-74",sex:"T",s_adj:"NSA",unit:"PC_ACT"})}) //use seasonal adjusted?
-						$.ajax({url:urlUnemp})
-				).then(function(inflationData, unemploymentData) {
-							EstLib.overrideCountryNames(inflationData[0].dimension.geo.category.label);
-							EstLib.overrideCountryNames(unemploymentData[0].dimension.geo.category.label);
+					//get inflation data
+					//$.ajax({url:EstLib.getEstatDataURL("prc_hicp_manr",{unit:"RCH_A",coicop:"CP00"})}),
+					$.ajax({ url: urlInflation }),
+					//get unemployment data
+					//$.ajax({url:EstLib.getEstatDataURL("une_rt_m",{age:"Y15-74",sex:"T",s_adj:"NSA",unit:"PC_ACT"})}) //use seasonal adjusted?
+					$.ajax({ url: urlUnemp })
+				).then(function (inflationData, unemploymentData) {
+					EstLib.overrideCountryNames(inflationData[0].dimension.geo.category.label);
+					EstLib.overrideCountryNames(unemploymentData[0].dimension.geo.category.label);
 
-							//decode data
-							inflationData = JSONstat(inflationData).Dataset(0);
-							unemploymentData = JSONstat(unemploymentData).Dataset(0);
+					//decode data
+					inflationData = JSONstat(inflationData).Dataset(0);
+					unemploymentData = JSONstat(unemploymentData).Dataset(0);
 
-							//function to compute intersection of two arrays
-							var intersection = function(array1,array2){ return array1.filter(function(n) { return array2.indexOf(n) != -1; }); };
+					//function to compute intersection of two arrays
+					var intersection = function (array1, array2) { return array1.filter(function (n) { return array2.indexOf(n) != -1; }); };
 
-							//get time and geo
-							var times = intersection(inflationData.Dimension("time").id, unemploymentData.Dimension("time").id);
-							var geos = intersection(inflationData.Dimension("geo").id, unemploymentData.Dimension("geo").id);
+					//get time and geo
+					var times = intersection(inflationData.Dimension("time").id, unemploymentData.Dimension("time").id);
+					var geos = intersection(inflationData.Dimension("geo").id, unemploymentData.Dimension("geo").id);
 
-							//filter and sort geos
-							//geos.splice(geos.indexOf("US"),1);
-							//geos.splice(geos.indexOf("TR"),1);
-							geos.sort(EstLib.geoComparisonEstatPublications);
+					//filter and sort geos
+					//geos.splice(geos.indexOf("US"),1);
+					//geos.splice(geos.indexOf("TR"),1);
+					geos.sort(EstLib.geoComparisonEstatPublications);
 
-							var highlightGeo = function(geo){
-								//move curve to front and show
-								d3.select("#curve"+geo).moveToFront().attr("stroke", "black").attr("stroke-width", 3);
-								//show points
-								d3.selectAll(".pt[geo="+geo+"]").attr("display", "inline");
-								//show year labels
-								d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "inline");
-								//bold legend label
-								d3.selectAll(".lgd[geo="+geo+"]").attr("font-weight","bold").attr("fill","maroon");
-								//show info
-								info.text( inflationData.Dimension("geo").Category(geo).label );
-							};
-							var unHighlightGeo = function(geo){
-								//hide curve
-								d3.select("#curve"+geo).attr("stroke", "#aaa").attr("stroke-width", 1.5);
-								//hide points
-								d3.selectAll(".pt[geo="+geo+"]").attr("display", "none");
-								//hide year labels
-								d3.selectAll(".lblTime[geo="+geo+"]").attr("display", "none");
-								//unbold legend label
-								d3.selectAll(".lgd[geo="+geo+"]").attr("font-weight","normal").attr("fill","black");
-								//hide info
-								info.text("");
-							};
+					var highlightGeo = function (geo) {
+						//move curve to front and show
+						d3.select("#curve" + geo).moveToFront().attr("stroke", "black").attr("stroke-width", 3);
+						//show points
+						d3.selectAll(".pt[geo=" + geo + "]").attr("display", "inline");
+						//show year labels
+						d3.selectAll(".lblTime[geo=" + geo + "]").attr("display", "inline");
+						//bold legend label
+						d3.selectAll(".lgd[geo=" + geo + "]").attr("font-weight", "bold").attr("fill", "maroon");
+						//show info
+						info.text(inflationData.Dimension("geo").Category(geo).label);
+					};
+					var unHighlightGeo = function (geo) {
+						//hide curve
+						d3.select("#curve" + geo).attr("stroke", "#aaa").attr("stroke-width", 1.5);
+						//hide points
+						d3.selectAll(".pt[geo=" + geo + "]").attr("display", "none");
+						//hide year labels
+						d3.selectAll(".lblTime[geo=" + geo + "]").attr("display", "none");
+						//unbold legend label
+						d3.selectAll(".lgd[geo=" + geo + "]").attr("font-weight", "normal").attr("fill", "black");
+						//hide info
+						info.text("");
+					};
 
-							var highlightTime = function(time){
-								//show points
-								d3.selectAll(".pt[time='"+time+"']").attr("display", "inline");
-								//show geo labels
-								d3.selectAll(".lblGeo[time='"+time+"']").attr("display", "inline");
-								//bold legend label
-								d3.selectAll(".lgd[time='"+time+"']").attr("font-weight","bold").attr("fill","maroon");
-								//show info
-								info.text( time );
-							};
-							var unHighlightTime = function(time){
-								//hide points
-								d3.selectAll(".pt[time='"+time+"']").attr("display", "none");
-								//hide geo labels
-								d3.selectAll(".lblGeo[time='"+time+"']").attr("display", "none");
-								//unbold legend label
-								d3.selectAll(".lgd[time='"+time+"']").attr("font-weight","normal").attr("fill","black");
-								//hide info
-								info.text("");
-							};
-
-
-
-							var margin = {top: 15, right: 10, bottom: 40, left: 50};
-							var width = 1000 - margin.left - margin.right, height = 600 - margin.top - margin.bottom;
-							var svg = d3.select("#curves").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom);
-
-							//unemployment scale
-							var xScale = d3.scaleLinear().domain([0, 25]).range([0, width]);
-							//inflation scale
-							var yScale = d3.scaleLinear().domain([-2, 15]).range([height, 0]);
+					var highlightTime = function (time) {
+						//show points
+						d3.selectAll(".pt[time='" + time + "']").attr("display", "inline");
+						//show geo labels
+						d3.selectAll(".lblGeo[time='" + time + "']").attr("display", "inline");
+						//bold legend label
+						d3.selectAll(".lgd[time='" + time + "']").attr("font-weight", "bold").attr("fill", "maroon");
+						//show info
+						info.text(time);
+					};
+					var unHighlightTime = function (time) {
+						//hide points
+						d3.selectAll(".pt[time='" + time + "']").attr("display", "none");
+						//hide geo labels
+						d3.selectAll(".lblGeo[time='" + time + "']").attr("display", "none");
+						//unbold legend label
+						d3.selectAll(".lgd[time='" + time + "']").attr("font-weight", "normal").attr("fill", "black");
+						//hide info
+						info.text("");
+					};
 
 
-							//draw x grid
-							var gratUnemp = svg.append("g").attr("class", "axis").attr("transform", "translate("+margin.left+","+(height+margin.top)+")");
-							gratUnemp.call(d3.axisBottom(xScale).tickValues([0,5,10,15,20,25]).tickSize(-height).tickFormat(function(d) {return d+"%";}));
-							//x axis label
-							svg.append("text").attr("class","chartLabel").attr("x",width*0.5).attr("y",height+35).attr("dy", ".35em").text("Unemployment rate");
 
-							//draw y grid
-							var gratInfl = svg.append("g").attr("class", "axis").attr("transform", "translate("+margin.left+","+margin.top+")");
-							gratInfl.call(d3.axisLeft(yScale).tickValues([0,5,10,15]).tickSize(-width).tickFormat(function(d) {return d+"%";}));
-							//y axis label
-							svg.append("text").attr("class","chartLabel").attr("x",0).attr("y",height*0.5-15).attr("dy", ".35em").text("Inflation")
-							svg.append("text").attr("class","chartLabel").attr("x",8).attr("y",height*0.5).attr("dy", ".35em").text("rate");
+					var margin = { top: 15, right: 10, bottom: 40, left: 50 };
+					var width = 1000 - margin.left - margin.right, height = 600 - margin.top - margin.bottom;
+					var svg = d3.select("#curves").append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom);
 
-							//the chart element
-							var chart = svg.append("g").attr("id", "chart").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-							//build dataset
-							var dataset = {};
-							for(var i=0; i<geos.length; i++){
-								var geo = geos[i];
-								dataset[geo]=[];
-								for(var j=0; j<times.length; j++){
-									var time = times[j];
-									var infl = inflationData.Data({time:time,geo:geo}).value;
-									if(!infl) continue;
-									var unemp = unemploymentData.Data({time:time,geo:geo}).value;
-									if(!unemp) continue;
-									dataset[geo].push({time:time,geo:geo,infl:infl,unemp:unemp})
-								}
-							}
-
-							//drawing function
-							var lineFunction = d3.line()
-											.x(function(d) { return xScale(d.unemp); })
-											.y(function(d) { return yScale(d.infl); })
-											.curve(d3.curveCatmullRom.alpha(0)) //.curve(d3.curveCardinal(0))
-									;
-
-							//draw chart curves
-							var curves = chart.append("g").attr("id", "curves");
-							for(i=0; i<geos.length; i++){
-								geo = geos[i];
-								curves.append("path")
-								.attr("d", lineFunction(dataset[geo]))
-								.attr("class", "curve")
-										.attr("id", "curve"+geo)
-										.attr("geo", geo)
-										.attr("stroke", "#aaa").attr("stroke-width", 1.5)
-										.on("mouseover", function() { highlightGeo(d3.select(this).attr("geo")); })
-										.on("mouseout", function() { unHighlightGeo(d3.select(this).attr("geo")); })
-								;
-							}
-
-							//draw chart points and labels
-							var points = chart.append("g").attr("id", "points");
-							var pointsLblTime = chart.append("g").attr("id", "pointsLblTime");
-							var pointsLblGeo = chart.append("g").attr("id", "pointsLblGeo");
-							for(i=0; i<geos.length; i++){
-								geo = geos[i];
-								var g;
-
-								//circles
-								g = points .append("g").attr("id", "points"+geo);
-								g.selectAll("circle").data(dataset[geo]).enter().append("circle")
-										.attr("display", "none").attr("fill", "black").attr("stroke-width", 0)
-										.attr("class", "pt")
-										.attr("time", function(d) { return d.time; })
-										.attr("geo", function(d) { return d.geo; })
-										.attr("cx", function(d) { return xScale(d.unemp); })
-										.attr("cy", function(d) { return yScale(d.infl); })
-										.attr("r", 4)
-								;
-
-								//time labels
-								g = pointsLblTime.append("g").attr("id", "pointsLblTime"+geo);
-								g.selectAll("text").data(dataset[geo]).enter().append("text")
-										.attr("display", "none")
-										.attr("class", "lblTime")
-										.attr("time", function(d) { return d.time; })
-										.attr("geo", function(d) { return d.geo; })
-										.attr("x", function(d) { return 5+xScale(d.unemp); })
-										.attr("y", function(d) { return -5+yScale(d.infl); })
-										.text(function(d) { return d.time; })
-								;
-
-								//geo labels
-								g = pointsLblGeo.append("g").attr("id", "pointsLblGeo"+geo);
-								g.selectAll("text").data(dataset[geo]).enter().append("text")
-										.attr("display", "none")
-										.attr("class", "lblGeo")
-										.attr("time", function(d) { return d.time; })
-										.attr("geo", function(d) { return d.geo; })
-										.attr("x", function(d) { return 5+xScale(d.unemp); })
-										.attr("y", function(d) { return -5+yScale(d.infl); })
-										.text(function(d) { return d.geo; })
-								;
-							}
-
-							var info = chart.append("text").attr("id", "infoText").attr("x", width-280).attr("y", 30).text("");
+					//unemployment scale
+					var xScale = d3.scaleLinear().domain([0, 25]).range([0, width]);
+					//inflation scale
+					var yScale = d3.scaleLinear().domain([-2, 15]).range([height, 0]);
 
 
-							//legend
-							width = 100;
-							var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom);
+					//draw x grid
+					var gratUnemp = svg.append("g").attr("class", "axis").attr("transform", "translate(" + margin.left + "," + (height + margin.top) + ")");
+					gratUnemp.call(d3.axisBottom(xScale).tickValues([0, 5, 10, 15, 20, 25]).tickSize(-height).tickFormat(function (d) { return d + "%"; }));
+					//x axis label
+					svg.append("text").attr("class", "chartLabel").attr("x", width * 0.5).attr("y", height + 35).attr("dy", ".35em").text("Unemployment rate");
 
-							//legend title
-							lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 25).text("Focus on");
-							lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 40).text("country or year...");
-							var topLgd = 45;
+					//draw y grid
+					var gratInfl = svg.append("g").attr("class", "axis").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+					gratInfl.call(d3.axisLeft(yScale).tickValues([0, 5, 10, 15]).tickSize(-width).tickFormat(function (d) { return d + "%"; }));
+					//y axis label
+					svg.append("text").attr("class", "chartLabel").attr("x", 0).attr("y", height * 0.5 - 15).attr("dy", ".35em").text("Inflation")
+					svg.append("text").attr("class", "chartLabel").attr("x", 8).attr("y", height * 0.5).attr("dy", ".35em").text("rate");
 
-							//geo legend
-							var dy = margin.top+topLgd;
-							lgd.append("g").selectAll("text").data(geos).enter().append("text")
-									.attr("class", "lgd")
-									.attr("geo", function(d) { return d; })
-									.attr("x", 0)
-									.attr("y", function() { dy+=12; return dy-10; })
-									.text(function(d) { return d; })
-									.on("mouseover", function() { highlightGeo(d3.select(this).attr("geo")); })
-									.on("mouseout", function() { unHighlightGeo(d3.select(this).attr("geo")); })
-							;
+					//the chart element
+					var chart = svg.append("g").attr("id", "chart").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-							//time legend
-							dy = margin.top+topLgd;
-							lgd.append("g").selectAll("text").data(times).enter().append("text")
-									.attr("class", "lgd")
-									.attr("time", function(d) { return d; })
-									.attr("x", 60)
-									.attr("y", function() { dy+=12; return dy-10; })
-									.text(function(d) { return d; })
-									.on("mouseover", function() { highlightTime(d3.select(this).attr("time")); })
-									.on("mouseout", function() { unHighlightTime(d3.select(this).attr("time")); })
-							;
-
-
-							//move to front function
-							d3.selection.prototype.moveToFront = function() {
-								return this.each(function(){
-									this.parentNode.appendChild(this);
-								});
-							};
-
-						}, function() {
-							console.log("Could not load data");
+					//build dataset
+					var dataset = {};
+					for (var i = 0; i < geos.length; i++) {
+						var geo = geos[i];
+						dataset[geo] = [];
+						for (var j = 0; j < times.length; j++) {
+							var time = times[j];
+							var infl = inflationData.Data({ time: time, geo: geo }).value;
+							if (!infl) continue;
+							var unemp = unemploymentData.Data({ time: time, geo: geo }).value;
+							if (!unemp) continue;
+							dataset[geo].push({ time: time, geo: geo, infl: infl, unemp: unemp })
 						}
+					}
+
+					//drawing function
+					var lineFunction = d3.line()
+						.x(function (d) { return xScale(d.unemp); })
+						.y(function (d) { return yScale(d.infl); })
+						.curve(d3.curveCatmullRom.alpha(0)) //.curve(d3.curveCardinal(0))
+						;
+
+					//draw chart curves
+					var curves = chart.append("g").attr("id", "curves");
+					for (i = 0; i < geos.length; i++) {
+						geo = geos[i];
+						curves.append("path")
+							.attr("d", lineFunction(dataset[geo]))
+							.attr("class", "curve")
+							.attr("id", "curve" + geo)
+							.attr("geo", geo)
+							.attr("stroke", "#aaa").attr("stroke-width", 1.5)
+							.on("mouseover", function () { highlightGeo(d3.select(this).attr("geo")); })
+							.on("mouseout", function () { unHighlightGeo(d3.select(this).attr("geo")); })
+							;
+					}
+
+					//draw chart points and labels
+					var points = chart.append("g").attr("id", "points");
+					var pointsLblTime = chart.append("g").attr("id", "pointsLblTime");
+					var pointsLblGeo = chart.append("g").attr("id", "pointsLblGeo");
+					for (i = 0; i < geos.length; i++) {
+						geo = geos[i];
+						var g;
+
+						//circles
+						g = points.append("g").attr("id", "points" + geo);
+						g.selectAll("circle").data(dataset[geo]).enter().append("circle")
+							.attr("display", "none").attr("fill", "black").attr("stroke-width", 0)
+							.attr("class", "pt")
+							.attr("time", function (d) { return d.time; })
+							.attr("geo", function (d) { return d.geo; })
+							.attr("cx", function (d) { return xScale(d.unemp); })
+							.attr("cy", function (d) { return yScale(d.infl); })
+							.attr("r", 4)
+							;
+
+						//time labels
+						g = pointsLblTime.append("g").attr("id", "pointsLblTime" + geo);
+						g.selectAll("text").data(dataset[geo]).enter().append("text")
+							.attr("display", "none")
+							.attr("class", "lblTime")
+							.attr("time", function (d) { return d.time; })
+							.attr("geo", function (d) { return d.geo; })
+							.attr("x", function (d) { return 5 + xScale(d.unemp); })
+							.attr("y", function (d) { return -5 + yScale(d.infl); })
+							.text(function (d) { return d.time; })
+							;
+
+						//geo labels
+						g = pointsLblGeo.append("g").attr("id", "pointsLblGeo" + geo);
+						g.selectAll("text").data(dataset[geo]).enter().append("text")
+							.attr("display", "none")
+							.attr("class", "lblGeo")
+							.attr("time", function (d) { return d.time; })
+							.attr("geo", function (d) { return d.geo; })
+							.attr("x", function (d) { return 5 + xScale(d.unemp); })
+							.attr("y", function (d) { return -5 + yScale(d.infl); })
+							.text(function (d) { return d.geo; })
+							;
+					}
+
+					var info = chart.append("text").attr("id", "infoText").attr("x", width - 280).attr("y", 30).text("");
+
+
+					//legend
+					width = 100;
+					var lgd = d3.select("#legend").append("svg").attr("width", width).attr("height", height + margin.top + margin.bottom);
+
+					//legend title
+					lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 25).text("Focus on");
+					lgd.append("text").attr("class", "lgd").attr("font-weight", "bold").attr("x", 0).attr("y", 40).text("country or year...");
+					var topLgd = 45;
+
+					//geo legend
+					var dy = margin.top + topLgd;
+					lgd.append("g").selectAll("text").data(geos).enter().append("text")
+						.attr("class", "lgd")
+						.attr("geo", function (d) { return d; })
+						.attr("x", 0)
+						.attr("y", function () { dy += 12; return dy - 10; })
+						.text(function (d) { return d; })
+						.on("mouseover", function () { highlightGeo(d3.select(this).attr("geo")); })
+						.on("mouseout", function () { unHighlightGeo(d3.select(this).attr("geo")); })
+						;
+
+					//time legend
+					dy = margin.top + topLgd;
+					lgd.append("g").selectAll("text").data(times).enter().append("text")
+						.attr("class", "lgd")
+						.attr("time", function (d) { return d; })
+						.attr("x", 60)
+						.attr("y", function () { dy += 12; return dy - 10; })
+						.text(function (d) { return d; })
+						.on("mouseover", function () { highlightTime(d3.select(this).attr("time")); })
+						.on("mouseout", function () { unHighlightTime(d3.select(this).attr("time")); })
+						;
+
+
+					//move to front function
+					d3.selection.prototype.moveToFront = function () {
+						return this.each(function () {
+							this.parentNode.appendChild(this);
+						});
+					};
+
+				}, function () {
+					console.log("Could not load data");
+				}
 				);
 			});
-	    }(jQuery, window.EstLib = window.EstLib || {} ));
+		}(jQuery, window.EstLib = window.EstLib || {}));
 
-		</script>
+	</script>
 
-</head>
+	</head>
 </body>
+
 </html>
