@@ -267,7 +267,7 @@
 						if (dsDict[indic][sel[j].geo + "_" + sel[j].coicop]) continue;
 						//var params = { geo: sel[j].geo, coicop: sel[j].coicop };
 						//if (indic === "midx") params.unit = "I15";
-						let url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_" + indic + "?format=json&lang=en&&geo=" + sel[j].geo + "&coicop=" + sel[j].coicop
+						let url = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hicp_" + indic + "?format=json&lang=en&geo=" + sel[j].geo + "&coicop=" + sel[j].coicop
 						if (indic === "midx") url += "&unit=I15";
 						var ajax = $.ajax({ url: url });
 						ajax.prSel = sel[j];
