@@ -208,6 +208,11 @@
                     .on("click", function() { window.open("income_distr_2.html?"+"time="+timeSel+"&lang="+lg, "_blank"); });
 
             $.when(
+
+//TODO use new API
+//https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_di01?format=json&lang=en&currency=EUR&indic_il=SHARE&quantile=P100&quantile=P99&quantile=P98&quantile=P97&quantile=P96&quantile=P95&quantile=D10&quantile=D9&quantile=D8&quantile=D7&quantile=D6&quantile=D5&quantile=D4&quantile=D3&quantile=D2&quantile=D1&quantile=P5&quantile=P4&quantile=P3&quantile=P2&quantile=P1
+
+
                     //get income distribution data
                     $.ajax({url:EstLib.getEstatDataURL("ilc_di01",{currency:"EUR",indic_il:"SHARE",
                                 quantile:["P100","P99","P98","P97","P96","P95","D10","D9","D8","D7","D6","D5","D4","D3","D2","D1","P5","P4","P3","P2","P1"]
