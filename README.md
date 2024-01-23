@@ -12,6 +12,7 @@ EurostatVisu is a web visualisation project of [Eurostat](http://ec.europa.eu/eu
 - Household expenditures composition, [detailled by product](http://eurostat.github.io/EurostatVisu/coicop_sunburst.html) and [evolution accross time](http://eurostat.github.io/EurostatVisu/coicop_time_stack.html)
 - [Price time series](http://eurostat.github.io/EurostatVisu/timeser.html)<!--- . Focus on [food prices](http://eurostat.github.io/EurostatVisu/FPMT_timeser.html) -->
 - [GDP evolution in Europe](http://eurostat.github.io/EurostatVisu/driving_forces.html?geo=DE,FR,IT,ES,PT,PL,EL)
+- [European fishing quotas explorer](https://eurostat.github.io/EurostatVisu/fq/quotas.html)
 
 ## Technical details
 
