@@ -82,6 +82,26 @@ table,th,td {
 			//http://bl.ocks.org/mbostock/4060954
 			//http://bl.ocks.org/mbostock/3943967
 
+			EstLib.getEstatRestDataURLBase = "https://ec.europa.eu/eurostat/api/dissemination/statistics/"
+
+			EstLib.getEstatDataURL = function (datasetCode, filters, lang, format, version, baseURL) {
+	lang = lang || "en";
+	format = format || "json";
+	version = version || "1.0";
+	baseURL = baseURL || EstLib.getEstatRestDataURLBase;
+	var url = [];
+	url.push(baseURL, version, "/data/", datasetCode, "?format=", format, "&lang=", lang);
+	if (filters)
+		for (var param in filters) {
+			var o = filters[param];
+			if (Array.isArray(o))
+				for (var i = 0; i < o.length; i++)
+					url.push("&", param, "=", o[i]);
+			else url.push("&", param, "=", o);
+		}
+	return url.join("");
+};
+
 			//
 			//EstLib.modifyCoicopHierarchy();
 			//TODO add more coicop levels?
